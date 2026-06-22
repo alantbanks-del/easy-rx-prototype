@@ -452,6 +452,83 @@ svg{width:100%;height:auto;display:block}
 .info-files{margin-top:8px;display:flex;flex-direction:column;gap:6px}
 .info-file{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13.5px;background:#fff}
 .info-fx{border:none;background:transparent;font-size:20px;line-height:1;color:#c0392b;cursor:pointer;padding:0 4px}
+.dec-busy{margin-top:12px;padding:12px 14px;border-radius:10px;background:#f3f9f9;color:var(--ink);font-size:14px;font-weight:600}
+.dec-err{margin-top:12px;padding:12px 14px;border-radius:10px;background:#fdf0ee;border:1px solid #f3c7c0;color:#8a2b1e;font-size:13.5px;line-height:1.5}
+.dec-card{margin-top:14px;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.dec-acc{display:flex;align-items:center;gap:14px;padding:14px;background:linear-gradient(135deg,#f3f9f9,#eef6f4);border-bottom:1px solid var(--line)}
+.dec-acc-ring{width:62px;height:62px;border-radius:50%;border:5px solid var(--c,#1f9d57);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto}
+.dec-acc-n{font-size:22px;font-weight:800;line-height:1;color:var(--ink)}
+.dec-acc-l{font-size:10px;color:var(--muted)}
+.dec-acc-cap{font-size:13px;line-height:1.4}
+.dec-sec{padding:12px 14px;border-top:1px solid #f0f3f2}
+.dec-sec:first-of-type{border-top:none}
+.dec-h{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.dec-kv{font-size:14px;margin:2px 0;color:var(--ink)}
+.dec-prod{padding:8px 0;border-bottom:1px dashed #eef0ef}
+.dec-prod:last-child{border-bottom:none}
+.dec-prod-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.dec-prod-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.dec-codes{font-size:11.5px;font-weight:700;color:#156468;background:#e3f1ef;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.dec-codes-none{color:#a06600;background:#fbf3e0}
+.dec-ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}
+.dec-ul li{margin:2px 0}
+.dec-para{font-size:14px;line-height:1.6;color:var(--ink)}
+.dec-suspect{background:#fffaf0}
+.dec-suspect .dec-h{color:#a06600}
+.dec-fixes{margin-top:14px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fafdfc}
+.dec-chat-u{font-size:13.5px;background:#e3f1ef;border-radius:10px;padding:7px 10px;margin:5px 0}
+.dec-chat-a{font-size:13px;color:#1f9d57;margin:3px 2px 7px}
+.dec-hard{font-size:9.5px;font-weight:800;background:#156468;color:#fff;border-radius:5px;padding:1px 5px;vertical-align:middle}
+.dec-hardchk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);margin-top:8px;cursor:pointer}
+.dec-hardchk input{width:16px;height:16px}
+.tg-results{margin-top:14px}
+.tg-grouphdr{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink);margin:16px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--ec,#8295a3)}
+.tg-grpdot{width:11px;height:11px;border-radius:50%;background:var(--ec,#8295a3);flex:0 0 auto}
+.tg-grpn{font-size:11px;font-weight:800;color:#fff;background:var(--ec,#8295a3);border-radius:10px;padding:1px 8px;margin-left:auto}
+.tg-grid{display:flex;flex-direction:column;gap:10px}
+.tg-tile{border:2px solid var(--ec,#8295a3);border-radius:13px;background:#fff;padding:11px 12px}
+.tg-tile-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.tg-tile-name{font-size:13.5px;font-weight:800;color:var(--ink);word-break:break-all}
+.tg-tile-eng{font-size:10px;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.tg-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tg-score{text-align:center}
+.tg-score-top{display:flex;flex-direction:column;align-items:center;gap:0}
+.tg-score-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.tg-score-n{font-size:21px;font-weight:800;line-height:1.1}
+.tg-score-bar{height:5px;border-radius:3px;background:#edf1f0;overflow:hidden;margin:3px 0}
+.tg-score-bar span{display:block;height:100%;border-radius:3px}
+.tg-score-route{font-size:9.5px;font-weight:700}
+.tg-miss{margin-top:8px;font-size:12px;font-weight:700;color:#c0392b;background:#fdf0ee;border-radius:8px;padding:5px 9px}
+.tg-expbtn{margin-top:9px;border:none;background:transparent;color:#156468;font-weight:700;font-size:12.5px;cursor:pointer;padding:2px 0}
+.tg-body{margin-top:8px;border-top:1px solid #eef0ef;padding-top:8px}
+.tg-sec{padding:7px 0;border-top:1px solid #f3f6f5}
+.tg-sec:first-child{border-top:none}
+.tg-sec-h{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.tg-kv{font-size:13px;margin:1px 0;color:var(--ink)}
+.tg-ul{margin:0;padding-left:17px;font-size:13px;line-height:1.5}
+.tg-na{color:#b0392b;font-style:italic;font-size:12.5px}
+.tg-note{font-size:12px;color:var(--muted);margin-top:3px;font-style:italic}
+.tg-hand{font-size:13.5px;line-height:1.55;color:var(--ink);background:#f8fbfa;border-radius:8px;padding:8px 10px;white-space:pre-wrap}
+.tg-low{background:#ffe08a;border-radius:3px;padding:0 2px}
+.tg-lowcap{font-size:11px;color:#a06600;margin-top:4px}
+.al-archlbl{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
+.al-teethrow{display:flex;flex-wrap:wrap;gap:4px}
+.al-tooth{flex:0 0 auto;min-width:34px;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:4px 2px;text-align:center;cursor:pointer;line-height:1.1}
+.al-tooth.on{border-color:var(--brand,#00785A);background:#eef8f5}
+.al-tnum{display:block;font-size:12px;font-weight:700;color:var(--ink)}
+.al-tmark{display:block;font-size:9px;font-weight:800;color:#156468;margin-top:1px}
+.ortho-swgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ortho-sw{display:flex;flex-direction:column;align-items:center;gap:5px;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:8px 6px;cursor:pointer;text-align:center}
+.ortho-sw.on{border-color:var(--brand,#00785A);background:#eef8f5}
+.ortho-sw-chip{width:100%;height:34px;border-radius:7px;border:1px solid rgba(0,0,0,.12);background-size:cover}
+.ortho-sw-lbl{font-size:11px;font-weight:700;color:var(--ink);line-height:1.2}
+.sh-compat{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sh-compat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;font-size:13.5px;border-top:1px solid #eef0ef}
+.sh-compat-row:first-child{border-top:none;background:#eef6f4}
+.sh-compat-row.cur{background:#e3f1ef}
+.sh-compat-sys{color:var(--ink)}
+.sh-compat-code{color:#156468}
+.sh-na{color:var(--muted);font-style:italic;font-weight:600;font-size:12px}
 .launch-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
 .ging-row{display:flex;gap:12px;padding:8px 16px;flex-wrap:wrap}
 .ging-card{flex:1;min-width:96px;border:2px solid var(--line);background:#fff;border-radius:14px;padding:0 0 10px;cursor:pointer;overflow:hidden}
@@ -618,11 +695,36 @@ function refreshCart(){
   chip.innerHTML='<span class="cart-ico">\u{1F6D2}</span><span class="cart-amt">'+fmtMoney(g)+'</span>'+(n>0?'<span class="cart-n">'+n+'</span>':'');
 }
 // Build a cart line-item for the current case (engine-aware).
+// Gather every free-text note in the current case, each credited to its source field,
+// so saved text is always memorialized in the Rx output.
+function collectCaseNotes(){
+  var out=[];
+  function add(src,val){ if(val && String(val).trim()) out.push({src:src, text:String(val).trim()}); }
+  if(curEngine==='fullarch'){
+    add('Full Arch \u2014 Esthetics Notes', fa.esthNotes);
+    add('Full Arch \u2014 Occlusion Notes', fa.occNotes);
+    if(fa.bsp) add('Full Arch \u2014 Bespoke Finishing Notes', fa.bsp.notes);
+  } else if(curEngine==='removable'){
+    add('Removable \u2014 Notes', rem.notes);
+  } else if(curEngine==='ortho'){
+    add('Orthodontic \u2014 Instructions', ortho.notes);
+  } else if(curEngine==='aligners'){
+    add('CLEARaline \u2014 Instructions', align.notes);
+  } else if(curEngine==='guides'){
+    add('Surgical Guide \u2014 Kit Notes', gd.stdKitNotes);
+    add('Surgical Guide \u2014 Restorative Notes', gd.stdRestoNotes);
+    add('CHROME \u2014 Kit Notes', gd.crKitNotes);
+    add('CombiGuide \u2014 Restorative Notes', gd.combiRestoNotes);
+    add('CombiGuide \u2014 Kit Notes', gd.combiKitNotes);
+  }
+  if(typeof caseInfo==='object') add('Requested Information \u2014 Notes', caseInfo.notes);
+  return out;
+}
 function buildCaseLineItem(){
   var title='', total=0, lines=[];
   if(curEngine==='guides'){ var gp=gdPricing(); total=gp.total; lines=gp.lines.slice(); title=(typeof gdFlowName==='function'?gdFlowName():'Surgical Guide')||'Surgical Guide'; }
-  else { var em=ENGINE_LIST.find(function(e){return e.id===curEngine;}); title=em?em.n:curEngine; if(curEngine==='removable') title=removableProductName(); if(curEngine==='ortho') title=orthoProductName(); total=liveCaseTotal(); }
-  return { id:_cartSeq++, engine:curEngine, title:title, total:total, lines:lines, pending:(total===0 && curEngine!=='guides') };
+  else { var em=ENGINE_LIST.find(function(e){return e.id===curEngine;}); title=em?em.n:curEngine; if(curEngine==='removable') title=removableProductName(); if(curEngine==='ortho') title=orthoProductName(); if(curEngine==='aligners') title=alignProductName(); total=liveCaseTotal(); }
+  return { id:_cartSeq++, engine:curEngine, title:title, total:total, lines:lines, notes:collectCaseNotes(), pending:(total===0 && curEngine!=='guides') };
 }
 // Capture current case into ORDER exactly once (guarded against double-add).
 function captureToCart(){ if(_caseCaptured) return null; var it=buildCaseLineItem(); ORDER.push(it); _caseCaptured=true; return it; }
@@ -648,7 +750,7 @@ function renderCartList(){
   });
   if(caseStarted && !_caseCaptured){
     var live=liveCaseTotal();
-    var t=(curEngine==='guides'&&typeof gdFlowName==='function')?(gdFlowName()||'Current case'):(curEngine==='removable'?removableProductName():(curEngine==='ortho'?orthoProductName():((ENGINE_LIST.find(function(e){return e.id===curEngine;})||{}).n||'Current case')));
+    var t=(curEngine==='guides'&&typeof gdFlowName==='function')?(gdFlowName()||'Current case'):(curEngine==='removable'?removableProductName():(curEngine==='ortho'?orthoProductName():(curEngine==='aligners'?alignProductName():((ENGINE_LIST.find(function(e){return e.id===curEngine;})||{}).n||'Current case'))));
     var amtLive=(live>0)?fmtMoney(live):'<span style="color:var(--muted)">Price pending</span>';
     if(curEngine) rows.push('<div class="cart-row" style="border-style:dashed"><div class="cart-row-top"><span class="cart-row-title">'+t+' <span style="font-weight:600;color:var(--muted)">(in progress)</span></span><span class="cart-row-amt">'+amtLive+'</span></div></div>');
   }
@@ -671,13 +773,14 @@ var ENGINE_LIST=[
  {id:'removable', n:'Removable',        d:'Dentures, partials, flexibles',          ic:'\u{1F9B7}', live:true},
  {id:'fullarch',  n:'Full Arch',        d:'Full-arch fixed / hybrid',               ic:'\u{1F600}', live:true},
  {id:'splints',   n:'Splints & Guards', d:'Night guards, splints',                  ic:'\u{1F6E1}\uFE0F', live:true},
+ {id:'aligners',  n:'CLEARaline Aligners', d:'Clear ortho aligners \u2014 crowding, spacing, midline', ic:'\u{1F61D}', live:true},
  {id:'guides',    n:'Surgical Guides',  d:'Implant surgical guides',                ic:'\u{1F4D0}', live:true},
  {id:'ortho',     n:'Orthodontic Devices', d:'Retainers, expanders, functional & habit appliances', ic:'\u{1F9B7}', live:true}
 ];
 // Fixed & Implants path (original).
 var FIXED_STEPS=["Arch","Restoration","Material","Bespoke","Shade","Dial in Shade","Implant Brand","Add-ons","Case Specs","Buy a Splint","Review","Opposing Arch","Finish"];
 // Removable path: Arch -> Appliance type -> (type-specific stages) -> Shade -> Review -> Opposing -> Finish.
-var REMOV_STEPS=["Appliance","Arch","Denture Type","Denture Bespoke","Denture Stage","Teeth","Major Connector","Clasps","Return","Frame Material","Rem Shade","Gingiva","Duplicate","Review","Opposing Arch","Finish"];
+var REMOV_STEPS=["Appliance","Arch","Denture Type","Denture Bespoke","Denture Stage","Tooth Class","Tooth Position","Teeth","Major Connector","Clasps","Return","Frame Material","Rem Shade","Gingiva","Duplicate","Review","Opposing Arch","Finish"];
 // Splints & Guards path: Arch -> Product (grouped) -> Options -> Review -> Opposing -> Finish.
 var SPLINT_STEPS=["Arch","Splint Product","Splint Options","Who Fabricates","Review","Opposing Arch","Finish"];
 // Full Arch path. Bespoke swaps the middle for the premium design flow.
@@ -693,6 +796,7 @@ function STEPS(){
  if(curEngine==='fullarch') return FA_STEPS.filter(faStepVisible);
  if(curEngine==='guides') return GUIDES_STEPS.filter(gdStepVisible);
  if(curEngine==='ortho') return ORTHO_STEPS.filter(orthoStepVisible);
+ if(curEngine==='aligners') return ALIGN_STEPS.filter(alignStepVisible);
  return FIXED_STEPS.filter(function(nm){
   if(nm==='Bespoke') return anyBespokeTooth();
   if(nm==='Implant Brand') return brandNeeded();
@@ -720,7 +824,10 @@ function faStepVisible(nm){
  if(nm==='Implant Detail') return faImplantSites().length>0;
  // Design suite — fixed finals only
  var inFixedDesign = fa.group==='fixed';
- if(nm==='Design Category'||nm==='Tooth Position'||nm==='Tooth Shape') return inFixedDesign;
+ // Tooth Position: offered whenever a tooth-moving stage is chosen (set-up, prototype/try-in,
+ // redesign/new design, finish, final) — in BOTH fixed and removable full-arch groups.
+ if(nm==='Tooth Position') return faOffersToothPos();
+ if(nm==='Design Category'||nm==='Tooth Shape') return inFixedDesign;
  // Bespoke sub-steps show when bespoke MODE toggled on inside Tooth Shape (fixed design)
  if(BSP_STEPS.indexOf(nm)>=0) return inFixedDesign && fa.bespokeMode;
  // these design steps are skipped when bespoke mode is on (handled inside the Bespoke flow instead)
@@ -735,6 +842,7 @@ function remStepVisible(nm){
  var a=rem.appliance;
  if(nm==='Opposing Arch') return curArch!=='both';
  if(nm==='Arch'||nm==='Appliance'||nm==='Review'||nm==='Finish') return true;
+ if(nm==='Tooth Class'||nm==='Tooth Position') return remOffersToothPos();
  if(nm==='Rem Shade') return remHasTeeth();   // no teeth to shade unless a set-up / reset / finish is requested
  if(nm==='Case Specs'||nm==='Buy a Splint') return false; // no case specs or guards on removable
  if(!a) return false;
@@ -790,13 +898,13 @@ var DENTURE_STAGES=[
  {stage:'Reset and Return',                   av:[1,1,0,0,0,0]},
  {stage:'Reset + Finish',                     av:[1,1,0,0,0,0]},
  {stage:'Finish in Ivocap',                   av:[1,1,0,0,0,0]},
- {stage:'Finish IMPACT Value Denture',        av:[0,0,0,1,0,0]},
- {stage:'Finish IMPACT Premium Denture',      av:[0,0,1,0,0,0]},
  {stage:'Printed Try-In',                     av:[0,0,1,1,1,0]},
  {stage:'Printed Try-In Adjustment',          av:[0,0,1,1,1,0]},
- {stage:'Finish Ivotion Premium',                     av:[0,0,0,0,1,0]},
+ {stage:'Finish Ivotion Premium',             av:[0,0,0,0,1,0]},
  {stage:'Stabiliteeth Digital Set-Up Try-in', av:[0,0,0,0,0,1]},
- {stage:'Stabiliteeth Ivotion Final',         av:[0,0,0,0,0,1]}
+ {stage:'Stabiliteeth Ivotion Final',         av:[0,0,0,0,0,1]},
+ {stage:'Finish IMPACT Value Denture',        av:[0,0,0,1,0,0]},
+ {stage:'Finish IMPACT Premium Denture',      av:[0,0,1,0,0,0]}
 ];
 // Immediate dentures: per Sire, only these stages offered (for now).
 var IMMEDIATE_STAGES=['Bite Block Only','Set and Finish','Finish','Just the Immediate Denture'];
@@ -833,6 +941,7 @@ var rem={
  acrylicStyle:'',
  shadeSys:'VITA Classical (A1\u2013D4)',
  shadeCode:'',
+ toothClass:'I',           // occlusal class for Tooth Position diagram (Full Dentures)
  gingiva:'',                   // tissue shade: 'Light Pink' | 'Original' | 'Dark Pink'
  dentureBespoke:false,         // Bespoke stage opted in (eligible types only)
  dupDenture:false,             // add discounted duplicate denture (CRDD03)
@@ -844,7 +953,7 @@ var REM_GINGIVA=[
  {id:'Dark Pink',  hex:'#c1727a'}
 ];
 function remReset(){
- rem={appliance:'',dentureKind:'',dentureType:'Traditional Handcrafted Premium',dentureStage:'',extractTeeth:{},toothState:{},frameMat:'SLM Cobalt Chrome',ret:'',conn:'ROE to Decide',clasp:'',acrylicStyle:'',shadeSys:'VITA Classical (A1\u2013D4)',shadeCode:'',gingiva:'',dentureBespoke:false,dupDenture:false,notes:''};
+ rem={appliance:'',dentureKind:'',dentureType:'Traditional Handcrafted Premium',dentureStage:'',extractTeeth:{},toothState:{},frameMat:'SLM Cobalt Chrome',ret:'',conn:'ROE to Decide',clasp:'',acrylicStyle:'',shadeSys:'VITA Classical (A1\u2013D4)',shadeCode:'',toothClass:'I',gingiva:'',dentureBespoke:false,dupDenture:false,notes:''};
 }
 // Stages available given current denture type + kind.
 function dentureStagesAvail(){
@@ -862,6 +971,45 @@ var REM_SHADE_CODES={
  'SR-Vivodent PE':['O1','1A','1C','2A','2B','1E','3E','3A','5B','3C','4D','4A','4B','6C','6D'],
  'Chromascope':['110','120','130','140','210','220','230','240','310','320','330','340','410','420','430','440']
 };
+// Vita Classical hub -> verified equivalents per system. Built from manufacturer/Dental Lab Network
+// cross-reference charts. Where a system has no verified 1:1, value is '' (rendered as "see chart").
+// Columns order: REM_XREF_SYS below.
+var REM_XREF_SYS=['Vita 3D Master','Bioform','Bioblend','Trubyte Portrait IPN','Trublend SLM','SR-Vivodent PE','Chromascope'];
+var REM_SHADE_XREF={
+//  VITA    3DMaster  Bioform  Bioblend Portrait  Trublend Vivodent Chromascope
+ 'A1':  ['1M1',  '59',  '102', 'P1',  'T9',  '1A',  '110'],
+ 'A2':  ['2M2',  '53',  '104', 'P2',  'T5',  '2A',  '130'],
+ 'A3':  ['3M2',  '54',  '106', 'P3',  'T6',  '3A',  '210'],
+ 'A3.5':['3M2',  '77',  '108', 'P4',  'T7',  '3E',  '230'],
+ 'A4':  ['4M2',  '84',  '109', 'P5',  'T8',  '',    '340'],
+ 'B1':  ['1M2',  '',    '100', 'P11', 'T2',  'O1',  '110'],
+ 'B2':  ['2L1.5','52',  '102', 'P12', 'T3',  '1C',  ''],
+ 'B3':  ['3L1.5','55',  '104', 'P13', 'T10', '2B',  '310'],
+ 'B4':  ['',     '',    '106', 'P14', 'T11', '',    '330'],
+ 'C1':  ['',     '91',  '112', 'P21', 'T12', '',    ''],
+ 'C2':  ['',     '94',  '113', 'P22', 'T13', '',    '430'],
+ 'C3':  ['',     '',    '114', 'P23', 'T14', '',    '510'],
+ 'C4':  ['',     '96',  '116', 'P24', 'T15', '',    ''],
+ 'D2':  ['',     '92',  '112', 'P32', 'T19', '5B',  ''],
+ 'D3':  ['',     '93',  '113', 'P33', 'T20', '4B',  '410'],
+ 'D4':  ['',     '69',  '114', 'P34', 'T22', '',    '']
+};
+
+
+// Resolve the current (system, code) to its Vita Classical equivalent, then to all systems.
+function remVitaOf(sys, code){
+ if(sys==='VITA Classical (A1\u2013D4)') return code;
+ for(var v in REM_SHADE_XREF){ var arr=REM_SHADE_XREF[v]; var i=REM_XREF_SYS.indexOf(sys); if(i>=0 && arr[i]===code) return v; }
+ return '';
+}
+function remCompatRows(sys, code){
+ var vita=remVitaOf(sys, code); if(!vita) return null;
+ var row=REM_SHADE_XREF[vita]||[];
+ var out=[{sys:'VITA Classical', code:vita}];
+ REM_XREF_SYS.forEach(function(s,i){ out.push({sys:s, code:row[i]||''}); });
+ return {vita:vita, items:out};
+}
+
 function remShadeList(){
  if(rem.appliance==='denture' && REM_LIMITED_SHADE_TYPES.indexOf(rem.dentureType)>=0) return REM_LIMITED_VITA.slice();
  return REM_SHADE_CODES[rem.shadeSys] || REM_SHADE_CODES['Vita 3D Master'];
@@ -912,8 +1060,8 @@ var SPL_HARD_VARIANTS=[
 ];
 var SPL_FF_COLORS=['Green','Red','White','Purple','Black'];
 var spl={ group:'guards', prod:'', opt:'', src:'ios', miniQty:'two', miniT1:'4.0', miniT2:'4.0', hardVariant:'stone', ffColor:'', ffStrap:false,
-          dzPurpose:'brux', dzBruxism:true, dzTMJ:false, dzCoverage:true, ret:'model', fabricator:'roe' };
-function splReset(){ spl={group:'guards',prod:'',opt:'',src:'ios',miniQty:'two',miniT1:'4.0',miniT2:'4.0',hardVariant:'stone',ffColor:'',ffStrap:false,dzPurpose:'brux',dzBruxism:true,dzTMJ:false,dzCoverage:true,ret:'model',fabricator:'roe'}; }
+          dzPurpose:'brux', dzBruxism:true, dzTMJ:false, dzCoverage:true, ret:'model', fabricator:'roe', clientDeliver:'', clientEmail:'' };
+function splReset(){ spl={group:'guards',prod:'',opt:'',src:'ios',miniQty:'two',miniT1:'4.0',miniT2:'4.0',hardVariant:'stone',ffColor:'',ffStrap:false,dzPurpose:'brux',dzBruxism:true,dzTMJ:false,dzCoverage:true,ret:'model',fabricator:'roe',clientDeliver:'',clientEmail:''}; }
 // Which products skip the Design + Return checklist.
 function splNoDesign(){ return spl.prod==='minicomfort' || spl.prod==='forcefield'; }
 // Comfort Hard and Digital Design Only offer the "Who fabricates? / file for in-office print" page.
@@ -1057,6 +1205,17 @@ function faImplantCount(){ return Object.keys(fa.implants).length; }
 function faImplantCountLower(){ return Object.keys(fa.implantsLower).length; }
 function faCurrentFinal(){ if(fa.group==='fixed'&&fa.finalIdx!=null) return FA_FIXED_FINALS[fa.finalIdx]; if(fa.group==='removable'&&fa.finalIdx!=null) return FA_REM_FINALS[fa.finalIdx]; return null; }
 function faStagesForCurrent(){ if(fa.group==='fixed') return FA_FIXED_STAGES; if(fa.group==='removable'&&fa.finalIdx!=null) return FA_REM_STAGES.filter(function(s){return s.av[fa.finalIdx]===1;}); return []; }
+// Tooth Position is offered when a tooth-moving stage is chosen: set-up, prototype/try-in,
+// redesign / new design, finish, or final. Covers both fixed and removable full-arch groups.
+function faOffersToothPos(){
+ var st=fa.stage||'';
+ if(!st) return false;
+ // fixed group: tooth-moving keys
+ if(fa.group==='fixed') return /tryin|redesign|final|finish|setup|proto/i.test(st);
+ // removable group: set-up / reset / finish stages move teeth
+ if(fa.group==='removable') return /setup|reset|resetfin|finish|final|tryin/i.test(st) || /set-?up|reset|finish|try-?in|final/i.test(faCurStage()?faCurStage().label:'');
+ return false;
+}
 function faCurStage(){ return faStagesForCurrent().find(function(s){return s.key===fa.stage;}); }
 function faShadeAskActive(){ var st=faCurStage(); return !!(st&&st.shadeAsk); }
 function faCondActive(){ var f=faCurrentFinal(); var copingFree=fa.group==='fixed'&&f&&f.copingFree; var recTrig=FA_RECORDS_TRIGGER.indexOf(fa.records)>=0; return copingFree||recTrig; }
@@ -1710,6 +1869,16 @@ function renderRemovableStage(stage){
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
+ if(nm==='Tooth Class'){
+   var bite=['I','II','III'].map(function(c){ return '<button type="button" class="rem-segbtn'+(rem.toothClass===c?' on':'')+'" data-rbite="'+c+'">Class '+c+'</button>'; }).join('');
+   stage.innerHTML='<p class="hint">Desired occlusal class <span style="font-weight:600;color:var(--muted)">(drives the Tooth Position diagram)</span>.</p>'+
+     '<div style="padding:6px 16px"><div class="rem-seg">'+bite+'</div>'+
+     '<div class="rem-note" style="margin-top:10px">Class I &amp; II show the lower in front; Class III shows the upper in front. You\u2019ll fine-tune positions on the next step.</div></div>';
+   [].forEach.call(stage.querySelectorAll('button[data-rbite]'),function(b){ b.onclick=function(){ rem.toothClass=b.getAttribute('data-rbite'); renderStage(); refreshBar(); }; });
+   return;
+ }
+ if(nm==='Tooth Position'){ renderToothDesign(stage); return; }
+
  if(nm==='Appliance'){
    var cards=REM_APPLIANCES.map(function(a){
      var on=rem.appliance===a.id;
@@ -1800,12 +1969,26 @@ function renderRemovableStage(stage){
      return '<button type="button" class="sys-chip'+(on?' on':'')+'" data-sys="'+s.replace(/"/g,'')+'">'+s+'</button>';
    }).join('');
    var tabs=shades.map(function(c){ return '<button type="button" class="shade-tab'+(rem.shadeCode===c?' on':'')+'" data-rcode="'+c+'"><span class="st-sw" style="background:'+shadeHexOf(c)+'"></span>'+c+'</button>'; }).join('');
+   var compatBlock='';
+   if(rem.shadeCode){
+     var compat=remCompatRows(rem.shadeSys, rem.shadeCode);
+     if(compat){
+       compatBlock='<div class="sh-lbl" style="margin-top:16px">Shade compatibility \u2014 equivalents across systems</div>'+
+         '<div class="rem-note" style="margin:2px 0 8px">Pivots through VITA Classical (<b>'+compat.vita+'</b>). "see chart" = no verified 1:1 \u2014 confirm on your shade guide.</div>'+
+         '<div class="sh-compat">'+compat.items.map(function(it){
+           var isCur=(it.sys===rem.shadeSys.split(' ')[0]||it.sys===rem.shadeSys||(it.sys==='VITA Classical'&&rem.shadeSys.indexOf('VITA Classical')>=0));
+           var val=it.code?('<b>'+it.code+'</b>'):'<span class="sh-na">see chart</span>';
+           return '<div class="sh-compat-row'+(isCur?' cur':'')+'"><span class="sh-compat-sys">'+it.sys+'</span><span class="sh-compat-code">'+val+'</span></div>';
+         }).join('')+'</div>';
+     }
+   }
    stage.innerHTML='<p class="hint">Pick the tooth shade. <b>Required.</b></p>'+
      '<div style="padding:6px 16px">'+
        (limited?'<div class="rem-note">'+rem.dentureType+' uses the VITA Classical guide.</div>':'<div class="sh-lbl">Shade guide</div><div class="sys-chiprow">'+sysChips+'</div>')+
        '<div class="sh-lbl" style="margin-top:14px">'+rem.shadeSys+' \u2014 compatible shades</div>'+
        '<div class="shade-grid">'+tabs+'</div>'+
        (rem.shadeCode?'<div class="sh-summary">Selected: <b>'+rem.shadeSys.split(' ')[0]+' '+rem.shadeCode+'</b></div>':'')+
+       compatBlock+
      '</div>';
    [].forEach.call(stage.querySelectorAll('.sys-chip'),function(b){ b.onclick=function(){ rem.shadeSys=b.getAttribute('data-sys'); rem.shadeCode=''; renderStage(); refreshBar(); }; });
    [].forEach.call(stage.querySelectorAll('.shade-tab[data-rcode]'),function(b){ b.onclick=function(){ rem.shadeCode=b.getAttribute('data-rcode'); renderStage(); refreshBar(); }; });
@@ -1912,6 +2095,13 @@ function remHasTeeth(){
   var s = (rem.appliance==='denture') ? (rem.dentureStage||'') : (rem.ret||'');
   if(!s) return false;
   return /set-?up|reset|finish|try-?in|final/i.test(s);
+}
+// Tooth Position is offered for FULL DENTURES only, when a Set-Up / Reset / Finish is being made.
+function remOffersToothPos(){
+  if(rem.appliance!=='denture') return false;
+  if(rem.dentureKind==='immediate') return false;     // full (new) dentures only
+  var s=rem.dentureStage||'';
+  return /set-?up|reset|finish/i.test(s);
 }
 // Specific product name for the cart (instead of just "Removable").
 function removableProductName(){
@@ -2813,6 +3003,11 @@ function tdSaveImage(manual){
  });
 }
 function tdValTxt(ax,v){ if(!v) return '0'; var dir=v<0?ax.neg:ax.pos; return Math.abs(v).toFixed(1)+'mm '+dir; }
+/* Tooth Position class is shared between Full Arch (fa.bite) and Removable dentures (rem.toothClass). */
+function tdClass(){
+ if(curEngine==='removable') return (typeof rem==='object' && rem.toothClass) ? rem.toothClass : 'I';
+ return fa.bite || 'I';
+}
 function drawToothDesign(){
  var box=document.getElementById('tdViz'); if(!box) return;
  var midline=fa.td.midline||0, incMax=fa.td.incMax||0, incMand=fa.td.incMand||0, occMax=fa.td.occMax||0, antMax=fa.td.antMax||0, antMand=fa.td.antMand||0;
@@ -2828,24 +3023,32 @@ function drawToothDesign(){
  // Upper main h=58, lower main hl=52, lower top edge = yMand - hl/2 = 128-26 = 102.
  // Target overlap = 10% of upper height (~5.8px): upper bottom = 102 + 5.8 = 107.8 -> yMax = 107.8 - 29 ≈ 79.
  var W=340,H=190,cx0=W/2, yMax=79, yMand=128;
+ var cls=tdClass();
+ // Class drives the frontal relationship of the lower row to the upper:
+ //  - Class I  : lower in front of upper, lower row shifted slightly mesial-forward
+ //  - Class II : lower in front of upper, larger forward offset
+ //  - Class III: upper in front of lower (the classic look) — lower sits back
+ var lowerDX = cls==='II' ? 10 : (cls==='I' ? 6 : 0);   // px horizontal offset of lower row
+ var lowerInFront = (cls!=='III');                      // III => uppers drawn on top
  var baseU='',ghostU='',baseL='',ghostL='';
  teeth.forEach(function(t,i){
    var w=(i===0||i===5)?28:32, h=(i===0||i===5)?52:58, x=cx0+t*38;
    // Maxillary row (top): midline + maxillary incisal + occlusal plane
    baseU+=toothPath(x, yMax, w, h, false);
    ghostU+=toothPath(x+dx, yMax+dyMax+occShift, w, h, true);
-   // Mandibular row (bottom): mandibular incisal (no midline shift on lower)
+   // Mandibular row (bottom): mandibular incisal + class-driven horizontal offset (no midline shift on lower)
    var wl=(i===0||i===5)?26:30, hl=(i===0||i===5)?46:52;
-   baseL+=toothPath(x, yMand, wl, hl, false);
-   ghostL+=toothPath(x, yMand+dyMand, wl, hl, true);
+   baseL+=toothPath(x+lowerDX, yMand, wl, hl, false);
+   ghostL+=toothPath(x+lowerDX, yMand+dyMand, wl, hl, true);
  });
- box.innerHTML='<div style="font-size:10.5px;color:#7d9794;font-weight:700;text-align:center;margin-bottom:3px">FRONTAL \u2014 midline, incisal edges &amp; occlusal plane</div>'+
+ var rows = lowerInFront ? (baseU+ghostU+baseL+ghostL) : (baseL+ghostL+baseU+ghostU);
+ box.innerHTML='<div style="font-size:10.5px;color:#7d9794;font-weight:700;text-align:center;margin-bottom:3px">FRONTAL \u2014 midline, incisal edges &amp; occlusal plane <span style="color:#1f8a8f">\u00b7 Class '+cls+'</span></div>'+
    '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:360px;display:block;margin:0 auto;background:#0c1f1e;border-radius:12px">'+
    '<line x1="'+cx0+'" y1="6" x2="'+cx0+'" y2="'+(H-6)+'" stroke="#2c4a48" stroke-width="1" stroke-dasharray="4 4"/>'+
    '<line x1="'+(cx0+dx)+'" y1="6" x2="'+(cx0+dx)+'" y2="'+(H-6)+'" stroke="#1f8a8f" stroke-width="1.5"/>'+
    '<text x="10" y="'+yMax+'" font-size="9" fill="#5a7472" font-weight="700">MAX</text>'+
    '<text x="10" y="'+yMand+'" font-size="9" fill="#5a7472" font-weight="700">MAND</text>'+
-   baseU+ghostU+baseL+ghostL+'</svg>';
+   rows+'</svg>';
  drawToothProfile(antMax, antMand);
 }
 function drawToothProfile(antMax, antMand){
@@ -2879,13 +3082,18 @@ function drawToothProfile(antMax, antMand){
  }
  // Maxillary tip ~ y= 44+65=109 ; Mandibular tip ~ y = 140-39=101. Overlap zone ~ 109-101 = 8px (~10% of crown). Good.
  // The mandibular sits slightly PALATAL (to the left) of the maxillary so the upper is "in front".
- var manBaseX = midX - 9;   // mandible offset palatal (behind) by default
- var maxBaseX = midX + 3;   // maxilla slightly facial (front)
+ // Class-driven base offset (2mm ~ 10px here). Class I neutral; II = max 2mm facial of mand; III = mand 2mm facial of max.
+ var cls=tdClass();
+ var clsMax=0, clsMand=0;
+ if(cls==='II') clsMax=10;    // upper 2mm to the right (facial) of lower
+ else if(cls==='III') clsMand=10; // lower 2mm to the right (facial) of upper
+ var manBaseX = midX - 9 + clsMand;   // mandible offset palatal (behind) by default
+ var maxBaseX = midX + 3 + clsMax;    // maxilla slightly facial (front)
  var labels='<text x="'+(W-8)+'" y="14" text-anchor="end" font-size="10" fill="#7d9794" font-weight="700">FACIAL \u2192</text>'+
    '<text x="8" y="14" font-size="10" fill="#7d9794" font-weight="700">\u2190 PALATAL</text>'+
    '<text x="14" y="50" font-size="9" fill="#5a7472" font-weight="700">MAX</text>'+
    '<text x="14" y="'+(H-30)+'" font-size="9" fill="#5a7472" font-weight="700">MAND</text>'+
-   '<text x="'+midX+'" y="'+(H-4)+'" text-anchor="middle" font-size="10" fill="#7d9794" font-weight="700">PROFILE \u2014 overbite &amp; overjet</text>';
+   '<text x="'+midX+'" y="'+(H-4)+'" text-anchor="middle" font-size="10" fill="#7d9794" font-weight="700">PROFILE \u2014 overbite &amp; overjet \u00b7 Class '+cls+'</text>';
  // overbite bracket on the right
  var obBracket='<line x1="'+(W-60)+'" y1="101" x2="'+(W-60)+'" y2="113" stroke="#7fd4d4" stroke-width="1.5"/>'+
    '<text x="'+(W-54)+'" y="111" font-size="9" fill="#7fd4d4" font-weight="700">overbite</text>';
@@ -3156,6 +3364,31 @@ var ORTHO_STEPS=["Arch","Category","Appliance","Appliance Options","Color & Acry
 // Color/design options (ROE Ortho Color Chart). Doctor may also write a 2nd choice in notes.
 var ORTHO_COLORS=["Clear","Pink","Blue","Red","Glitter (specify)","Tie Dye","Zebra","Tiger Glitter","Polka Dot","Glo Melon","Tutti Fruitti","Midnight Stars","Patriotic","Neon Rainbow","Glo Marble","Cotton Candy","Camouflage","Super Star","Your Team Colors","Favorite Cartoon / Superhero","Other (specify in notes)"];
 var ORTHO_ACRYLIC_SHADE=["Clear","Pink","Other (specify in notes)"];
+// Visual swatch per color/design from the ROE Ortho Color Chart (CSS gradients approximate the patterns).
+var ORTHO_COLOR_SWATCH={
+ 'Clear':'linear-gradient(135deg,#f2f7f7,#dfeaea)',
+ 'Pink':'#f4a7c0',
+ 'Blue':'#3a7bd5',
+ 'Red':'#d83b3b',
+ 'Glitter (specify)':'linear-gradient(135deg,#c0c0c0 0%,#fff 25%,#b9b9b9 50%,#fff 75%,#c0c0c0 100%)',
+ 'Tie Dye':'conic-gradient(from 0deg,#ff5f6d,#ffc371,#47cf73,#3a7bd5,#9d50bb,#ff5f6d)',
+ 'Zebra':'repeating-linear-gradient(60deg,#111 0 5px,#fff 5px 10px)',
+ 'Tiger Glitter':'repeating-linear-gradient(60deg,#e8870f 0 5px,#3a2400 5px 9px)',
+ 'Polka Dot':'radial-gradient(#d83b3b 30%,transparent 32%) 0 0/9px 9px,#fff',
+ 'Glo Melon':'linear-gradient(135deg,#b6f36b,#7be0a0)',
+ 'Tutti Fruitti':'linear-gradient(135deg,#ff7eb3,#ffd86b,#7be0a0)',
+ 'Midnight Stars':'radial-gradient(#ffe98a 18%,transparent 20%) 0 0/10px 10px,#16245e',
+ 'Patriotic':'linear-gradient(90deg,#b22234 33%,#fff 33% 66%,#3c3b6e 66%)',
+ 'Neon Rainbow':'linear-gradient(90deg,#ff3b3b,#ff9f1c,#ffe600,#39e639,#3a7bd5,#9d50bb)',
+ 'Glo Marble':'conic-gradient(from 45deg,#dff3ef,#9fd8cf,#dff3ef,#bfe8e0,#dff3ef)',
+ 'Cotton Candy':'linear-gradient(135deg,#ffc0e0,#bfe3ff)',
+ 'Camouflage':'linear-gradient(135deg,#4b5320 25%,#78866b 25% 50%,#3b3b2b 50% 75%,#8f9779 75%)',
+ 'Super Star':'radial-gradient(#ffd84d 22%,transparent 24%) 0 0/11px 11px,#1f8a8f',
+ 'Your Team Colors':'linear-gradient(135deg,#1f8a8f,#156468)',
+ 'Favorite Cartoon / Superhero':'linear-gradient(135deg,#ff5f6d,#ffc371)',
+ 'Other (specify in notes)':'repeating-linear-gradient(45deg,#e6eceb 0 6px,#cfdad9 6px 12px)'
+};
+function orthoSwatch(c){ return ORTHO_COLOR_SWATCH[c]||'#dfeaea'; }
 
 // Category -> appliances. Each appliance: {k,name,desc, opts:[{k,label}], multiOpt:bool}
 var ORTHO_CATS=[
@@ -3323,8 +3556,8 @@ function renderOrthoStage(stage){
  if(nm==='Color & Acrylic'){
    var html='<p class="hint">Appliance color &amp; acrylic shade <span style="font-weight:600;color:var(--muted)">(optional)</span>.</p><div style="padding:4px 16px">';
    html+='<div class="rem-note" style="margin-bottom:10px">Browse the full design chart at roedentallab.com/ortho-color. Some patterns mix \u2014 it\u2019s smart to give a 2nd choice.</div>';
-   html+='<div class="rem-sub-lbl">Color / design</div><div class="sys-chiprow">'+
-     ORTHO_COLORS.map(function(c){ return '<button type="button" class="sys-chip'+(ortho.color===c?' on':'')+'" data-ocolor="'+c.replace(/"/g,'')+'">'+c+'</button>'; }).join('')+'</div>';
+   html+='<div class="rem-sub-lbl">Color / design</div><div class="ortho-swgrid">'+
+     ORTHO_COLORS.map(function(c){ return '<button type="button" class="ortho-sw'+(ortho.color===c?' on':'')+'" data-ocolor="'+c.replace(/"/g,'')+'"><span class="ortho-sw-chip" style="background:'+orthoSwatch(c)+'"></span><span class="ortho-sw-lbl">'+c+'</span></button>'; }).join('')+'</div>';
    html+='<div class="rem-sub-lbl" style="margin-top:10px">2nd choice <span style="font-weight:600;color:var(--muted)">(recommended)</span></div>'+
      '<input id="oColor2" type="text" placeholder="2nd color/design" value="'+(ortho.color2||'').replace(/"/g,'&quot;')+'" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px">';
    html+='<div class="rem-sub-lbl" style="margin-top:12px">Acrylic shade</div><div class="rem-seg">'+
@@ -3369,6 +3602,234 @@ function renderOrthoStage(stage){
 
 // Cart / review label for ortho
 function orthoProductName(){ var a=orthoAppl(); return a?a.name:'Orthodontic Appliance'; }
+
+/* ===================== CLEARaline ALIGNERS ENGINE =====================
+ * Built from ROE's official CLEARaline Work Authorization Rx + product page.
+ * Full wizard: Arch -> Range -> IPR -> Attachments -> Goals -> Midline -> Tooth Chart -> Case Specs -> Review.
+ * Per-tooth chart marks EI (exclude from IPR), EA (exclude from attachments), R (restoration), I (implant site), SB (splinted bridge).
+ * No prices (pricing coming).
+ * ===================================================================== */
+var ALIGN_STEPS=["Arch","Range","IPR","Attachments","Goals","Midline","Tooth Chart","Case Specs","Review","Opposing Arch","Finish"];
+
+// Universal tooth numbering, upper 1-16 (right->left), lower 32-17 (right->left)
+var ALIGN_UPPER=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+var ALIGN_LOWER=[32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17];
+
+var align={
+  range:'',                 // '3-3' | '5-5' | '7-7'
+  ipr:'', iprOpp:false,      // 'yes'|'no' ; IPR in opposite arch (dual only)
+  attach:'',                 // 'yes'|'no'
+  ap:'',                     // anterior-posterior: 'maintainU'|'maintainL'|'canineL'|'canineR'|'levelIncisal'|'levelGingival'  (multi)
+  apSet:{},                  // multi-select set for A-P relation
+  level:'',                  // 'incisal'|'gingival'
+  overjet:'', overbite:'',   // 'maintain'|'improve'
+  spacesOpen:{},             // {laterals:bool, canines:bool}
+  mlU:'', mlUmove:'', mlUmm:'',   // upper midline: improve/maintain ; left/right ; .5/1/2
+  mlL:'', mlLmove:'', mlLmm:'',
+  marks:{},                  // toothNum -> array of codes ['EI','EA','R','I','SB']
+  expedite:false, notes:''
+};
+function alignReset(){
+  align={ range:'', ipr:'', iprOpp:false, attach:'', ap:'', apSet:{}, level:'', overjet:'', overbite:'',
+    spacesOpen:{}, mlU:'', mlUmove:'', mlUmm:'', mlL:'', mlLmove:'', mlLmm:'', marks:{}, expedite:false, notes:'' };
+}
+function alignIsDual(){ return curArch==='both'; }
+
+function alignStepVisible(nm){
+  if(nm==='Midline'){ return true; }      // applies to whichever arch(es) in play
+  return true;
+}
+function alignStepOK(nm){
+  if(nm==='Arch') return !!curArch;
+  if(nm==='Range') return !!align.range;
+  if(nm==='IPR') return !!align.ipr;
+  if(nm==='Attachments') return !!align.attach;
+  if(nm==='Goals') return true;           // goals optional but encouraged
+  if(nm==='Midline') return true;
+  if(nm==='Tooth Chart') return true;
+  if(nm==='Case Specs') return true;
+  return true;
+}
+
+// label helpers
+function alignRangeLabel(r){ return r==='3-3'?'3-3 \u00b7 Anterior only':(r==='5-5'?'5-5 \u00b7 2nd premolar to 2nd premolar':(r==='7-7'?'7-7 \u00b7 Includes molars':'')); }
+function alignArchTeeth(){
+  if(curArch==='upper') return ALIGN_UPPER;
+  if(curArch==='lower') return ALIGN_LOWER;
+  return ALIGN_UPPER.concat(ALIGN_LOWER);
+}
+function alignToggleMark(t,code){
+  var a=align.marks[t]||[]; var i=a.indexOf(code);
+  if(i>=0) a.splice(i,1); else a.push(code);
+  if(a.length) align.marks[t]=a; else delete align.marks[t];
+}
+
+// Standard U-shaped arch chart for the aligner Tooth Chart step (replaces horizontal rows).
+function alignArchSvg(isUp){
+  var list=isUp?UPPER:LOWER;
+  var pts=archPoints(list, isUp);
+  var teeth=pts.map(function(p){
+    var marks=align.marks[p.n]||[]; var on=marks.length>0; var r=17;
+    var rot=(p.ang*180/Math.PI)-90;
+    var col=on?'#1f8a8f':null;
+    var bodyStyle=col?' style="fill:'+col+';fill-opacity:.4;stroke:'+col+';stroke-width:3.5"':'';
+    var label = on
+      ? '<text class="tnum" y="4" style="fill:#0c4a4d;font-weight:800;font-size:11px">'+marks.join('/')+'</text>'
+      : '<text class="tnum" y="4">'+p.n+'</text>';
+    return '<g class="tooth" data-altooth="'+p.n+'" transform="translate('+p.x.toFixed(1)+','+p.y.toFixed(1)+')">'+
+      '<rect class="tooth-body" x="'+(-r)+'" y="'+(-r)+'" width="'+(2*r)+'" height="'+(2*r)+'" rx="5" transform="rotate('+rot.toFixed(1)+')"'+bodyStyle+'/>'+label+'</g>';
+  }).join('');
+  var vb = isUp ? '35 18 470 285' : '35 70 470 285';
+  return '<svg viewBox="'+vb+'" xmlns="http://www.w3.org/2000/svg">'+
+    '<text class="archlbl" x="115" y="'+(isUp?42:120)+'">RIGHT</text><text class="archlbl" x="425" y="'+(isUp?42:120)+'">LEFT</text>'+
+    '<text class="archlbl" x="270" y="'+(isUp?185:230)+'">'+(isUp?'UPPER':'LOWER')+'</text>'+teeth+'</svg>';
+}
+function bindAlignTeeth(){
+  [].forEach.call(document.querySelectorAll('.tooth[data-altooth]'),function(g){
+    g.addEventListener('click',function(){ alignToggleMark(+g.getAttribute('data-altooth'), align._chartCode); renderStage(); refreshBar(); });
+  });
+}
+
+function renderAlignStage(stage){
+  var nm=STEPS()[step];
+  if(nm==='Review'){
+    stage.innerHTML=renderReview();
+    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+    return;
+  }
+  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
+
+  if(nm==='Arch'){
+    stage.innerHTML='<p class="hint">Which arch are we treating?</p>'+
+      '<div style="padding:8px 16px">'+
+      '<button class="archpick'+(curArch==='upper'?' on':'')+'" data-arch="upper"><span class="ap-ico">\u25E0</span><span><b>Upper</b><small>Maxillary</small></span></button>'+
+      '<button class="archpick'+(curArch==='lower'?' on':'')+'" data-arch="lower"><span class="ap-ico">\u25E1</span><span><b>Lower</b><small>Mandibular</small></span></button>'+
+      '<button class="archpick'+(curArch==='both'?' on':'')+'" data-arch="both"><span class="ap-ico">\u25A3</span><span><b>Both</b><small>Dual arch</small></span></button>'+
+      '</div>';
+    [].forEach.call(stage.querySelectorAll('.archpick'),function(b){ b.onclick=function(){ curArch=b.getAttribute('data-arch'); renderStage(); refreshBar(); }; });
+    return;
+  }
+
+  if(nm==='Range'){
+    var opts=[['3-3','3-3','Anterior only'],['5-5','5-5','2nd premolar to 2nd premolar'],['7-7','7-7','Includes molars']];
+    stage.innerHTML='<p class="hint">Align the treatment from\u2026</p><div style="padding:4px 16px"><div class="spl-tilewrap">'+
+      opts.map(function(o){ var on=align.range===o[0];
+        return '<button type="button" class="spl-tile'+(on?' on':'')+'" data-arange="'+o[0]+'"><div class="spl-tname">'+o[1]+'</div><div class="spl-tdesc">'+o[2]+'</div></button>'; }).join('')+
+      '</div></div>';
+    [].forEach.call(stage.querySelectorAll('[data-arange]'),function(b){ b.onclick=function(){ align.range=b.getAttribute('data-arange'); renderStage(); refreshBar(); }; });
+    return;
+  }
+
+  if(nm==='IPR'){
+    var html='<p class="hint">Allow IPR (interproximal reduction)?</p><div style="padding:4px 16px">'+
+      '<div class="rem-seg">'+
+        '<button type="button" class="rem-segbtn'+(align.ipr==='yes'?' on':'')+'" data-ipr="yes">Yes</button>'+
+        '<button type="button" class="rem-segbtn'+(align.ipr==='no'?' on':'')+'" data-ipr="no">No</button>'+
+      '</div>';
+    if(alignIsDual()){
+      html+='<label class="dec-hardchk" style="margin-top:12px"><input type="checkbox" id="alIprOpp"'+(align.iprOpp?' checked':'')+'> IPR in opposite arch <span style="color:var(--muted)">(dual arch only)</span></label>';
+    }
+    html+='<div class="rem-note" style="margin-top:10px">Specific teeth can be excluded from IPR on the Tooth Chart step (code EI).</div></div>';
+    stage.innerHTML=html;
+    [].forEach.call(stage.querySelectorAll('[data-ipr]'),function(b){ b.onclick=function(){ align.ipr=b.getAttribute('data-ipr'); renderStage(); refreshBar(); }; });
+    var o=stage.querySelector('#alIprOpp'); if(o) o.onchange=function(){ align.iprOpp=o.checked; };
+    return;
+  }
+
+  if(nm==='Attachments'){
+    stage.innerHTML='<p class="hint">Allow attachments?</p><div style="padding:4px 16px">'+
+      '<div class="rem-seg">'+
+        '<button type="button" class="rem-segbtn'+(align.attach==='yes'?' on':'')+'" data-att="yes">Yes</button>'+
+        '<button type="button" class="rem-segbtn'+(align.attach==='no'?' on':'')+'" data-att="no">No</button>'+
+      '</div>'+
+      '<div class="rem-note" style="margin-top:10px">Attachments create a surface the aligner pushes on for certain movements. Exclude specific teeth on the Tooth Chart step (code EA).</div></div>';
+    [].forEach.call(stage.querySelectorAll('[data-att]'),function(b){ b.onclick=function(){ align.attach=b.getAttribute('data-att'); renderStage(); refreshBar(); }; });
+    return;
+  }
+
+  if(nm==='Goals'){
+    function seg(label,key,a,b){ return '<div class="rem-sub-lbl">'+label+'</div><div class="rem-seg">'+
+      '<button type="button" class="rem-segbtn'+(align[key]===a[0]?' on':'')+'" data-goal="'+key+'|'+a[0]+'">'+a[1]+'</button>'+
+      '<button type="button" class="rem-segbtn'+(align[key]===b[0]?' on':'')+'" data-goal="'+key+'|'+b[0]+'">'+b[1]+'</button>'+
+      '</div>'; }
+    var ap=[['maintainU','Maintain Upper'],['maintainL','Maintain Lower'],['canineL','Improve Canine \u2014 Left'],['canineR','Improve Canine \u2014 Right'],['levelIncisal','Level Ant. \u2014 Incisal edge'],['levelGingival','Level Ant. \u2014 Gingival margin']];
+    var html='<p class="hint">Treatment goals.</p><div style="padding:4px 16px">';
+    html+='<div class="rem-sub-lbl">Anterior\u2013Posterior relation <span style="font-weight:600;color:var(--muted)">(choose any)</span></div><div class="spl-indent">'+
+      ap.map(function(o){ var on=!!align.apSet[o[0]]; return '<button type="button" class="rem-opt'+(on?' on':'')+'" data-ap="'+o[0]+'"><span class="zb-check'+(on?' on':'')+'"></span>'+o[1]+'</button>'; }).join('')+'</div>';
+    html+=seg('Overjet','overjet',['maintain','Maintain'],['improve','Improve']);
+    html+=seg('Overbite','overbite',['maintain','Maintain'],['improve','Improve']);
+    html+='<div class="rem-sub-lbl">Tooth size discrepancy \u2014 leave spaces open distal to <span style="font-weight:600;color:var(--muted)">(optional)</span></div><div class="spl-indent">'+
+      [['laterals','Laterals'],['canines','Canines']].map(function(o){ var on=!!align.spacesOpen[o[0]]; return '<button type="button" class="rem-opt'+(on?' on':'')+'" data-space="'+o[0]+'"><span class="zb-check'+(on?' on':'')+'"></span>'+o[1]+'</button>'; }).join('')+'</div>';
+    html+='</div>';
+    stage.innerHTML=html;
+    [].forEach.call(stage.querySelectorAll('[data-ap]'),function(b){ b.onclick=function(){ var k=b.getAttribute('data-ap'); if(align.apSet[k]) delete align.apSet[k]; else align.apSet[k]=true; renderStage(); refreshBar(); }; });
+    [].forEach.call(stage.querySelectorAll('[data-goal]'),function(b){ b.onclick=function(){ var p=b.getAttribute('data-goal').split('|'); align[p[0]]=(align[p[0]]===p[1]?'':p[1]); renderStage(); refreshBar(); }; });
+    [].forEach.call(stage.querySelectorAll('[data-space]'),function(b){ b.onclick=function(){ var k=b.getAttribute('data-space'); if(align.spacesOpen[k]) delete align.spacesOpen[k]; else align.spacesOpen[k]=true; renderStage(); refreshBar(); }; });
+    return;
+  }
+
+  if(nm==='Midline'){
+    function mlBlock(letter,key){
+      var imp=align['ml'+letter], mv=align['ml'+letter+'move'], mm=align['ml'+letter+'mm'];
+      var h='<div class="rem-sub-lbl">'+(letter==='U'?'Upper midline':'Lower midline')+'</div>';
+      h+='<div class="rem-seg">'+
+        '<button type="button" class="rem-segbtn'+(imp==='maintain'?' on':'')+'" data-ml="'+letter+'|maintain">Maintain</button>'+
+        '<button type="button" class="rem-segbtn'+(imp==='improve'?' on':'')+'" data-ml="'+letter+'|improve">Improve</button>'+
+      '</div>';
+      if(imp==='improve'){
+        h+='<div class="rem-seg" style="margin-top:6px">'+
+          '<button type="button" class="rem-segbtn'+(mv==='left'?' on':'')+'" data-mlmove="'+letter+'|left">To patient left</button>'+
+          '<button type="button" class="rem-segbtn'+(mv==='right'?' on':'')+'" data-mlmove="'+letter+'|right">To patient right</button>'+
+        '</div>';
+        h+='<div class="sys-chiprow" style="margin-top:6px">'+
+          ['.5mm','1mm','2mm'].map(function(v){ return '<button type="button" class="sys-chip'+(mm===v?' on':'')+'" data-mlmm="'+letter+'|'+v+'">'+v+'</button>'; }).join('')+
+        '</div>';
+      }
+      return h;
+    }
+    var html='<p class="hint">Midline <span style="font-weight:600;color:var(--muted)">(only set if needed)</span>.</p><div style="padding:4px 16px">';
+    if(curArch==='upper'||curArch==='both') html+=mlBlock('U','U');
+    if(curArch==='lower'||curArch==='both') html+='<div style="margin-top:12px">'+mlBlock('L','L')+'</div>';
+    html+='</div>';
+    stage.innerHTML=html;
+    [].forEach.call(stage.querySelectorAll('[data-ml]'),function(b){ b.onclick=function(){ var p=b.getAttribute('data-ml').split('|'); align['ml'+p[0]]=(align['ml'+p[0]]===p[1]?'':p[1]); renderStage(); refreshBar(); }; });
+    [].forEach.call(stage.querySelectorAll('[data-mlmove]'),function(b){ b.onclick=function(){ var p=b.getAttribute('data-mlmove').split('|'); align['ml'+p[0]+'move']=(align['ml'+p[0]+'move']===p[1]?'':p[1]); renderStage(); refreshBar(); }; });
+    [].forEach.call(stage.querySelectorAll('[data-mlmm]'),function(b){ b.onclick=function(){ var p=b.getAttribute('data-mlmm').split('|'); align['ml'+p[0]+'mm']=(align['ml'+p[0]+'mm']===p[1]?'':p[1]); renderStage(); refreshBar(); }; });
+    return;
+  }
+
+  if(nm==='Tooth Chart'){
+    var CODES=[['EI','Excl. IPR'],['EA','Excl. Attach'],['R','Restoration'],['I','Implant site'],['SB','Splinted bridge']];
+    if(!align._chartCode) align._chartCode='EI';
+    var html='<p class="hint">Mark teeth (optional). Pick a code, then tap teeth.</p><div style="padding:4px 16px">';
+    html+='<div class="sys-chiprow">'+CODES.map(function(c){ return '<button type="button" class="sys-chip'+(align._chartCode===c[0]?' on':'')+'" data-alcode="'+c[0]+'"><b>'+c[0]+'</b> '+c[1]+'</button>'; }).join('')+'</div>';
+    if(curArch==='upper'||curArch==='both') html+='<div class="chartwrap">'+alignArchSvg(true)+'</div>';
+    if(curArch==='lower'||curArch==='both') html+='<div class="chartwrap">'+alignArchSvg(false)+'</div>';
+    html+='<div class="rem-note" style="margin-top:8px">EI = exclude from IPR \u00b7 EA = exclude from attachments \u00b7 R = restoration \u00b7 I = implant site \u00b7 SB = splinted bridge. Tap a marked tooth again with the same code to clear it.</div>';
+    html+='</div>';
+    stage.innerHTML=html;
+    [].forEach.call(stage.querySelectorAll('[data-alcode]'),function(b){ b.onclick=function(){ align._chartCode=b.getAttribute('data-alcode'); renderStage(); }; });
+    bindAlignTeeth();
+    return;
+  }
+
+  if(nm==='Case Specs'){
+    stage.innerHTML='<p class="hint">Case specifics.</p><div style="padding:6px 16px">'+
+      '<label class="dec-hardchk"><input type="checkbox" id="alExp"'+(align.expedite?' checked':'')+'> Expedite <span style="color:var(--muted)">(additional fees apply)</span></label>'+
+      '<div class="rem-sub-lbl" style="margin-top:12px">Notes for the lab</div>'+
+      '<textarea id="alNotes" rows="6" placeholder="Anything else the lab should know\u2026" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;font-size:14px;font-family:inherit;line-height:1.5">'+(align.notes||'').replace(/</g,'&lt;')+'</textarea>'+
+      '</div>';
+    var e=stage.querySelector('#alExp'); if(e) e.onchange=function(){ align.expedite=e.checked; refreshBar(); };
+    var t=stage.querySelector('#alNotes'); if(t) t.oninput=function(){ align.notes=t.value; };
+    return;
+  }
+}
+
+function alignProductName(){ return 'CLEARaline Aligners'; }
+function alignMarksSummary(){
+  var keys=Object.keys(align.marks); if(!keys.length) return 'None';
+  return keys.sort(function(a,b){return a-b;}).map(function(t){ return '#'+t+' '+(align.marks[t].join('/')); }).join(', ');
+}
 
 function renderSplintStage(stage){
  var nm=STEPS()[step];
@@ -3478,12 +3939,29 @@ function renderSplintStage(stage){
    var q = isDigital ? 'This is a digital design (STL file). Confirm the file delivery.' : 'Who fabricates this Comfort Hard splint?';
    var roeLbl = isDigital ? 'ROE fabricates from the file' : 'ROE fabricates the appliance';
    var clientLbl = isDigital ? 'File for in-office print (client)' : 'Design &amp; send file \u2014 client prints in-office';
+   var deliverBlock='';
+   if(spl.fabricator==='client'){
+     deliverBlock='<div class="rem-sub-lbl" style="margin-top:14px">How should we send the file? <span style="color:#c0392b">*</span> <span style="font-weight:600;color:var(--muted)">(pick one)</span></div>'+
+       '<div class="spl-indent">'+
+         '<button type="button" class="rem-opt'+(spl.clientDeliver==='email'?' on':'')+'" data-deliver="email">Email the file to an address</button>';
+     if(spl.clientDeliver==='email'){
+       deliverBlock+='<input id="splEmail" type="email" placeholder="name@practice.com" value="'+(spl.clientEmail||'').replace(/"/g,'&quot;')+'" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;margin:6px 0 4px">';
+     }
+     deliverBlock+='<button type="button" class="rem-opt'+(spl.clientDeliver==='sprintray'?' on':'')+'" data-deliver="sprintray">Send via <b>SprintRay Cloud</b> (Partner)</button>'+
+       '</div>';
+     if(spl.clientDeliver==='sprintray'){
+       deliverBlock+='<div class="rem-note" style="margin-top:6px">We\u2019ll push the print file to your SprintRay Cloud account for in-office printing.</div>';
+     }
+   }
    stage.innerHTML='<p class="hint">'+q+'</p>'+
      '<div style="padding:6px 16px">'+
        '<button type="button" class="rem-opt'+(spl.fabricator==='roe'?' on':'')+'" data-fab="roe">'+roeLbl+'</button>'+
        '<button type="button" class="rem-opt'+(spl.fabricator==='client'?' on':'')+'" data-fab="client">'+clientLbl+'</button>'+
+       deliverBlock+
      '</div>';
-   [].forEach.call(stage.querySelectorAll('button[data-fab]'),function(b){ b.onclick=function(){ spl.fabricator=b.getAttribute('data-fab'); renderStage(); refreshBar(); }; });
+   [].forEach.call(stage.querySelectorAll('button[data-fab]'),function(b){ b.onclick=function(){ spl.fabricator=b.getAttribute('data-fab'); if(spl.fabricator!=='client'){ spl.clientDeliver=''; spl.clientEmail=''; } renderStage(); refreshBar(); }; });
+   [].forEach.call(stage.querySelectorAll('button[data-deliver]'),function(b){ b.onclick=function(){ spl.clientDeliver=b.getAttribute('data-deliver'); if(spl.clientDeliver!=='email') spl.clientEmail=''; renderStage(); refreshBar(); }; });
+   var em=stage.querySelector('#splEmail'); if(em) em.oninput=function(){ spl.clientEmail=em.value; refreshBar(); };
    return;
  }
  stage.innerHTML='<div class="laterwrap">Step: '+nm+'</div>';
@@ -3497,7 +3975,12 @@ function splStepOK(nm){
  if(nm==='Arch') return !!curArch;
  if(nm==='Splint Product') return !!spl.prod;
  if(nm==='Splint Options') return true; // options have sensible defaults
- if(nm==='Who Fabricates') return true; // defaults to ROE
+ if(nm==='Who Fabricates'){
+   if(spl.fabricator!=='client') return true; // ROE path always fine
+   if(spl.clientDeliver==='sprintray') return true;
+   if(spl.clientDeliver==='email') return /\S+@\S+\.\S+/.test(spl.clientEmail||'');
+   return false; // client chosen but no delivery method yet
+ }
  return true;
 }
 function faStepOK(nm){
@@ -3603,6 +4086,8 @@ function remStepOK(nm){
  if(nm==='Arch') return !!curArch;
  if(nm==='Denture Type') return !!rem.dentureKind && !!rem.dentureType;
  if(nm==='Denture Stage') return !!rem.dentureStage;
+ if(nm==='Tooth Class') return !!rem.toothClass;
+ if(nm==='Tooth Position') return true;   // optional fine-tuning
  if(nm==='Teeth'){
    if(rem.appliance==='denture'){
      // Immediate must mark at least one extraction; new denture needs no marks.
@@ -3658,8 +4143,14 @@ function renderLauncher(){
      '<span class="eng-txt"><span class="eng-name">Add requested information</span><span class="eng-desc">Patient name, case ID, files &amp; notes</span></span>'+
      '<span class="eng-go">\u203A</span>'+
    '</button>'+
+   '<button type="button" class="eng-card" id="decipherCard" data-decipher="1">'+
+     '<span class="eng-ic">\u{1F50D}</span>'+
+     '<span class="eng-txt"><span class="eng-name">Rx Triage</span><span class="eng-desc">Read a batch of incoming Rx\u2019s \u2014 score, decipher &amp; route by department</span></span>'+
+     '<span class="eng-go">\u203A</span>'+
+   '</button>'+
  '</div>';
  var ai=document.getElementById('addInfoCard'); if(ai) ai.onclick=function(){ renderInfoPage(); };
+ var dc=document.getElementById('decipherCard'); if(dc) dc.onclick=function(){ triageReset(); renderTriagePage(); };
  [].forEach.call(stage.querySelectorAll('.eng-card[data-soon]'),function(b){ if(b.getAttribute('data-addinfo')) return; b.onclick=function(){
    stage.innerHTML='<div class="laterwrap"><div class="big">\u{1F6A7}</div><b style="color:var(--ink);font-size:16px">Removable Repairs</b>'+
      '<p style="margin-top:8px;line-height:1.5"><b>Coming soon.</b> Relines, repairs, clasp additions and tooth replacements will live here.</p>'+
@@ -3727,6 +4218,240 @@ function renderInfoPage(){
    var note=document.getElementById('ciSaved'); if(note) note.textContent='\u2713 Saved \u2014 this will travel with the case.';
  };
 }
+/* ===================== RX TRIAGE (read a batch of Rx's -> score, decipher & route) =====================
+ * Drop up to 10 incoming Rx's. Each is analyzed in 3 scored sections:
+ *   A) Doctor identity  — name, address, phone (in that order); flags missing address/phone.
+ *   B) Standard fields  — checked/filled boxes (crown #, upper/lower, return-for-finish, case specs).
+ *   C) Handwritten      — deciphered to text, low-confidence spans highlighted.
+ * Each section gets its own confidence score. Cases are categorized by Engine and shown as
+ * colored tiles grouped under per-engine headers. 100=green(production), 75=L1, 50=L2, 1=red(Senior).
+ *
+ * No API key here — calls /.netlify/functions/claude. Until that's deployed, a DEMO batch renders
+ * so the screen can be shown. Real reads drop in automatically once the backend is live.
+ * ===================================================================================================== */
+var TRIAGE_ENDPOINT='/.netlify/functions/claude';
+var triage={ files:[], busy:false, cases:[], error:'' };
+function triageReset(){ triage={ files:[], busy:false, cases:[], error:'' }; }
+
+// Engine catalog for categorization + tile border colors.
+var TRIAGE_ENGINES={
+ fixed:    {name:'Fixed & Implants', color:'#3E91C9'},
+ removable:{name:'Removable',        color:'#9b5fb0'},
+ fullarch: {name:'Full Arch',        color:'#c0707a'},
+ splints:  {name:'Splints & Guards', color:'#d99100'},
+ guides:   {name:'Surgical Guides',  color:'#1f8a8f'},
+ ortho:    {name:'Orthodontic',      color:'#c44a8f'},
+ aligners: {name:'CLEARaline',       color:'#2aa775'},
+ unknown:  {name:'Uncategorized',    color:'#8295a3'}
+};
+var TRIAGE_ENGINE_ORDER=['fixed','removable','fullarch','splints','guides','ortho','aligners','unknown'];
+
+// Score bands -> who reviews.
+function triageBand(score){
+ var n=Math.max(1,Math.min(100, parseInt(score,10)||0));
+ if(n>=100) return {lbl:'Production', cls:'tg-prod', color:'#1f9d57'};
+ if(n>=75)  return {lbl:'Level 1 review', cls:'tg-l1', color:'#6aaf3a'};
+ if(n>=50)  return {lbl:'Level 2 review', cls:'tg-l2', color:'#d99100'};
+ return {lbl:'Senior Staff', cls:'tg-sr', color:'#c0392b'};
+}
+function triageScoreColor(score){ return triageBand(score).color; }
+
+function triageSystemPrompt(){
+ return "You are an Rx triage analyst for ROE Dental Laboratory. You read an incoming dental lab "+
+  "prescription (typed, handwritten, photo, or PDF) and return a structured triage assessment that "+
+  "routes the case to the right department and flags read-quality for human review. Be precise; never invent.\n\n"+
+  "Departments (engines): fixed (crowns/bridges/implant crowns), removable (dentures/partials/flexibles), "+
+  "fullarch (hybrid/fixed full-arch), splints (night guards/splints), guides (surgical guides), "+
+  "ortho (retainers/expanders/functional appliances), aligners (CLEARaline clear aligners). Use 'unknown' if unclear.\n\n"+
+  "Return ONLY valid JSON (no markdown/backticks) in EXACTLY this shape:\n"+
+  "{\n"+
+  '  "engine": "fixed|removable|fullarch|splints|guides|ortho|aligners|unknown",\n'+
+  '  "doctor": { "name":"", "address":"", "phone":"", "missing":["address"|"phone"...], "score":0, "notes":"" },\n'+
+  '  "fields": { "items":["short fact each: e.g. Crown #8","Upper","Return for finish","Shade A2"], "score":0, "notes":"" },\n'+
+  '  "handwritten": { "text":"deciphered handwriting as plain text", "lowConfidence":["verbatim snippet uncertain"], "score":0, "notes":"" }\n'+
+  "}\n"+
+  "Each score is an integer 1-100 confidence in the READ of that section (100=perfectly legible/complete; "+
+  "lower when unclear or missing). doctor.score should drop if address or phone is missing or unreadable. "+
+  "fields.score reflects how cleanly the checked/filled standard items read. handwritten.score reflects decipher confidence.";
+}
+function triageUserContent(dataUrl){
+ var t="Triage this Rx. Return the JSON assessment.";
+ if(/^data:image\//.test(dataUrl)){ var m=dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/); if(m) return [{type:'image',source:{type:'base64',media_type:m[1],data:m[2]}},{type:'text',text:t}]; }
+ if(/^data:application\/pdf/.test(dataUrl)){ var p=dataUrl.match(/^data:application\/pdf;base64,(.*)$/); if(p) return [{type:'document',source:{type:'base64',media_type:'application/pdf',data:p[1]}},{type:'text',text:t}]; }
+ return [{type:'text',text:t+"\n\n(No readable file content.)"}];
+}
+function triageParse(txt){ if(!txt) return null; var s=txt.replace(/```json/gi,'').replace(/```/g,'').trim(); var a=s.indexOf('{'),b=s.lastIndexOf('}'); if(a>=0&&b>a) s=s.slice(a,b+1); try{ return JSON.parse(s); }catch(e){ return null; } }
+
+function triageAnalyzeOne(file, cb){
+ fetch(TRIAGE_ENDPOINT,{ method:'POST', headers:{'Content-Type':'application/json'},
+  body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1500, system:triageSystemPrompt(), messages:[{role:'user',content:triageUserContent(file.dataUrl)}] })
+ }).then(function(r){return r.text();}).then(function(t){
+  var data; try{ data=JSON.parse(t); }catch(e){ data=null; }
+  if(!data || data.error){ cb(null); return; }
+  var textOut=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
+  cb(triageParse(textOut));
+ }).catch(function(){ cb(null); });
+}
+
+// DEMO data so the screen is presentable before the backend is wired.
+function triageDemoCases(){
+ return [
+  {name:'rx_01.jpg', engine:'fixed', doctor:{name:'Dr. Jane Smith',address:'123 Main St, Cleveland OH',phone:'(440) 555-0199',missing:[],score:100,notes:'All identity fields legible.'},
+    fields:{items:['Crown #8, #9','Upper','Layered zirconia','Shade A2','Return for finish'],score:100,notes:'Cleanly checked.'},
+    handwritten:{text:'Please keep contacts tight and match the adjacent centrals.',lowConfidence:[],score:100,notes:'Clear print.'}},
+  {name:'rx_02.png', engine:'fixed', doctor:{name:'Dr. A. Patel',address:'',phone:'(216) 555-0144',missing:['address'],score:72,notes:'Address blank.'},
+    fields:{items:['Crown #14','Upper','PFM','Shade B1'],score:88,notes:'Legible.'},
+    handwritten:{text:'Margin slightly subgingival on mesial \u2014 verify.',lowConfidence:['subgingival'],score:74,notes:'One uncertain word.'}},
+  {name:'rx_03.pdf', engine:'removable', doctor:{name:'Dr. R. Gomez',address:'87 Lake Rd, Westlake OH',phone:'',missing:['phone'],score:68,notes:'Phone missing.'},
+    fields:{items:['Upper complete denture','Set-up & finish','Shade A3'],score:90,notes:'Standard fields clear.'},
+    handwritten:{text:'Patient prefers a fuller lip support.',lowConfidence:[],score:95,notes:''}},
+  {name:'rx_04.jpg', engine:'guides', doctor:{name:'Dr. Lee',address:'9 Elm Ave',phone:'(330) 555-0102',missing:[],score:96,notes:''},
+    fields:{items:['Surgical guide','Sites #4,#5','Tooth-supported'],score:80,notes:'Support type slightly unclear.'},
+    handwritten:{text:'Fully guided, NobelActive 4.3, please confirm sleeve kit.',lowConfidence:['NobelActive 4.3'],score:55,notes:'Implant line hard to read.'}},
+  {name:'rx_05.png', engine:'splints', doctor:{name:'Dr. Owens',address:'441 Oak Blvd, Akron OH',phone:'(330) 555-0177',missing:[],score:100,notes:''},
+    fields:{items:['Night guard','Hard','Lower','Models enclosed'],score:100,notes:''},
+    handwritten:{text:'',lowConfidence:[],score:100,notes:'No handwriting.'}},
+  {name:'rx_06.jpg', engine:'ortho', doctor:{name:'(illegible)',address:'',phone:'',missing:['address','phone'],score:28,notes:'Header smudged; identity unreadable.'},
+    fields:{items:['Hawley retainer','Upper'],score:45,notes:'Color choice unclear.'},
+    handwritten:{text:'Blue with ??? sparkle, add bite plane.',lowConfidence:['??? sparkle'],score:38,notes:'Color word unreadable.'}},
+  {name:'rx_07.pdf', engine:'aligners', doctor:{name:'Dr. Chen',address:'12 Bay St, Sandusky OH',phone:'(419) 555-0153',missing:[],score:100,notes:''},
+    fields:{items:['CLEARaline','Both arches','5-5 range','Allow IPR','Allow attachments'],score:100,notes:''},
+    handwritten:{text:'Improve overjet, maintain midline.',lowConfidence:[],score:100,notes:''}}
+ ];
+}
+
+function triageRun(){
+ triage.error=''; triage.busy=true; renderTriagePage();
+ if(!triage.files.length){ triage.busy=false; renderTriagePage(); return; }
+ var results=[]; var pending=triage.files.length; var anyLive=false;
+ triage.files.forEach(function(f){
+  triageAnalyzeOne(f, function(res){
+   if(res){ anyLive=true; res._name=f.name; results.push(res); }
+   if(--pending===0){
+    if(anyLive){ triage.cases=results.map(triageNormalize); }
+    else { triage.error='AI service not reachable \u2014 showing a demo batch. Deploy the Netlify function to triage real files.'; triage.cases=triageDemoCases().map(triageNormalize); }
+    triage.busy=false; renderTriagePage();
+   }
+  });
+ });
+}
+function triageNormalize(c){
+ c.engine = TRIAGE_ENGINES[c.engine] ? c.engine : 'unknown';
+ c.name = c._name || c.name || 'Rx';
+ ['doctor','fields','handwritten'].forEach(function(k){ if(!c[k]) c[k]={score:1,notes:''}; });
+ return c;
+}
+function triageGroupByEngine(){
+ var groups={};
+ triage.cases.forEach(function(c){ (groups[c.engine]=groups[c.engine]||[]).push(c); });
+ return groups;
+}
+
+function renderTriagePage(){
+ var stage=document.getElementById('stage');
+ var esc=function(s){ return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); };
+ var html='<div style="padding:14px 16px">'+
+   '<div class="launch-title" style="font-size:20px">Rx Triage</div>'+
+   '<div class="launch-sub">Drop up to 10 incoming Rx\u2019s. We score the read, decipher handwriting, and route each to the right department.</div>';
+
+ // Dropzone
+ html+='<div id="tgDrop" class="info-drop" style="margin-top:4px">'+
+   '<input id="tgFile" type="file" accept="image/*,application/pdf" multiple style="display:none">'+
+   '<div class="info-drop-ic">\u{1F4C4}</div><div><b>Drop Rx\u2019s here</b> or tap to browse <span style="color:var(--muted)">(up to 10)</span></div>'+
+   '<div style="font-size:12px;color:var(--muted);margin-top:2px">.jpg \u00b7 .png \u00b7 .pdf</div></div>';
+ if(triage.files.length){
+   html+='<div class="info-files">'+triage.files.map(function(f,i){ return '<div class="info-file"><span>\u{1F4CE} '+esc(f.name)+'</span><button type="button" class="info-fx" data-tgrm="'+i+'">\u00D7</button></div>'; }).join('')+'</div>';
+   html+='<button type="button" class="rx-submit" id="tgRun" style="margin-top:10px">'+(triage.busy?'Triaging\u2026':'Triage '+triage.files.length+' Rx'+(triage.files.length>1?'\u2019s':''))+'</button>';
+ } else {
+   html+='<button type="button" class="ack-btn" id="tgDemo" style="margin-top:10px">See a demo batch</button>';
+ }
+ if(triage.busy){ html+='<div class="dec-busy">\u23F3 Reading and scoring the batch\u2026</div>'; }
+ if(triage.error){ html+='<div class="dec-err">'+esc(triage.error)+'</div>'; }
+
+ // Results grouped by engine
+ if(triage.cases.length){
+   var groups=triageGroupByEngine();
+   html+='<div class="tg-results">';
+   TRIAGE_ENGINE_ORDER.forEach(function(eng){
+     var list=groups[eng]; if(!list||!list.length) return;
+     var E=TRIAGE_ENGINES[eng];
+     html+='<div class="tg-grouphdr" style="--ec:'+E.color+'"><span class="tg-grpdot"></span>'+E.name+' <span class="tg-grpn">'+list.length+'</span></div>';
+     html+='<div class="tg-grid">';
+     list.forEach(function(c){
+       html+=triageTile(c, E, esc);
+     });
+     html+='</div>';
+   });
+   html+='</div>';
+ }
+
+ html+='<div style="margin-top:16px"><button type="button" class="ack-btn" id="tgBack" style="margin:0">\u2039 Back</button></div>';
+ html+='</div>';
+ stage.innerHTML=html;
+
+ // wire dropzone
+ var fi=stage.querySelector('#tgFile'), dz=stage.querySelector('#tgDrop');
+ function addFiles(list){
+   var arr=[].slice.call(list);
+   arr.forEach(function(f){ if(triage.files.length>=10) return; var fr=new FileReader(); fr.onload=function(){ triage.files.push({name:f.name,type:f.type,dataUrl:fr.result}); renderTriagePage(); }; fr.readAsDataURL(f); });
+ }
+ if(dz){ dz.onclick=function(){ fi&&fi.click(); };
+   dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('drag'); });
+   dz.addEventListener('dragleave',function(){ dz.classList.remove('drag'); });
+   dz.addEventListener('drop',function(e){ e.preventDefault(); dz.classList.remove('drag'); if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length) addFiles(e.dataTransfer.files); }); }
+ if(fi){ fi.onchange=function(){ if(fi.files&&fi.files.length) addFiles(fi.files); }; }
+ [].forEach.call(stage.querySelectorAll('[data-tgrm]'),function(b){ b.onclick=function(){ triage.files.splice(+b.getAttribute('data-tgrm'),1); renderTriagePage(); }; });
+ var run=stage.querySelector('#tgRun'); if(run) run.onclick=function(){ if(!triage.busy) triageRun(); };
+ var demo=stage.querySelector('#tgDemo'); if(demo) demo.onclick=function(){ triage.cases=triageDemoCases().map(triageNormalize); renderTriagePage(); };
+ var bk=stage.querySelector('#tgBack'); if(bk) bk.onclick=function(){ renderLauncher(); };
+ [].forEach.call(stage.querySelectorAll('[data-tgexp]'),function(b){ b.onclick=function(){ var i=+b.getAttribute('data-tgexp'); var el=document.getElementById('tgbody-'+i); if(el) el.style.display = el.style.display==='none'?'block':'none'; }; });
+}
+
+function triageScorePill(label, score, esc){
+ var band=triageBand(score); var n=Math.max(1,Math.min(100,parseInt(score,10)||0));
+ return '<div class="tg-score"><div class="tg-score-top"><span class="tg-score-lbl">'+label+'</span>'+
+   '<span class="tg-score-n" style="color:'+band.color+'">'+n+'</span></div>'+
+   '<div class="tg-score-bar"><span style="width:'+n+'%;background:'+band.color+'"></span></div>'+
+   '<div class="tg-score-route" style="color:'+band.color+'">'+band.lbl+'</div></div>';
+}
+
+function triageTile(c, E, esc){
+ var idx = triage.cases.indexOf(c);
+ var d=c.doctor||{}, f=c.fields||{}, h=c.handwritten||{};
+ var missing=(d.missing&&d.missing.length)?'<div class="tg-miss">\u26A0 Missing: '+d.missing.map(esc).join(', ')+'</div>':'';
+ var html='<div class="tg-tile" style="--ec:'+E.color+'">';
+ html+='<div class="tg-tile-head"><span class="tg-tile-name">'+esc(c.name)+'</span><span class="tg-tile-eng" style="background:'+E.color+'">'+E.name+'</span></div>';
+ // 3 section scores
+ html+='<div class="tg-scores">'+
+   triageScorePill('Doctor', d.score, esc)+
+   triageScorePill('Fields', f.score, esc)+
+   triageScorePill('Handwriting', h.score, esc)+'</div>';
+ html+=missing;
+ // expandable detail
+ html+='<button type="button" class="tg-expbtn" data-tgexp="'+idx+'">View analysis \u203A</button>';
+ html+='<div class="tg-body" id="tgbody-'+idx+'" style="display:none">';
+ // A) doctor
+ html+='<div class="tg-sec"><div class="tg-sec-h">A \u00b7 Doctor identity</div>'+
+   '<div class="tg-kv"><b>Name:</b> '+(esc(d.name)||'<i>\u2014</i>')+'</div>'+
+   '<div class="tg-kv"><b>Address:</b> '+(esc(d.address)||'<span class="tg-na">missing</span>')+'</div>'+
+   '<div class="tg-kv"><b>Phone:</b> '+(esc(d.phone)||'<span class="tg-na">missing</span>')+'</div>'+
+   (d.notes?'<div class="tg-note">'+esc(d.notes)+'</div>':'')+'</div>';
+ // B) fields
+ html+='<div class="tg-sec"><div class="tg-sec-h">B \u00b7 Checked &amp; filled fields</div>'+
+   ((f.items&&f.items.length)?'<ul class="tg-ul">'+f.items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<div class="tg-na">none read</div>')+
+   (f.notes?'<div class="tg-note">'+esc(f.notes)+'</div>':'')+'</div>';
+ // C) handwritten
+ var htext=esc(h.text||'');
+ (h.lowConfidence||[]).forEach(function(sn){ if(!sn) return; var e=esc(sn); htext=htext.split(e).join('<mark class="tg-low">'+e+'</mark>'); });
+ html+='<div class="tg-sec"><div class="tg-sec-h">C \u00b7 Handwriting deciphered</div>'+
+   '<div class="tg-hand">'+(htext||'<span class="tg-na">none</span>')+'</div>'+
+   ((h.lowConfidence&&h.lowConfidence.length)?'<div class="tg-lowcap">\u26A0 Low-confidence reads highlighted above</div>':'')+
+   (h.notes?'<div class="tg-note">'+esc(h.notes)+'</div>':'')+'</div>';
+ html+='</div>'; // body
+ html+='</div>'; // tile
+ return html;
+}
+
 function startCase(engine){
  curEngine=engine;
  caseStarted=true;
@@ -3735,7 +4460,7 @@ function startCase(engine){
  if(typeof sel==='object'){ for(var k in sel) delete sel[k]; }
  if(typeof mat==='object'){ for(var k2 in mat) delete mat[k2]; }
  if(typeof alloy==='object'){ for(var k3 in alloy) delete alloy[k3]; }
- if(typeof remReset==='function') remReset(); if(typeof splReset==='function') splReset(); if(typeof faReset==='function') faReset(); if(typeof gdReset==='function') gdReset(); if(typeof orthoReset==='function') orthoReset();
+ if(typeof remReset==='function') remReset(); if(typeof splReset==='function') splReset(); if(typeof faReset==='function') faReset(); if(typeof gdReset==='function') gdReset(); if(typeof orthoReset==='function') orthoReset(); if(typeof alignReset==='function') alignReset();
  // reset Fixed-engine dial-in-shade painting so a saved shade image never carries into the next product
  if(typeof dial==='object'){ dial={open:false, sys:null, strokes:[], byTooth:{}, view:'arch', saved:null, savedMarks:-1}; }
  recEmail=''; recRequested=false;   // records-by-email resets per case
@@ -3752,6 +4477,7 @@ function renderStage(){
  if(curEngine==='fullarch'){ renderFullArchStage(stage); return; }
  if(curEngine==='guides'){ renderGuidesStage(stage); return; }
  if(curEngine==='ortho'){ renderOrthoStage(stage); return; }
+ if(curEngine==='aligners'){ renderAlignStage(stage); return; }
  if(step===0){
   stage.innerHTML='<p class="hint">Which arch are we building? Pick one, or choose <b>Both Arches</b> to chart upper and lower together.</p>'+
    '<div style="padding:8px 16px">'+
@@ -3959,6 +4685,24 @@ function renderEnginePicker(){
 }
 
 function reviewDecision(nm){
+ if(curEngine==='aligners'){
+   if(nm==='Arch') return curArch==='both'?'Both (dual arch)':(curArch==='lower'?'Lower':(curArch==='upper'?'Upper':'Not set'));
+   if(nm==='Range') return alignRangeLabel(align.range)||'Not set';
+   if(nm==='IPR'){ if(!align.ipr) return 'Not set'; return (align.ipr==='yes'?'Allowed':'Not allowed')+(align.iprOpp?' \u00b7 opp. arch':''); }
+   if(nm==='Attachments') return align.attach?(align.attach==='yes'?'Allowed':'Not allowed'):'Not set';
+   if(nm==='Goals'){ var p=[]; var apm={maintainU:'Maintain U',maintainL:'Maintain L',canineL:'Canine L',canineR:'Canine R',levelIncisal:'Level incisal',levelGingival:'Level gingival'};
+     Object.keys(align.apSet||{}).forEach(function(k){ p.push(apm[k]||k); });
+     if(align.overjet) p.push('Overjet: '+align.overjet); if(align.overbite) p.push('Overbite: '+align.overbite);
+     var sp=Object.keys(align.spacesOpen||{}); if(sp.length) p.push('Spaces distal to '+sp.join(' & '));
+     return p.length?p.join(' \u00b7 '):'None set'; }
+   if(nm==='Midline'){ var m=[];
+     if(align.mlU){ m.push('U: '+align.mlU+(align.mlU==='improve'?(' '+(align.mlUmove||'')+' '+(align.mlUmm||'')):'')); }
+     if(align.mlL){ m.push('L: '+align.mlL+(align.mlL==='improve'?(' '+(align.mlLmove||'')+' '+(align.mlLmm||'')):'')); }
+     return m.length?m.join(' \u00b7 '):'Not set'; }
+   if(nm==='Tooth Chart') return alignMarksSummary();
+   if(nm==='Case Specs'){ var c=[]; if(align.expedite) c.push('Expedite'); if(align.notes) c.push('Notes added'); return c.length?c.join(' \u00b7 '):'None'; }
+   return '';
+ }
  if(curEngine==='ortho'){
    if(nm==='Arch') return curArch==='both'?'Both':(curArch==='lower'?'Lower':(curArch==='upper'?'Upper':'Not set'));
    if(nm==='Category'){ var c=orthoCat(); return c?c.name:'Not set'; }
@@ -4068,7 +4812,7 @@ function reviewDecision(nm){
      }
      return bits.length?bits.join(' \u00B7 '):'Standard';
    }
-   if(nm==='Who Fabricates') return spl.fabricator==='client'?'Client prints in-office':'ROE fabricates';
+   if(nm==='Who Fabricates'){ if(spl.fabricator!=='client') return 'ROE fabricates'; var d=spl.clientDeliver==='email'?('email \u2192 '+(spl.clientEmail||'?')):(spl.clientDeliver==='sprintray'?'SprintRay Cloud':'delivery not set'); return 'Client prints in-office \u00b7 '+d; }
    return '';
  }
  // Removable decisions
@@ -4078,6 +4822,8 @@ function reviewDecision(nm){
    if(nm==='Denture Type') return (rem.dentureKind==='immediate'?'Immediate · ':'New · ')+rem.dentureType;
    if(nm==='Denture Bespoke') return rem.dentureBespoke?'Bespoke design added':'No';
    if(nm==='Denture Stage') return rem.dentureStage||'Not set';
+   if(nm==='Tooth Class') return 'Class '+(rem.toothClass||'I');
+   if(nm==='Tooth Position'){ var moved=Object.keys(fa.td||{}).some(function(k){return (fa.td[k]||0)!==0;}); return moved?'Custom positions set':'No changes (Class '+(rem.toothClass||'I')+')'; }
    if(nm==='Teeth'){ if(remIsDenture()){ var l=remExtractList(); return l.length?('Extract #'+l.join(', #')):'None marked'; } var ms=[],ab=[],ex=[]; Object.keys(rem.toothState).forEach(function(n){ var s=rem.toothState[n]; if(s==='missing')ms.push(n); else if(s==='abutment')ab.push(n); else if(s==='extract')ex.push(n); }); if(!ms.length&&!ab.length&&!ex.length) return 'None marked'; var out=[]; if(ms.length)out.push('Missing #'+ms.join(',#')); if(ab.length)out.push('Abutment #'+ab.join(',#')); if(ex.length)out.push('Extract #'+ex.join(',#')); return out.join(' \u00B7 '); }
    if(nm==='Frame Material') return rem.frameMat||'Not set';
    if(nm==='Return') return rem.ret||'Not set';
@@ -4119,7 +4865,7 @@ function reviewDecision(nm){
  return '';
 }
 function renderReview(){
- if(curEngine!=='removable' && curEngine!=='splints' && curEngine!=='fullarch' && curEngine!=='guides'){
+ if(curEngine!=='removable' && curEngine!=='splints' && curEngine!=='fullarch' && curEngine!=='guides' && curEngine!=='ortho' && curEngine!=='aligners'){
    var keys=Object.keys(sel);
    if(!keys.length)return '<div class="laterwrap"><div class="big">\uD83D\uDCCB</div>No teeth charted yet. Go back to Restoration to start.</div>';
  }
@@ -4135,11 +4881,22 @@ function renderReview(){
  }).join('');
  // Saved captures (shade-Rx images saved from the Dial)
  var imgBlock='';
+ // Attributed free-text notes — every saved text box memorialized with its source.
+ var caseNotes=collectCaseNotes();
+ var notesBlock='';
+ if(caseNotes.length){
+   notesBlock='<div class="rev-notesec"><div class="rev-notesec-lbl">\u270D\uFE0F Notes (included in the Rx)</div>'+
+     caseNotes.map(function(n){ return '<div class="rev-note"><div class="rev-note-src">'+n.src+'</div><div class="rev-note-txt">'+String(n.text).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];})+'</div></div>'; }).join('')+
+     '</div>';
+ }
  if(curEngine==='guides'){
   var gp=gdPricing();
   var pl=gp.lines.map(function(l){ return '<div class="gd-priceline"><span>'+l.label+'</span><span>'+(l.amt<0?'\u2212$'+Math.abs(l.amt).toLocaleString():'$'+l.amt.toLocaleString())+'</span></div>'; }).join('');
   imgBlock='<div class="gd-pricebox"><div class="gd-pricehead">Estimated Total</div>'+pl+'<div class="gd-pricetotal"><span>Total</span><span>$'+gp.total.toLocaleString(undefined,{minimumFractionDigits:gp.total%1?2:0})+'</span></div><div class="gd-pricenote">Estimate from current selections. Final pricing confirmed by ROE.</div></div>';
-  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+imgBlock+'</div>';
+  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+imgBlock+'</div>';
+ }
+ if(curEngine==='ortho' || curEngine==='aligners'){
+  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+'</div>';
  }
  if(savedImages.length){
   var thumbs=savedImages.map(function(im){
@@ -4150,7 +4907,7 @@ function renderReview(){
  } else {
   imgBlock='<div class="rev-imgsec"><div class="rev-imgsec-lbl">\u{1F4CE} Saved images / captures</div><div class="rev-img-none">No shade captures saved. (Optional \u2014 paint &amp; save on the Dial step.)</div></div>';
  }
- return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+imgBlock+'</div>';
+ return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+imgBlock+'</div>';
 }
 
 /* ===== Step 6 — Implant Brand (per implant site, A / B / C) ===== */
@@ -4835,6 +5592,7 @@ function stepOK(){
  if(curEngine==='fullarch') return faStepOK(nm);
  if(curEngine==='guides') return gdStepOK(nm);
  if(curEngine==='ortho') return orthoStepOK(nm);
+ if(curEngine==='aligners') return alignStepOK(nm);
  if(step===0) return !!curArch;                       // Fixed: must pick an arch
  if(step===1){                                        // restoration: ≥1 tooth, and any sub-option resolved
    var rk=Object.keys(sel);
@@ -5414,11 +6172,12 @@ document.getElementById('micBtn').onclick=micTap;
    if(typeof sel==='object'){ for(var k in sel) delete sel[k]; }
    if(typeof mat==='object'){ for(var k2 in mat) delete mat[k2]; }
    if(typeof alloy==='object'){ for(var k3 in alloy) delete alloy[k3]; }
-   if(typeof remReset==='function') remReset(); if(typeof splReset==='function') splReset(); if(typeof faReset==='function') faReset(); if(typeof gdReset==='function') gdReset(); if(typeof orthoReset==='function') orthoReset();
+   if(typeof remReset==='function') remReset(); if(typeof splReset==='function') splReset(); if(typeof faReset==='function') faReset(); if(typeof gdReset==='function') gdReset(); if(typeof orthoReset==='function') orthoReset(); if(typeof alignReset==='function') alignReset();
    if(typeof dial==='object'){ dial={open:false, sys:null, strokes:[], byTooth:{}, view:'arch', saved:null, savedMarks:-1}; }
    savedImages.length=0;            // wipe Tooth Position / dial-shade captures from the prior case
    if(typeof fa==='object'){ fa.tdImage=''; }
    if(typeof caseInfo==='object'){ caseInfo={pt:'',caseId:'',notes:'',files:[]}; }
+   if(typeof decipherReset==='function') decipherReset();
    recEmail=''; recRequested=false;
    if(typeof archDone==='object'){ archDone.upper=false; archDone.lower=false; }
    refreshAll();
