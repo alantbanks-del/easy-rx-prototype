@@ -1,0 +1,10 @@
+# Netlify config for ROE Easy-Rx (static single-file app)
+[build]
+  publish = "."
+  command = ""
+
+# Belt-and-suspenders: make / serve the app explicitly
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
