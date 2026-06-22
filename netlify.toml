@@ -1,9 +1,9 @@
-# Netlify config for ROE Easy-Rx (static single-file app)
+# Netlify config for ROE Easy-Rx (static single-file app + one serverless function)
 [build]
   publish = "."
   command = ""
+  functions = "netlify/functions"
 
-# Belt-and-suspenders: make / serve the app explicitly
 [[redirects]]
   from = "/"
   to = "/index.html"
