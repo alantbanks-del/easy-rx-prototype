@@ -601,11 +601,54 @@ svg{width:100%;height:auto;display:block}
   .mic-btn{z-index:60 !important;bottom:96px !important}
   .voice-toggle{z-index:60 !important;bottom:100px !important}
 }
+@keyframes airxspin{to{transform:rotate(360deg)}}
+/* ===== AI Rx home overlay (Google-style) ===== */
+#airxHome{position:fixed;inset:0;z-index:200;background:radial-gradient(1100px 560px at 50% -8%, #e7f1f1, transparent 60%),var(--bg);display:flex;justify-content:center;overflow-y:auto;padding:0 18px 40px}
+.airxh-inner{width:100%;max-width:600px;padding-top:13vh}
+.airxh-brand{text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:46px;color:var(--teal-d);line-height:1}
+.airxh-brand span{font-family:inherit;font-weight:700;font-size:15px;letter-spacing:3px;color:var(--gold);vertical-align:super;font-family:system-ui,sans-serif}
+.airxh-tag{text-align:center;color:var(--muted);font-size:14.5px;margin:12px auto 0;max-width:420px;line-height:1.5}
+.airxh-bar{display:flex;align-items:flex-end;gap:8px;background:#fff;border:1px solid var(--line);border-radius:26px;padding:8px 8px 8px 20px;box-shadow:0 10px 30px -16px rgba(20,58,64,.4);margin-top:26px;transition:border-color .2s,box-shadow .2s}
+.airxh-bar:focus-within{border-color:var(--teal);box-shadow:0 12px 36px -14px rgba(20,58,64,.5)}
+.airxh-bar textarea{flex:1;border:0;outline:0;resize:none;background:transparent;font:inherit;font-size:17px;line-height:1.5;color:var(--ink);padding:9px 0;max-height:160px;min-height:24px}
+.airxh-bar textarea::placeholder{color:#9AA6A4}
+.airxh-bar button{flex:none;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#e7f1f1;color:var(--teal-d);transition:transform .12s,background .2s,color .2s}
+.airxh-bar button:active{transform:scale(.92)}
+.airxh-bar #airxGo{background:var(--teal-d);color:#fff}
+.airxh-bar #airxGo:disabled{opacity:.4;cursor:default}
+.airxh-bar #airxMic.live{background:#C0392B;color:#fff;animation:airxpulse 1.2s infinite}
+.airxh-bar svg{width:22px;height:22px}
+@keyframes airxpulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}70%{box-shadow:0 0 0 12px rgba(192,57,43,0)}100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}}
+#airxMsg{text-align:center;color:var(--gold);font-size:13.5px;margin-top:12px;min-height:18px;font-weight:600}
+.airxh-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center}
+.airxh-chip{font-size:13px;color:var(--teal-d);background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 13px;cursor:pointer;transition:background .15s}
+.airxh-chip:active{background:#e7f1f1}
+#airxRep{margin-top:16px}
 </style>
 </head>
 <body>
 
-<div class="shell">
+<div id="airxHome">
+  <div class="airxh-inner">
+    <div class="airxh-brand">ROE <span>AI&nbsp;RX</span></div>
+    <div class="airxh-tag">Type the case or hold the mic. I write up the Rx and only ask for what\u2019s missing.</div>
+    <div class="airxh-bar">
+      <textarea id="airxQ" rows="1" placeholder="e.g. Zirconia crown #8, shade A2\u2026" autocomplete="off"></textarea>
+      <button type="button" id="airxMic" title="Hold to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+      <button type="button" id="airxGo" title="Write up Rx" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div id="airxMsg"></div>
+    <div class="airxh-chips">
+      <span class="airxh-chip">Zirconia crown #8, A2</span>
+      <span class="airxh-chip">e.max crown #9, BL2</span>
+      <span class="airxh-chip">3-unit bridge 4-6, B1</span>
+      <span class="airxh-chip">Zirconia crown #8</span>
+    </div>
+    <div id="airxRep"></div>
+  </div>
+</div>
+
+<div class="shell" id="airxShell" style="display:none">
 <div class="shell-rail">
 <div class="topbar">
   <div class="rail-brand"><span class="rail-logo">ROE</span><span class="rail-sub">Ai Rx</span></div>
@@ -4132,6 +4175,16 @@ function renderLauncher(){
  stage.innerHTML='<div style="padding:14px 16px">'+
    '<div class="launch-title">Let\u2019s write up your patient</div>'+
    '<div class="launch-sub">Pick what you\u2019re sending us \u2014 we\u2019ll walk it through together.</div>'+
+   '<div id="airxBox" style="margin:6px 0 16px">'+
+     '<div style="display:flex;align-items:flex-end;gap:8px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:7px 7px 7px 18px;box-shadow:0 8px 24px -16px rgba(20,58,64,.35)">'+
+       '<textarea id="airxQ" rows="1" placeholder="Type the case\u2026 e.g. Zirconia crown #8, A2" style="flex:1;border:0;outline:0;resize:none;background:transparent;font:inherit;font-size:16px;line-height:1.5;padding:8px 0;max-height:140px;color:var(--ink)"></textarea>'+
+       '<button type="button" id="airxMic" title="Hold to talk" style="flex:none;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#e7f1f1;color:var(--teal-d)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>'+
+       '<button type="button" id="airxGo" title="Write up Rx" disabled style="flex:none;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--teal-d);color:#fff;opacity:.4"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>'+
+     '</div>'+
+     '<div id="airxMsg" style="text-align:center;color:var(--gold);font-size:13px;margin-top:8px;min-height:16px;font-weight:600"></div>'+
+     '<div id="airxRep" style="margin-top:8px"></div>'+
+     '<div style="text-align:center;color:var(--muted);font-size:12px;margin-top:4px">or pick a department below</div>'+
+   '</div>'+
    cards+
    '<button type="button" class="eng-card" data-soon="1" style="opacity:.7">'+
      '<span class="eng-ic">\u{1F527}</span>'+
@@ -4171,7 +4224,144 @@ function renderLauncher(){
      startCase(id);
    };
  });
+ airxInit();
 }
+
+/* ===================== AI Rx — search-bar intake (launcher option 1) =====================
+   Free text / voice -> Claude parses to canonical case -> drives the REAL Fixed workflow:
+   startCase('fixed'), set curArch + sel/mat/shade, then auto-advance through the engine's
+   own steps (gated by its own stepOK()) to the first genuinely-missing step, or Review. */
+var AIRX_ENDPOINT='https://api.anthropic.com/v1/messages'; // LOCAL/PREVIEW direct call (works in artifact preview)
+var AIRX_MODEL='claude-sonnet-4-6';
+function airxInit(){
+  var q=document.getElementById('airxQ'), go=document.getElementById('airxGo'),
+      mic=document.getElementById('airxMic'), msg=document.getElementById('airxMsg');
+  if(!q) return;
+  function syncBtn(){ q.style.height='auto'; q.style.height=Math.min(q.scrollHeight,140)+'px'; var on=!!q.value.trim(); go.disabled=!on; go.style.opacity=on?'1':'.4'; }
+  q.oninput=syncBtn;
+  q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(); } };
+  go.onclick=airxSubmit;
+  // voice (Web Speech API, hold-to-talk)
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, listening=false, base='';
+  if(SR){
+    rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US';
+    rec.onstart=function(){ listening=true; mic.style.background='#C0392B'; mic.style.color='#fff'; msg.textContent='Listening\u2026 release to stop'; base=q.value?q.value+' ':''; };
+    rec.onresult=function(e){ var t=''; for(var i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; q.value=base+t; syncBtn(); };
+    rec.onerror=function(e){ msg.textContent=e.error==='not-allowed'?'Microphone blocked \u2014 allow access.':'Mic error: '+e.error; };
+    rec.onend=function(){ listening=false; mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; msg.textContent=''; };
+    var st=function(){ if(!listening){ try{rec.start();}catch(_){} } }, sp=function(){ if(listening) rec.stop(); };
+    mic.addEventListener('mousedown',st); mic.addEventListener('touchstart',function(e){e.preventDefault();st();},{passive:false});
+    mic.addEventListener('mouseup',sp); mic.addEventListener('mouseleave',sp);
+    mic.addEventListener('touchend',function(e){e.preventDefault();sp();},{passive:false});
+  } else { mic.onclick=function(){ msg.textContent='Voice needs Chrome or Safari.'; setTimeout(function(){msg.textContent='';},2500); }; }
+}
+function airxPrompt(text){
+  return [
+"You are the ROE Dental Laboratory AI Rx intake engine. Convert a clinician's free-text or spoken case into JSON for the Fixed & Implants workflow.",
+"","CLINICIAN INPUT:",'\"\"\"'+text+'\"\"\"',"",
+"Return ONLY this JSON (no markdown):",
+'{ \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"units\":[{\"tooth\":8,\"resto\":\"Crown\",\"material\":\"TLZ\"}], \"shadeSystem\":\"VITA Classical A1-D4\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
+"","RULES:",
+"- arch: teeth 1-16 = upper, 17-32 = lower; both arches => \"both\". Derive from tooth numbers.",
+"- resto: one of \"Crown\", \"Bridge\", \"Veneer\", \"Implant Crown\". Plain/unspecified crown => \"Crown\".",
+'- material KEY exactly one of: \"TLZ\" (default zirconia, monolithic/unspecified), \"zRc\" (economy zirconia), \"emaxMono\" (e.max/lithium disilicate), \"emaxLay\" (e.max layered), \"PFZ\". If they say zirconia/monolithic/unspecified crown => \"TLZ\". e.max/lithium disilicate => \"emaxMono\". Never invent.',
+'- shade: if a shade like A2/B1/BL2 is given, set shade + matching shadeSystem (default \"VITA Classical A1-D4\"; BL shades use \"IPS e.max / Bleach BL\"). If no shade stated, OMIT both shade and shadeSystem.',
+"- units REQUIRED: at least one tooth with a resto. If no tooth determinable, units:[] and explain in interpretation."
+  ].join("\n");
+}
+function airxSubmit(){
+  var q=document.getElementById('airxQ'), go=document.getElementById('airxGo'), rep=document.getElementById('airxRep');
+  var text=(q.value||'').trim(); if(!text) return; go.disabled=true; go.style.opacity='.4';
+  rep.innerHTML='<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;padding:10px 2px"><span style="width:16px;height:16px;border:2.5px solid var(--line);border-top-color:var(--teal-d);border-radius:50%;display:inline-block;animation:airxspin .7s linear infinite"></span>Reading the case and writing up the Rx\u2026</div>';
+  fetch(AIRX_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:AIRX_MODEL,max_tokens:1000,messages:[{role:'user',content:airxPrompt(text)}]})})
+  .then(function(r){ if(!r.ok) throw new Error('Backend '+r.status); return r.json(); })
+  .then(function(data){
+    var raw=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
+    raw=raw.replace(/```json|```/g,'').trim();
+    airxApply(JSON.parse(raw));
+  })
+  .catch(function(err){ rep.innerHTML='<div style="background:#FBE9E7;color:#B0341F;padding:12px 14px;border-radius:11px;font-size:14px"><b>Couldn\u2019t reach the parser.</b><br>'+err.message+'</div>'; go.disabled=false; go.style.opacity='1'; });
+}
+// Map a parsed resto -> the engine's sel{} entry shape.
+function airxSelEntry(resto){
+  if(resto==='Implant Crown') return {type:'imp', val:'Crown'};
+  if(resto==='Veneer') return {type:'cb', val:'Veneer'};
+  if(resto==='Bridge') return {type:'cb', val:'Bridge'};
+  return {type:'cb', val:'Crown'};
+}
+function airxApply(c){
+  var go=document.getElementById('airxGo'), rep=document.getElementById('airxRep');
+  if(go){ go.disabled=false; go.style.opacity='1'; }
+  if(!c.units || !c.units.length){
+    if(rep) rep.innerHTML='<div style="background:#FBF1DC;color:var(--gold);padding:12px 14px;border-radius:11px;font-size:14px">I couldn\u2019t tell which tooth this is for. Add a tooth number (e.g. \u201c#8\u201d) and try again.<br><small>'+airxEsc(c.interpretation||'')+'</small></div>';
+    return;
+  }
+  // 1) Start a fresh Fixed case (clears sel/mat/shade and resets steps).
+  startCase('fixed');
+  // 1a) Transition from the Google-style home into the live engine shell.
+  var home=document.getElementById('airxHome'); if(home) home.style.display='none';
+  var shell=document.getElementById('airxShell'); if(shell) shell.style.display='';
+  // 2) Arch
+  curArch = (c.arch==='upper'||c.arch==='lower'||c.arch==='both') ? c.arch : 'upper';
+  // 3) Units -> sel/mat
+  var VALID_MAT={TLZ:1,zRc:1,emaxMono:1,emaxLay:1,PFZ:1};
+  var applied=[], skipped=[];
+  c.units.forEach(function(u){
+    var n=parseInt(u.tooth,10);
+    var onArch = (curArch==='both') ? (n>=1&&n<=32) : (curArch==='upper' ? (n>=1&&n<=16) : (n>=17&&n<=32));
+    if(!onArch){ skipped.push('tooth '+u.tooth+' not on '+curArch+' arch'); return; }
+    sel[n]=airxSelEntry(u.resto);
+    var m = VALID_MAT[u.material] ? u.material : 'TLZ';
+    mat[n]=m;
+    applied.push('#'+n+' '+(u.resto||'Crown')+' ('+m+')');
+  });
+  // 4) Shade
+  if(c.shade){
+    if(c.shadeSystem){ var sysObj=SHADE_SYS.find(function(s){return s.sys===c.shadeSystem;}); if(sysObj) shade.sys=c.shadeSystem; }
+    var cur=SHADE_SYS.find(function(s){return s.sys===shade.sys;})||SHADE_SYS[0];
+    if(cur.shades.indexOf(c.shade)>=0){ shade.code=c.shade; applied.push('shade '+c.shade); }
+    else skipped.push('shade \u201c'+c.shade+'\u201d not in '+cur.sys);
+  }
+  // 5) Auto-advance through the REAL workflow to the first genuinely-missing step (or Review).
+  var landed=airxAutoAdvance();
+  // 6) Render the engine (it now shows its own UI at the landed step, pre-filled).
+  refreshAll();
+  // 7) Report under the (now-hidden) launcher box — but the stage has re-rendered to the engine,
+  //    so surface a brief toast at the top of the engine stage instead.
+  airxToast(c, applied, skipped, landed);
+}
+// Walk step from 0 upward while the engine's own stepOK() passes; stop at first failure or Review.
+function airxAutoAdvance(){
+  var steps=STEPS();
+  var reviewIdx=steps.indexOf('Review');
+  step=0; maxStep=0;
+  // advance while current step validates AND we haven't reached Review
+  var guard=0;
+  while(guard++<steps.length+2){
+    var nm=STEPS()[step];
+    if(nm==='Review'||nm==='Opposing Arch'||nm==='Finish') break;
+    if(stepOK()){
+      if(step < STEPS().length-1){ step++; maxStep=Math.max(maxStep,step); }
+      else break;
+    } else break; // first missing thing — stop here
+  }
+  return STEPS()[step];
+}
+function airxToast(c, applied, skipped, landed){
+  var stage=document.getElementById('stage'); if(!stage) return;
+  var complete = (landed==='Review');
+  var head = complete
+    ? '<b>'+airxEsc(c.caseLabel||'Case')+' \u2014 all set.</b> Everything needed is filled. Review and send.'
+    : '<b>'+airxEsc(c.caseLabel||'Case')+'</b> is written up. Next: <b>'+airxEsc(landed)+'</b> \u2014 just finish what\u2019s left below.';
+  var bg = complete ? 'background:#E7F2EE;color:#1E6E5C' : 'background:#FBF1DC;color:var(--gold)';
+  var chips = applied.length ? '<div style="margin-top:6px;font-size:12.5px;opacity:.85">\u2713 '+applied.map(airxEsc).join(' \u00B7 ')+'</div>' : '';
+  var skip = skipped.length ? '<div style="margin-top:6px;font-size:12.5px;color:#B0341F">Needs a look: '+skipped.map(airxEsc).join('; ')+'</div>' : '';
+  var bar='<div id="airxToast" style="'+bg+';margin:10px 16px 0;padding:12px 14px;border-radius:11px;font-size:14px;line-height:1.5">'+head+chips+skip+'</div>';
+  stage.insertAdjacentHTML('afterbegin', bar);
+}
+function airxEsc(s){ return String(s==null?'':s).replace(/[&<>\"]/g,function(m){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]);}); }
+
 // ===== Add requested information page (patient name, case ID, files, notes) =====
 var caseInfo={ pt:'', caseId:'', notes:'', files:[] };
 function renderInfoPage(){
@@ -6221,6 +6411,13 @@ document.getElementById('next').onclick=function(){
 };
 
 refreshAll();
+
+/* ===== AI Rx home overlay boot (local Google-style front) ===== */
+airxInit();
+(function(){
+  var chips=document.querySelectorAll('.airxh-chip'), q=document.getElementById('airxQ');
+  [].forEach.call(chips,function(c){ c.onclick=function(){ q.value=c.textContent; q.dispatchEvent(new Event('input')); q.focus(); }; });
+})();
 </script>
 </body>
 </html>
