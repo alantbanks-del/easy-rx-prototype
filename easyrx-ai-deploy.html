@@ -4287,18 +4287,43 @@ function airxInit(ids){
   syncBtn();
   q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(ids); } };
   go.onclick=function(){ airxSubmit(ids); };
-  // voice (Web Speech API, hold-to-talk)
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, listening=false, base='';
+  // voice (Web Speech API) — HOLD to talk. Fix: track finalized text separately
+  // from the live interim guess so results never re-append/duplicate.
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, listening=false;
+  var baseText='';      // what was in the box when this hold started
+  var finalText='';     // finalized speech this hold (accumulates)
   if(SR){
-    rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US';
-    rec.onstart=function(){ listening=true; mic.style.background='#C0392B'; mic.style.color='#fff'; if(msg)msg.textContent='Listening\u2026 release to stop'; base=q.value?q.value+' ':''; };
-    rec.onresult=function(e){ var t=''; for(var i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; q.value=base+t; syncBtn(); };
-    rec.onerror=function(e){ if(msg)msg.textContent=e.error==='not-allowed'?'Microphone blocked \u2014 allow access.':'Mic error: '+e.error; };
-    rec.onend=function(){ listening=false; mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; if(msg)msg.textContent=''; };
-    var st=function(){ if(!listening){ try{rec.start();}catch(_){} } }, sp=function(){ if(listening) rec.stop(); };
-    mic.addEventListener('mousedown',st); mic.addEventListener('touchstart',function(e){e.preventDefault();st();},{passive:false});
-    mic.addEventListener('mouseup',sp); mic.addEventListener('mouseleave',sp);
-    mic.addEventListener('touchend',function(e){e.preventDefault();sp();},{passive:false});
+    rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US'; rec.maxAlternatives=1;
+    rec.onstart=function(){ listening=true; mic.classList.add('live'); mic.style.background='#C0392B'; mic.style.color='#fff'; if(msg)msg.textContent='Listening\u2026 release to stop'; };
+    rec.onresult=function(e){
+      var interim='';
+      // Only consume results from resultIndex forward; append finals once, show interim live.
+      for(var i=e.resultIndex; i<e.results.length; i++){
+        var r=e.results[i];
+        if(r.isFinal){ finalText += (finalText && !/\s$/.test(finalText)?' ':'') + r[0].transcript.trim(); }
+        else { interim += r[0].transcript; }
+      }
+      var sep = baseText && !/\s$/.test(baseText) ? ' ' : '';
+      q.value = baseText + sep + finalText + (interim ? (sep||finalText?' ':'')+interim : '');
+      syncBtn();
+    };
+    rec.onerror=function(e){ if(msg)msg.textContent=e.error==='not-allowed'?'Microphone blocked \u2014 allow access in browser settings.':'Mic error: '+e.error; };
+    rec.onend=function(){
+      listening=false; mic.classList.remove('live'); mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; if(msg)msg.textContent='';
+      // commit finalized text into the box (drop any trailing interim)
+      var sep = baseText && !/\s$/.test(baseText) ? ' ' : '';
+      q.value = (baseText + sep + finalText).trim();
+      syncBtn();
+    };
+    var startRec=function(){ if(listening) return; baseText=q.value||''; finalText=''; try{ rec.start(); }catch(_){} };
+    var stopRec =function(){ if(listening){ try{ rec.stop(); }catch(_){} } };
+    // HOLD to talk (WhatsApp-style): press and hold to record, release to stop.
+    mic.addEventListener('mousedown', function(e){ e.preventDefault(); startRec(); });
+    mic.addEventListener('touchstart', function(e){ e.preventDefault(); startRec(); }, {passive:false});
+    mic.addEventListener('mouseup',    function(e){ e.preventDefault(); stopRec(); });
+    mic.addEventListener('mouseleave', function(){ stopRec(); });
+    mic.addEventListener('touchend',   function(e){ e.preventDefault(); stopRec(); }, {passive:false});
+    mic.addEventListener('touchcancel',function(){ stopRec(); });
   } else { mic.onclick=function(){ if(msg){msg.textContent='Voice needs Chrome or Safari.'; setTimeout(function(){msg.textContent='';},2500);} }; }
 }
 function airxPrompt(text){
