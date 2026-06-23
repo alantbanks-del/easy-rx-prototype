@@ -1,420 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>ROE · AI Rx</title>
+<!-- ============================================================
+     AI RX  —  drop-in module for rx.html
+     Paste this block where the launcher's "AI Rx" option mounts.
+     It calls the Netlify claude.js function, converts free text /
+     voice into the exact caseObj that window.roeApplyCase() already
+     expects, applies it to the REAL engine, then reports back using
+     the engine's own {applied, skipped} so the engine's own dynamic
+     questions handle whatever's missing. No parallel form.
+     ============================================================ -->
+
 <style>
-  :root{
-    --teal:#143A40; --teal-deep:#0E2A2E; --brass:#A8854F;
-    --paper:#FBFAF7; --ink:#16201F; --muted:#5E6B69;
-    --line:#E4E0D8; --field:#FFFFFF;
-    --ok:#1E6E5C; --ok-bg:#E7F2EE;
-    --warn:#9A6A12; --warn-bg:#FBF1DC;
-    --teal-tint:#EAF1F0;
-    --r:16px;
-  }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0; padding:0;}
-  body{
-    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
-    background:
-      radial-gradient(1200px 600px at 50% -10%, var(--teal-tint), transparent 60%),
-      var(--paper);
-    color:var(--ink); min-height:100dvh;
-    display:flex; flex-direction:column; align-items:center;
-    padding:0 18px env(safe-area-inset-bottom);
-  }
-  .wrap{width:100%; max-width:640px; display:flex; flex-direction:column; min-height:100dvh;}
-
-  /* ---- Brand ---- */
-  .brand{display:flex; flex-direction:column; align-items:center; padding-top:14dvh; transition:padding .5s cubic-bezier(.2,.7,.2,1);}
-  .brand.lifted{padding-top:4dvh;}
-  .mark{font-family:'Newsreader',Georgia,serif; font-weight:600; letter-spacing:.5px; font-size:46px; color:var(--teal); line-height:1; display:flex; align-items:baseline; gap:10px;}
-  .mark .ai{font-family:'Inter',sans-serif; font-weight:700; font-size:16px; letter-spacing:3px; color:var(--brass); text-transform:uppercase; transform:translateY(-10px);}
-  .tag{margin-top:12px; color:var(--muted); font-size:14.5px; text-align:center; max-width:380px; line-height:1.5;}
-
-  /* ---- Search ---- */
-  .searchwrap{margin-top:26px;}
-  .search{
-    display:flex; align-items:flex-end; gap:8px; background:var(--field);
-    border:1px solid var(--line); border-radius:26px;
-    padding:8px 8px 8px 20px; box-shadow:0 8px 28px -16px rgba(20,58,64,.35);
-    transition:border-color .2s, box-shadow .2s;
-  }
-  .search:focus-within{border-color:var(--teal); box-shadow:0 10px 34px -14px rgba(20,58,64,.5);}
-  .search textarea{
-    flex:1; border:0; outline:0; resize:none; background:transparent;
-    font:inherit; font-size:17px; line-height:1.5; color:var(--ink);
-    padding:9px 0; max-height:160px; min-height:24px;
-  }
-  .search textarea::placeholder{color:#9AA6A4;}
-  .iconbtn{
-    flex:none; width:46px; height:46px; border-radius:50%; border:0; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; background:var(--teal-tint);
-    color:var(--teal); transition:transform .12s, background .2s, color .2s;
-  }
-  .iconbtn:active{transform:scale(.92);}
-  .iconbtn.go{background:var(--teal); color:#fff;}
-  .iconbtn.go:disabled{opacity:.4; cursor:default;}
-  .iconbtn.mic.live{background:#C0392B; color:#fff; animation:pulse 1.2s infinite;}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5);}70%{box-shadow:0 0 0 12px rgba(192,57,43,0);}100%{box-shadow:0 0 0 0 rgba(192,57,43,0);}}
-  .iconbtn svg{width:22px; height:22px;}
-
-  .hints{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; justify-content:center;}
-  .chip{font-size:13px; color:var(--teal); background:#fff; border:1px solid var(--line); border-radius:20px; padding:7px 13px; cursor:pointer; transition:background .15s, border-color .15s;}
-  .chip:active{background:var(--teal-tint);}
-  .micstate{text-align:center; color:var(--warn); font-size:13.5px; margin-top:12px; min-height:18px; font-weight:600;}
-
-  /* ---- Status / thinking ---- */
-  .stage{margin-top:22px; flex:1;}
-  .thinking{display:flex; align-items:center; gap:11px; color:var(--muted); font-size:15px; padding:18px 4px;}
-  .spinner{width:18px; height:18px; border:2.5px solid var(--line); border-top-color:var(--teal); border-radius:50%; animation:spin .7s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-
-  /* ---- Result card ---- */
-  .card{background:#fff; border:1px solid var(--line); border-radius:var(--r); overflow:hidden; box-shadow:0 10px 30px -20px rgba(20,58,64,.4); margin-bottom:18px; animation:rise .4s cubic-bezier(.2,.7,.2,1);}
-  @keyframes rise{from{opacity:0; transform:translateY(10px);}to{opacity:1; transform:none;}}
-  .card-head{padding:16px 18px; background:linear-gradient(180deg,var(--teal),var(--teal-deep)); color:#fff;}
-  .card-head .eyebrow{font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#9FC4BF; font-weight:700;}
-  .card-head h2{margin:4px 0 0; font-family:'Newsreader',Georgia,serif; font-size:23px; font-weight:600;}
-  .card-head .sub{margin-top:3px; font-size:13.5px; color:#BFD8D4;}
-  .card-body{padding:6px 18px 18px;}
-
-  .banner{display:flex; gap:11px; padding:13px 15px; border-radius:12px; font-size:14.5px; line-height:1.5; margin:14px 0;}
-  .banner.ok{background:var(--ok-bg); color:var(--ok);}
-  .banner.need{background:var(--warn-bg); color:var(--warn);}
-  .banner b{font-weight:700;}
-  .banner svg{flex:none; width:20px; height:20px; margin-top:1px;}
-
-  .sec-label{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700; margin:18px 0 8px;}
-  .kv{display:flex; justify-content:space-between; gap:14px; padding:9px 0; border-bottom:1px solid var(--line); font-size:15px;}
-  .kv:last-child{border-bottom:0;}
-  .kv .k{color:var(--muted);}
-  .kv .v{font-weight:600; text-align:right;}
-  .kv .v .def{font-weight:500; color:var(--ok); font-size:12px; background:var(--ok-bg); padding:2px 7px; border-radius:10px; margin-left:7px; white-space:nowrap;}
-
-  /* ---- Missing questions ---- */
-  .q{padding:15px 0; border-bottom:1px solid var(--line);}
-  .q:last-of-type{border-bottom:0;}
-  .q .qn{display:flex; align-items:center; gap:9px; font-weight:600; font-size:15.5px; margin-bottom:11px;}
-  .q .qnum{flex:none; width:23px; height:23px; border-radius:50%; background:var(--teal); color:#fff; font-size:12.5px; display:flex; align-items:center; justify-content:center; font-weight:700;}
-  .opts{display:flex; flex-wrap:wrap; gap:8px;}
-  .opt{border:1px solid var(--line); background:#fff; border-radius:11px; padding:9px 14px; font-size:14.5px; cursor:pointer; color:var(--ink); transition:all .14s;}
-  .opt:active{transform:scale(.96);}
-  .opt.sel{background:var(--teal); border-color:var(--teal); color:#fff;}
-  .q input[type=text]{width:100%; border:1px solid var(--line); border-radius:11px; padding:11px 13px; font:inherit; font-size:15px; outline:0;}
-  .q input[type=text]:focus{border-color:var(--teal);}
-
-  .actions{display:flex; gap:10px; margin-top:20px;}
-  .btn{flex:1; border:0; border-radius:13px; padding:15px; font:inherit; font-weight:700; font-size:15.5px; cursor:pointer; transition:transform .12s, opacity .2s;}
-  .btn:active{transform:scale(.98);}
-  .btn.primary{background:var(--teal); color:#fff;}
-  .btn.primary:disabled{opacity:.45; cursor:default;}
-  .btn.ghost{flex:none; background:transparent; color:var(--muted); border:1px solid var(--line);}
-
-  .review-note{margin-top:14px; font-size:13px; color:var(--muted); text-align:center; line-height:1.5;}
-  .err{background:#FBE9E7; color:#B0341F; padding:13px 15px; border-radius:12px; font-size:14px; margin:14px 0; line-height:1.5;}
-  .raw{margin-top:14px; font-size:12.5px; color:#9AA6A4; font-style:italic; line-height:1.5; border-top:1px dashed var(--line); padding-top:12px;}
+  #airx-wrap{max-width:640px;margin:0 auto;}
+  #airx-search{display:flex;align-items:flex-end;gap:8px;background:#fff;border:1px solid #E4E0D8;border-radius:26px;padding:8px 8px 8px 20px;box-shadow:0 8px 28px -16px rgba(20,58,64,.35);transition:border-color .2s,box-shadow .2s;}
+  #airx-search:focus-within{border-color:#143A40;box-shadow:0 10px 34px -14px rgba(20,58,64,.5);}
+  #airx-q{flex:1;border:0;outline:0;resize:none;background:transparent;font:inherit;font-size:17px;line-height:1.5;color:#16201F;padding:9px 0;max-height:160px;min-height:24px;}
+  #airx-q::placeholder{color:#9AA6A4;}
+  .airx-icon{flex:none;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#EAF1F0;color:#143A40;transition:transform .12s,background .2s,color .2s;}
+  .airx-icon:active{transform:scale(.92);}
+  .airx-icon.go{background:#143A40;color:#fff;}
+  .airx-icon.go:disabled{opacity:.4;cursor:default;}
+  .airx-icon.mic.live{background:#C0392B;color:#fff;animation:airxpulse 1.2s infinite;}
+  @keyframes airxpulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5);}70%{box-shadow:0 0 0 12px rgba(192,57,43,0);}100%{box-shadow:0 0 0 0 rgba(192,57,43,0);}}
+  .airx-icon svg{width:22px;height:22px;}
+  #airx-hints{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center;}
+  .airx-chip{font-size:13px;color:#143A40;background:#fff;border:1px solid #E4E0D8;border-radius:20px;padding:7px 13px;cursor:pointer;}
+  .airx-chip:active{background:#EAF1F0;}
+  #airx-mstate{text-align:center;color:#9A6A12;font-size:13.5px;margin-top:12px;min-height:18px;font-weight:600;}
+  #airx-report{margin-top:18px;}
+  .airx-think{display:flex;align-items:center;gap:11px;color:#5E6B69;font-size:15px;padding:16px 4px;}
+  .airx-spin{width:18px;height:18px;border:2.5px solid #E4E0D8;border-top-color:#143A40;border-radius:50%;animation:airxspin .7s linear infinite;}
+  @keyframes airxspin{to{transform:rotate(360deg);}}
+  .airx-banner{display:flex;gap:11px;padding:13px 15px;border-radius:12px;font-size:14.5px;line-height:1.5;}
+  .airx-banner.ok{background:#E7F2EE;color:#1E6E5C;}
+  .airx-banner.need{background:#FBF1DC;color:#9A6A12;}
+  .airx-banner b{font-weight:700;}
+  .airx-list{margin:10px 0 0;padding-left:18px;font-size:14px;color:#5E6B69;line-height:1.6;}
+  .airx-list li.skip{color:#9A6A12;}
+  .airx-err{background:#FBE9E7;color:#B0341F;padding:13px 15px;border-radius:12px;font-size:14px;line-height:1.5;}
 </style>
-</head>
-<body>
-<div class="wrap">
 
-  <div class="brand" id="brand">
-    <div class="mark">ROE<span class="ai">AI&nbsp;Rx</span></div>
-    <div class="tag">Type the case or hold the mic and talk it through. I'll write up the Rx and only ask for what's missing.</div>
+<div id="airx-wrap">
+  <div id="airx-search">
+    <textarea id="airx-q" rows="1" placeholder="e.g. Zirconia crown #8, shade A2…" autocomplete="off"></textarea>
+    <button class="airx-icon mic" id="airx-mic" title="Hold to talk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+    <button class="airx-icon go" id="airx-go" title="Write up Rx" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
   </div>
-
-  <div class="searchwrap">
-    <div class="search">
-      <textarea id="q" rows="1" placeholder="e.g. Zirconia crown #8, shade A2…" autocomplete="off"></textarea>
-      <button class="iconbtn mic" id="mic" title="Hold to talk" aria-label="Voice input">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-      </button>
-      <button class="iconbtn go" id="go" title="Write up Rx" aria-label="Submit" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-    </div>
-    <div class="micstate" id="micstate"></div>
-    <div class="hints" id="hints">
-      <span class="chip">Zirconia crown #8, A2</span>
-      <span class="chip">3-unit bridge 4-6, monolithic, B1</span>
-      <span class="chip">Implant crown #19 on a Straumann BL</span>
-      <span class="chip">Upper full denture, A2, try-in first</span>
-    </div>
+  <div id="airx-mstate"></div>
+  <div id="airx-hints">
+    <span class="airx-chip">Zirconia crown #8, A2</span>
+    <span class="airx-chip">3-unit bridge 4-6, B1</span>
+    <span class="airx-chip">e.max crown #9, BL2</span>
+    <span class="airx-chip">PFZ crowns 13 and 14, A3.5</span>
   </div>
-
-  <div class="stage" id="stage"></div>
-
+  <div id="airx-report"></div>
 </div>
 
 <script>
-/* ============================================================
-   AI Rx — search-bar case write-up (show & tell prototype)
-   Parses free text / voice → fills ROE defaults → asks only
-   for what's missing → jumps to review.
-   Live parse target: Netlify function /.netlify/functions/claude
-   ============================================================ */
+(function(){
+  var PARSE_ENDPOINT = "/.netlify/functions/claude";
+  var MODEL = "claude-sonnet-4-6";
 
-const PARSE_ENDPOINT = "/.netlify/functions/claude"; // live ROE backend
-const MODEL = "claude-sonnet-4-6";
+  var q=document.getElementById('airx-q'),
+      go=document.getElementById('airx-go'),
+      mic=document.getElementById('airx-mic'),
+      mstate=document.getElementById('airx-mstate'),
+      hints=document.getElementById('airx-hints'),
+      report=document.getElementById('airx-report');
 
-const els = {
-  q: document.getElementById('q'),
-  go: document.getElementById('go'),
-  mic: document.getElementById('mic'),
-  micstate: document.getElementById('micstate'),
-  stage: document.getElementById('stage'),
-  brand: document.getElementById('brand'),
-  hints: document.getElementById('hints'),
-};
+  function sync(){ q.style.height='auto'; q.style.height=Math.min(q.scrollHeight,160)+'px'; go.disabled=!q.value.trim(); }
+  q.addEventListener('input',sync);
+  q.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); submit(); } });
+  hints.addEventListener('click',function(e){ var c=e.target.closest('.airx-chip'); if(!c)return; q.value=c.textContent; sync(); q.focus(); });
+  go.addEventListener('click',submit);
 
-/* ---------- textarea autosize + enable submit ---------- */
-function sync(){
-  els.q.style.height='auto';
-  els.q.style.height=Math.min(els.q.scrollHeight,160)+'px';
-  els.go.disabled = els.q.value.trim().length===0;
-}
-els.q.addEventListener('input', sync);
-els.q.addEventListener('keydown', e=>{
-  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); }
-});
-els.hints.addEventListener('click', e=>{
-  const c=e.target.closest('.chip'); if(!c) return;
-  els.q.value=c.textContent; sync(); els.q.focus();
-});
-els.go.addEventListener('click', submit);
-
-/* ---------- voice (Web Speech API, hold-to-talk) ---------- */
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let rec=null, listening=false;
-if(SR){
-  rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US';
-  let base='';
-  rec.onstart=()=>{ listening=true; els.mic.classList.add('live'); els.micstate.textContent='Listening… release to stop'; base=els.q.value?els.q.value+' ':''; };
-  rec.onresult=e=>{
-    let txt='';
-    for(let i=0;i<e.results.length;i++) txt+=e.results[i][0].transcript;
-    els.q.value=base+txt; sync();
-  };
-  rec.onerror=e=>{ els.micstate.textContent = e.error==='not-allowed' ? 'Microphone blocked — allow access in browser settings.' : 'Mic error: '+e.error; };
-  rec.onend=()=>{ listening=false; els.mic.classList.remove('live'); els.micstate.textContent=''; };
-
-  const start=()=>{ if(!listening){ try{rec.start();}catch(_){} } };
-  const stop =()=>{ if(listening) rec.stop(); };
-  els.mic.addEventListener('mousedown',start);
-  els.mic.addEventListener('touchstart',e=>{e.preventDefault();start();},{passive:false});
-  els.mic.addEventListener('mouseup',stop);
-  els.mic.addEventListener('mouseleave',stop);
-  els.mic.addEventListener('touchend',e=>{e.preventDefault();stop();},{passive:false});
-}else{
-  els.mic.addEventListener('click',()=>{ els.micstate.textContent='Voice input needs Chrome or Safari.'; setTimeout(()=>els.micstate.textContent='',2500); });
-}
-
-/* ---------- ROE defaults (Fixed/crown path for v1) ---------- */
-/* These define what "complete" means: if a field is missing but has a
-   default, the engine fills it and labels it as a default rather than
-   asking. Expand per engine over time. */
-const DEFAULTS = {
-  fixed: {
-    material:        { value:'Translucent Zirconia (TLZ)', note:'default zirconia' },
-    occlusalAnatomy: { value:'Match Adjacent / Partner', note:'default' },
-    occlusalContact: { value:'Light',    note:'default' },
-    translucency:    { value:'Standard', note:'default' },
-    contactShape:    { value:'Standard', note:'default' },
-    contour:         { value:'Standard', note:'default' },
-    returnInstr:     { value:'Evaluate / call', note:'default' },
-  }
-};
-
-/* ---------- prompt ---------- */
-function buildPrompt(text){
-  return `You are the ROE Dental Laboratory AI Rx intake engine. A clinician has written or spoken a case in free text. Extract a structured dental lab prescription.
-
-CLINICIAN INPUT:
-"""${text}"""
-
-ROE KNOWLEDGE & DEFAULTS (apply silently — do NOT ask about anything that has a default):
-- Default zirconia crown material is Translucent Zirconia (TLZ).
-- occlusalAnatomy default: "Match Adjacent / Partner"; occlusalContact default: "Light"; translucency default: "Standard"; contactShape default: "Standard"; contour default: "Standard"; returnInstr default: "Evaluate / call".
-- Teeth use Universal numbering 1–32.
-- Route to the correct engine: "fixed" (crown/bridge/inlay/onlay/veneer/implant crown), "removable" (partial/denture), "fullArch", "splint", "guide" (surgical guide), "ortho", "aligner".
-
-For a crown/bridge case, the REQUIRED fields to consider are: caseType, teeth, material, shade, occlusalAnatomy, occlusalContact, translucency, contactShape, contour, returnInstr. Plus implantSystem IF it is an implant case.
-
-Return ONLY valid JSON (no markdown, no prose) in exactly this shape:
-{
-  "engine": "fixed|removable|fullArch|splint|guide|ortho|aligner",
-  "caseTypeLabel": "human label e.g. Single Crown, 3-Unit Bridge, Implant Crown",
-  "summary": "one short human sentence describing the case",
-  "fields": [
-    {"key":"teeth","label":"Teeth","value":"#8","source":"stated|default|inferred"},
-    {"key":"material","label":"Material","value":"Translucent Zirconia (TLZ)","source":"default"}
-    // ...one entry for every field you could fill, stated OR default OR inferred
-  ],
-  "missing": [
-    {"key":"shade","label":"Shade","type":"text","question":"What shade?","options":[]}
-    // ...one entry for every REQUIRED field you could NOT determine and has no default.
-    // type is "choice" (with options[]) or "text". Keep questions short and plain.
-  ],
-  "interpretation": "one short note on anything you assumed or inferred, for transparency"
-}
-
-Be decisive: if a field has a default, fill it and mark source:"default" — never put it in "missing". Only truly required, non-defaultable, unstated fields go in "missing".`;
-}
-
-/* ---------- submit / parse ---------- */
-let CASE=null;
-
-async function submit(){
-  const text=els.q.value.trim();
-  if(!text) return;
-  els.brand.classList.add('lifted');
-  els.go.disabled=true;
-  els.stage.innerHTML=`<div class="thinking"><div class="spinner"></div>Reading the case and writing up the Rx…</div>`;
-
-  try{
-    const res=await fetch(PARSE_ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:MODEL,
-        max_tokens:1500,
-        messages:[{role:'user',content:buildPrompt(text)}]
-      })
-    });
-    if(!res.ok) throw new Error('Backend returned '+res.status);
-    const data=await res.json();
-    let raw = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
-    raw = raw.replace(/```json|```/g,'').trim();
-    CASE = JSON.parse(raw);
-    render(CASE, text);
-  }catch(err){
-    els.stage.innerHTML=`<div class="err"><b>Couldn't reach the parser.</b><br>${err.message}<br><br>This prototype calls your Netlify function at <code>${PARSE_ENDPOINT}</code> — it works once deployed to the ROE site. Locally it won't resolve.</div>`;
-    els.go.disabled=false;
-  }
-}
-
-/* ---------- render result ---------- */
-function render(c, original){
-  const missing = c.missing||[];
-  const complete = missing.length===0;
-  const filled = (c.fields||[]).filter(f=>f.value && String(f.value).trim());
-
-  let h=`<div class="card">
-    <div class="card-head">
-      <div class="eyebrow">${(c.engine||'fixed').toUpperCase()} · RX</div>
-      <h2>${esc(c.caseTypeLabel||'Case')}</h2>
-      ${c.summary?`<div class="sub">${esc(c.summary)}</div>`:''}
-    </div>
-    <div class="card-body">`;
-
-  if(complete){
-    h+=`<div class="banner ok">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-      <div><b>All set.</b> Everything I need is here — no further questions. Review and send.</div>
-    </div>`;
+  /* voice */
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, listening=false;
+  if(SR){
+    rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US';
+    var base='';
+    rec.onstart=function(){ listening=true; mic.classList.add('live'); mstate.textContent='Listening… release to stop'; base=q.value?q.value+' ':''; };
+    rec.onresult=function(e){ var t=''; for(var i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; q.value=base+t; sync(); };
+    rec.onerror=function(e){ mstate.textContent=e.error==='not-allowed'?'Microphone blocked — allow access in browser settings.':'Mic error: '+e.error; };
+    rec.onend=function(){ listening=false; mic.classList.remove('live'); mstate.textContent=''; };
+    var start=function(){ if(!listening){ try{rec.start();}catch(_){} } }, stop=function(){ if(listening)rec.stop(); };
+    mic.addEventListener('mousedown',start);
+    mic.addEventListener('touchstart',function(e){e.preventDefault();start();},{passive:false});
+    mic.addEventListener('mouseup',stop); mic.addEventListener('mouseleave',stop);
+    mic.addEventListener('touchend',function(e){e.preventDefault();stop();},{passive:false});
   }else{
-    const n=missing.length;
-    h+=`<div class="banner need">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="9"/></svg>
-      <div>Just <b>${n}</b> more ${n===1?'bit':'bits'} of info, then off we go.</div>
-    </div>`;
+    mic.addEventListener('click',function(){ mstate.textContent='Voice input needs Chrome or Safari.'; setTimeout(function(){mstate.textContent='';},2500); });
   }
 
-  /* captured fields */
-  h+=`<div class="sec-label">Captured</div>`;
-  filled.forEach(f=>{
-    const isDef = f.source==='default';
-    const isInf = f.source==='inferred';
-    h+=`<div class="kv"><span class="k">${esc(f.label)}</span><span class="v">${esc(f.value)}${isDef?`<span class="def">default</span>`:''}${isInf?`<span class="def" style="background:#EAF1F0;color:#143A40">inferred</span>`:''}</span></div>`;
-  });
+  /* prompt — produces the EXACT caseObj shape roeApplyCase/setFromCase expects.
+     Valid material keys: TLZ, zRc, emaxMono, emaxLay, PFZ, PFM, FullCast, Bespoke.
+     Valid roles: crown, bridge, veneer, pontic.
+     Shade systems are the FXSHADE_TRAD .sys strings. caseSpec keys/opts are the CASE_SPEC grid. */
+  function prompt(text){
+    return [
+"You are the ROE Dental Laboratory AI Rx intake engine. Convert a clinician's free-text or spoken case into a JSON case object for the Fixed & Implants engine.",
+"",
+"CLINICIAN INPUT:",
+'"""'+text+'"""',
+"",
+"OUTPUT — return ONLY this JSON (no markdown, no prose):",
+"{",
+'  "engine":"fixed",',
+'  "arch":"upper|lower",',
+'  "caseLabel":"short human label, e.g. Single Crown #8",',
+'  "units":[{"tooth":8,"role":"crown","material":"TLZ"}],',
+'  "shadeSystem":"VITA Classical A1-D4",',
+'  "shade":"A2",',
+'  "caseSpec":{},',
+'  "interpretation":"one short note on anything assumed"',
+"}",
+"",
+"RULES:",
+"- arch: teeth 1-16 = upper, 17-32 = lower. If a tooth number is given, derive arch from it.",
+"- role: one of crown | bridge | veneer | pontic. A plain 'crown' is crown. Bridge abutments are 'bridge', the missing-tooth unit between them is 'pontic'.",
+'- material KEY must be exactly one of: "TLZ" (default zirconia — translucent monolithic), "zRc" (economy zirconia), "emaxMono" (e.max monolithic), "emaxLay" (e.max layered), "PFZ" (porcelain-fused-zirconia), "PFM", "FullCast", "Bespoke". If clinician says zirconia / monolithic / unspecified crown -> "TLZ". If they say e.max or lithium disilicate -> "emaxMono". Only use what is implied; never invent.',
+"- shade: if a shade like A2/B1/BL2 is given, set shade to it and pick the matching shadeSystem. Default shadeSystem is \"VITA Classical A1-D4\". BL shades use \"IPS e.max / Ivoclar Bleach BL\". If no shade is stated, OMIT both shade and shadeSystem (the engine will ask).",
+"- caseSpec: only include keys the clinician explicitly states. Valid keys/values: occAnatomy[Match Adjacent/Partner|Ideal], occContact[Light|Full|Very light|Out of occlusion], occStain[Light|Medium|Dark|None], translucency[Standard|Increased|Minimal|As Drawn], contactShape[Standard|Broad|Extra Broad], contour[Match Adj./Partner|Match Study Model|Ideal], closeBite[Call|Trim/Mark Opp.|Trim w/Coping]. Leave caseSpec empty {} if nothing is stated — the engine applies ROE standards itself; do not echo defaults here.",
+"- Do NOT include fields you cannot determine. The engine surfaces its own questions for anything missing.",
+"- units is REQUIRED — at least one tooth with a role. If no tooth number is determinable, return units:[] and explain in interpretation."
+    ].join("\n");
+  }
 
-  /* missing questions */
-  if(!complete){
-    h+=`<div class="sec-label">Need from you</div>`;
-    missing.forEach((m,i)=>{
-      h+=`<div class="q" data-key="${esc(m.key)}">
-        <div class="qn"><span class="qnum">${i+1}</span>${esc(m.question||m.label)}</div>`;
-      if(m.type==='choice' && (m.options||[]).length){
-        h+=`<div class="opts">`+m.options.map(o=>`<button class="opt" data-val="${esc(o)}">${esc(o)}</button>`).join('')+`</div>`;
-      }else{
-        h+=`<input type="text" placeholder="${esc(m.label||'Type here')}…">`;
-      }
-      h+=`</div>`;
+  function submit(){
+    var text=q.value.trim(); if(!text) return;
+    go.disabled=true;
+    report.innerHTML='<div class="airx-think"><div class="airx-spin"></div>Reading the case and writing up the Rx…</div>';
+    fetch(PARSE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:MODEL,max_tokens:1200,messages:[{role:'user',content:prompt(text)}]})})
+    .then(function(r){ if(!r.ok) throw new Error('Backend '+r.status); return r.json(); })
+    .then(function(data){
+      var raw=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
+      raw=raw.replace(/```json|```/g,'').trim();
+      var c=JSON.parse(raw);
+      apply(c);
+    })
+    .catch(function(err){
+      report.innerHTML='<div class="airx-err"><b>Couldn\'t reach the parser.</b><br>'+err.message+'</div>';
+      go.disabled=false;
     });
   }
 
-  /* actions */
-  h+=`<div class="actions">
-        <button class="btn ghost" id="redo">Edit</button>
-        <button class="btn primary" id="review" ${complete?'':'disabled'}>${complete?'Go to review →':'Complete the Rx'}</button>
-      </div>`;
+  /* Hand the parsed case to the REAL engine and report using ITS feedback. */
+  function apply(c){
+    if(!c.units || !c.units.length){
+      report.innerHTML='<div class="airx-banner need"><div>I couldn\'t tell which tooth this is for. Add a tooth number (e.g. "#8") and try again.<br><small>'+(c.interpretation||'')+'</small></div></div>';
+      go.disabled=false; return;
+    }
+    if(typeof window.roeApplyCase!=='function'){
+      report.innerHTML='<div class="airx-err">roeApplyCase() not found — this module must run inside rx.html.</div>';
+      go.disabled=false; return;
+    }
+    // Drive the real engine. It mounts Fixed on the arch, pre-fills, and renders ITS own UI (with its own dynamic questions for anything unfilled).
+    var res=window.roeApplyCase(c);
+    go.disabled=false;
+    if(!res || !res.ok){
+      report.innerHTML='<div class="airx-err">Engine couldn\'t apply the case'+(res&&res.error?': '+res.error:'')+'.</div>';
+      return;
+    }
+    var rep=res.report||{applied:[],skipped:[]};
+    var applied=rep.applied||[], skipped=rep.skipped||[];
 
-  if(c.interpretation){
-    h+=`<div class="raw"><b>Note:</b> ${esc(c.interpretation)}</div>`;
+    // What still needs attention = the engine's required fields the parser couldn't set.
+    // shade is the common one; surface it plainly and let the engine's own shade UI handle it.
+    var needShade = !c.shade;
+    var open = [];
+    if(needShade) open.push('Shade — pick it on the chart');
+    skipped.forEach(function(s){ open.push(s); });
+
+    var html='';
+    if(open.length===0){
+      html+='<div class="airx-banner ok"><div><b>All set.</b> '+esc(c.caseLabel||'Case')+' is written up and ready — scroll up to review and send.</div></div>';
+    }else{
+      var n=open.length;
+      html+='<div class="airx-banner need"><div><b>'+esc(c.caseLabel||'Case')+'</b> is mostly done. Just '+n+' more '+(n===1?'thing':'things')+' — finish '+(n===1?'it':'them')+' on the engine above:</div></div>';
+      html+='<ul class="airx-list">'+open.map(function(o){return '<li>'+esc(o)+'</li>';}).join('')+'</ul>';
+    }
+    if(applied.length){
+      html+='<ul class="airx-list">'+applied.map(function(a){return '<li>✓ '+esc(a)+'</li>';}).join('')+'</ul>';
+    }
+    if(c.interpretation){ html+='<div class="airx-list" style="list-style:none;padding-left:0;font-style:italic;margin-top:10px;">'+esc(c.interpretation)+'</div>'; }
+    report.innerHTML=html;
   }
 
-  h+=`</div></div>`;
-  els.stage.innerHTML=h;
-
-  /* wire option buttons + inputs to live-check completeness */
-  const answers={};
-  els.stage.querySelectorAll('.q').forEach(q=>{
-    const key=q.dataset.key;
-    q.querySelectorAll('.opt').forEach(b=>{
-      b.addEventListener('click',()=>{
-        q.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));
-        b.classList.add('sel'); answers[key]=b.dataset.val; checkDone();
-      });
-    });
-    const inp=q.querySelector('input');
-    if(inp) inp.addEventListener('input',()=>{ answers[key]=inp.value.trim(); checkDone(); });
-  });
-
-  function checkDone(){
-    const done = missing.every(m=>answers[m.key] && String(answers[m.key]).trim());
-    const btn=document.getElementById('review');
-    btn.disabled=!done;
-    if(done) btn.textContent='Go to review →';
-  }
-
-  document.getElementById('redo').addEventListener('click',()=>{
-    els.brand.classList.remove('lifted'); els.stage.innerHTML=''; els.q.focus(); els.go.disabled=false;
-  });
-  document.getElementById('review').addEventListener('click',()=>{
-    if(document.getElementById('review').disabled) return;
-    goReview(c, filled, missing, answers);
-  });
-}
-
-/* ---------- review screen ---------- */
-function goReview(c, filled, missing, answers){
-  const all = filled.map(f=>({label:f.label, value:f.value, tag:f.source}))
-    .concat(missing.map(m=>({label:m.label, value:answers[m.key], tag:'answered'})));
-  let h=`<div class="card">
-    <div class="card-head">
-      <div class="eyebrow">Review · ${(c.engine||'fixed').toUpperCase()}</div>
-      <h2>${esc(c.caseTypeLabel||'Case')}</h2>
-      <div class="sub">Confirm the details below, then submit to the lab.</div>
-    </div>
-    <div class="card-body">
-      <div class="banner ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div><b>Rx complete.</b> This is where your existing workflow takes over — chart, images, ship-to and the sticky total bar.</div></div>
-      <div class="sec-label">Final Rx</div>`;
-  all.forEach(a=>{ if(a.value) h+=`<div class="kv"><span class="k">${esc(a.label)}</span><span class="v">${esc(a.value)}</span></div>`; });
-  h+=`<div class="actions"><button class="btn ghost" id="back">← Back</button><button class="btn primary" id="submit">Submit to lab</button></div>
-      <div class="review-note">Prototype stops here — wire <code>Submit</code> into the Master Rx engine to push the canonical work order.</div>
-    </div></div>`;
-  els.stage.innerHTML=h;
-  document.getElementById('back').addEventListener('click',()=>render(c, els.q.value));
-  document.getElementById('submit').addEventListener('click',()=>{
-    els.stage.innerHTML=`<div class="card"><div class="card-body" style="text-align:center;padding:42px 18px;"><div style="font-size:46px;line-height:1">✅</div><h2 style="font-family:'Newsreader',serif;color:var(--teal);margin:14px 0 6px;">Sent.</h2><p style="color:var(--muted);margin:0;">The completed Rx would now be in the lab queue.</p></div></div>`;
-  });
-}
-
-function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
-sync();
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]);});}
+  sync();
+})();
 </script>
-</body>
-</html>
