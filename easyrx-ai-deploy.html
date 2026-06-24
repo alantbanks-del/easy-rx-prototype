@@ -657,16 +657,15 @@ svg{width:100%;height:auto;display:block}
 <div id="airxHome">
   <div class="airxh-inner">
     <div class="airxh-brand">ROE <span>AI&nbsp;RX</span></div>
-    <div class="airxh-sub">Talk or Type</div>
-    <div class="airxh-tag" id="airxGreet">&nbsp;</div>
+    <div class="airxh-sub" id="airxGreet">Let's see what you've got — Talk or Type</div>
     <div class="airxh-bar">
       <textarea id="airxQ" rows="1" placeholder="Tell me about the case\u2026" autocomplete="off"></textarea>
       <button type="button" id="airxMic" title="Tap to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
       <button type="button" id="airxGo" title="Write up Rx" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
     <div id="airxMsg"></div>
-    <div class="airxh-eg">Try: <span class="airxh-chip">Zirconia crown #8, A2</span><span class="airxh-chip">e.max crown #9, BL2</span><span class="airxh-chip">Lower partial 19,20, finish, esthetic clasp, B1</span></div>
-    <button type="button" id="airxPush" class="airxh-push">Push Here for Easy Clicking</button>
+    <div class="airxh-eg">Try: <span class="airxh-chip">Zirconia crown #8, A2</span><span class="airxh-chip">Lower partial 19,20, finish, B1</span></div>
+    <button type="button" id="airxPush" class="airxh-push">Click here for old school</button>
     <div id="airxRep"></div>
   </div>
 </div>
@@ -794,7 +793,7 @@ function buildCaseLineItem(){
   return { id:_cartSeq++, engine:curEngine, title:title, total:total, lines:lines, notes:collectCaseNotes(), pending:(total===0 && curEngine!=='guides') };
 }
 // Capture current case into ORDER exactly once (guarded against double-add).
-function captureToCart(){ if(_caseCaptured) return null; var it=buildCaseLineItem(); ORDER.push(it); _caseCaptured=true; return it; }
+function captureToCart(){ if(_caseCaptured) return null; var it=buildCaseLineItem(); ORDER.push(it); _caseCaptured=true; if(typeof airxQueueAdvance==='function' && AIRX_QUEUE.length){ airxQueueAdvance(); } return it; }
 // ---- Cart panel (itemized view + remove) ----
 function openCartPanel(){
   var ov=document.getElementById('cartPanel'); if(!ov) return;
@@ -4329,8 +4328,12 @@ function airxInit(ids){
 }
 function airxPrompt(text){
   return [
-"You are the ROE Dental Laboratory AI Rx intake engine. Read a clinician's free-text or spoken case, decide which lab department (engine) it belongs to, and extract that engine's fields. Return ONLY JSON (no markdown).",
+"You are the ROE Dental Laboratory AI Rx intake engine. Read a clinician's free-text or spoken case and split it into ONE OR MORE individual lab cases. A single request often contains multiple appliances/restorations (e.g. \"upper denture and a lower partial\" = 2 cases). Return ONLY JSON (no markdown).",
 "","CLINICIAN INPUT:",'\"\"\"'+text+'\"\"\"',"",
+"OUTPUT: { \"cases\":[ <case>, <case>, ... ], \"interpretation\":\"one short overall note\" }",
+"Put SEPARATE physical appliances/arches as SEPARATE cases. An upper-and-lower denture pair is TWO cases (one per arch) unless clearly one appliance spanning 'both'. A simple single-appliance request returns cases with exactly one element.",
+"",
+"ROUTE each case to an engine:",
 "STEP 1 \u2014 ROUTE. Choose engine:",
 '- \"fixed\": crowns, bridges, veneers, inlays/onlays, implant crowns (single-tooth fixed restorations).',
 '- \"removable\": full dentures, partial dentures (cast metal frame), flexible/thermoplastic partials, all-acrylic partials/flippers, unilateral (Nesbit), Essix retainers, Snap-On Smile.',
@@ -4356,9 +4359,10 @@ function airxPrompt(text){
 "  - Only include fields actually stated or clearly implied; OMIT anything unknown so the engine asks.",
 "",
 "IF engine = \"other\":",
-'{ \"engine\":\"other\", \"interpretation\":\"e.g. This looks like a surgical guide case \u2014 not yet available in the bar.\" }',
+'{ \"engine\":\"other\", \"caseLabel\":\"short label\", \"otherKind\":\"fullarch|guide|aligner|ortho|splint|unknown\", \"arch\":\"upper|lower|both\", \"interpretation\":\"what it is\" }',
+"  - otherKind routes the user to the right department screen even though auto-fill isn\u2019t built for it yet.",
 "",
-"GENERAL: derive arch from tooth numbers when present. Never invent values not implied by the input."
+"GENERAL: derive arch from tooth numbers when present. Never invent values not implied by the input. Wrap every case inside the cases[] array."
   ].join("\n");
 }
 function airxSubmit(ids){
@@ -4374,7 +4378,12 @@ function airxSubmit(ids){
   .then(function(data){
     var raw=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
     raw=raw.replace(/```json|```/g,'').trim();
-    airxApply(JSON.parse(raw));
+    var parsed=JSON.parse(raw);
+    // New shape: {cases:[...]}. Back-compat: a bare single case object.
+    var cases = (parsed && Array.isArray(parsed.cases)) ? parsed.cases
+              : (parsed && parsed.engine) ? [parsed] : [];
+    if(parsed && parsed.interpretation && cases.length && !cases[0]._overall) cases[0]._overall=parsed.interpretation;
+    airxRunQueue(cases, parsed && parsed.interpretation);
   })
   .catch(function(err){ var m='<b>Couldn\u2019t reach the parser.</b><br>'+err.message; if(rep) rep.innerHTML='<div style="background:#FBE9E7;color:#B0341F;padding:12px 14px;border-radius:11px;font-size:14px">'+m+'</div>'; else if(msg) msg.textContent='Couldn\u2019t reach the parser.'; if(go){go.disabled=false; go.style.opacity='1';} });
 }
@@ -4385,18 +4394,76 @@ function airxSelEntry(resto){
   if(resto==='Bridge') return {type:'cb', val:'Bridge'};
   return {type:'cb', val:'Crown'};
 }
+// ===================== AI Rx multi-case QUEUE =====================
+// A single request may contain several cases. We apply them one at a time:
+// case 1 -> user finishes/commits -> auto-start case 2 (pre-filled), etc.
+var AIRX_QUEUE=[];        // pending cases (after the current one)
+var AIRX_QUEUE_TOTAL=0;   // total cases in this request
+var AIRX_QUEUE_IDX=0;     // 1-based index of the case currently being worked
+
+function airxRunQueue(cases, overall){
+  cases = (cases||[]).filter(function(c){ return c && c.engine; });
+  if(!cases.length){ airxNotice(overall||'I couldn\u2019t make out a case there. Try naming the restoration and a tooth (e.g. \u201czirconia crown #8 A2\u201d).'); return; }
+  AIRX_QUEUE_TOTAL = cases.length;
+  AIRX_QUEUE_IDX = 1;
+  AIRX_QUEUE = cases.slice(1);   // everything after the first waits
+  window.AIRX_OVERALL = overall || '';
+  // Show the whole plan up front when there's more than one case.
+  if(AIRX_QUEUE_TOTAL>1){ airxShowPlan(cases); }
+  airxApply(cases[0]);           // start case 1
+}
+// When the current AI case is committed to the cart, auto-start the next queued case.
+function airxQueueAdvance(){
+  if(!AIRX_QUEUE.length){ AIRX_QUEUE_TOTAL=0; AIRX_QUEUE_IDX=0; return false; }
+  var next=AIRX_QUEUE.shift();
+  AIRX_QUEUE_IDX++;
+  // Fresh case state, then apply the next one.
+  setTimeout(function(){ airxApply(next); }, 60);
+  return true;
+}
+function airxShowPlan(cases){
+  var host=document.getElementById('airxTranscript'); if(!host) return;
+  var rows=cases.map(function(c,i){
+    var label=c.caseLabel || (c.engine==='removable'?(c.appliance||'removable'):(c.engine==='other'?(c.otherKind||'other'):'fixed case'));
+    var arch=c.arch?(' \u00B7 '+c.arch):'';
+    return '<div style="padding:3px 0"><b>'+(i+1)+'.</b> '+airxEsc(label)+airxEsc(arch)+'</div>';
+  }).join('');
+  var said=window.AIRX_LAST_INPUT||'';
+  host.innerHTML='<div style="margin:10px 16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13.5px;line-height:1.5">'+
+    '<div style="background:#f3f8f7;padding:8px 12px;border-bottom:1px solid var(--line);font-weight:800;color:var(--teal-d);font-size:11px;letter-spacing:1px;text-transform:uppercase">\u2728 AI Rx \u2014 I heard '+cases.length+' cases</div>'+
+    '<div style="padding:10px 12px">'+
+      (said?'<div style="color:var(--muted);font-size:12px;margin-bottom:6px">\u201C'+airxEsc(said)+'\u201D</div>':'')+
+      rows+
+      '<div style="margin-top:8px;color:var(--gold);font-weight:700">Doing #1 now \u2014 finish it and I\u2019ll tee up the next.</div>'+
+    '</div></div>';
+}
+
 function airxApply(c){
   var go=document.getElementById('airxGo')||document.getElementById('airxLGo'),
       rep=document.getElementById('airxRep');
   if(go){ go.disabled=false; go.style.opacity='1'; }
   var eng=c && c.engine;
-  if(eng==='other'){
-    airxNotice((c&&c.interpretation)||'This case type isn\u2019t available in the bar yet \u2014 use the Easy Click cards below.');
-    return;
-  }
+  if(eng==='other'){ airxApplyOther(c); return; }
   if(eng==='removable'){ airxApplyRemovable(c); return; }
   // default + fixed (also covers a malformed/empty parse: Fixed handler shows its own notice)
   airxApplyFixed(c);
+}
+// 'other' engine: not auto-fillable yet. Open the matching department screen blank
+// (so a multi-case request still routes the user to the right place) with a note.
+function airxApplyOther(c){
+  var kind=(c&&c.otherKind)||'unknown';
+  var map={fullarch:'fullarch', guide:'guides', aligner:'aligners', ortho:'ortho', splint:'splints'};
+  var engId=map[kind];
+  var label=(c&&c.caseLabel)||kind;
+  if(engId && typeof startCase==='function'){
+    startCase(engId);
+    if(c && (c.arch==='upper'||c.arch==='lower'||c.arch==='both')) curArch=c.arch;
+    airxEnterEngine();
+    refreshAll();
+    airxToast(c, [], ['auto-fill not built for '+kind+' yet \u2014 enter details on screen'], STEPS()[step]);
+  } else {
+    airxNotice('This case ('+airxEsc(label)+') isn\u2019t available in the bar yet \u2014 use the Easy Click cards below.'+(AIRX_QUEUE.length?(' Then I\u2019ll continue with the next case.'):''));
+  }
 }
 // Show a notice on whichever surface is visible (home rep box, or launcher card msg).
 function airxNotice(text){
@@ -4531,7 +4598,6 @@ function airxToast(c, applied, skipped, landed){
       '</div>'+
       '<div style="padding:10px 12px">'+
         (said ? '<div style="color:var(--ink)"><span style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px">You said</span><br>\u201C'+airxEsc(said)+'\u201D</div>' : '')+
-        (understood ? '<div style="margin-top:8px"><span style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px">I wrote up</span><br>'+understood+'</div>' : '')+
         chips+skip+
         '<div style="margin-top:8px;font-weight:700;color:'+statusColor+'">'+statusTxt+'</div>'+
       '</div>'+
@@ -6720,10 +6786,8 @@ var AIRX_GREETINGS=[
  "Bite me\u2026 nicely."
 ];
 function airxShowGreeting(){
- var el=document.getElementById('airxGreet'); if(!el) return;
- var line=AIRX_GREETINGS[Math.floor(Math.random()*AIRX_GREETINGS.length)];
- el.classList.remove('show');
- setTimeout(function(){ el.textContent=line; el.classList.add('show'); }, 60);
+ // Home sub-line is fixed ("Let's see what you've got — Talk or Type"); no rotation.
+ var el=document.getElementById('airxGreet'); if(el) el.classList.add('show');
 }
 (function(){
   var chips=document.querySelectorAll('.airxh-chip'), q=document.getElementById('airxQ');
