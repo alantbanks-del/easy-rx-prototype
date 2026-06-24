@@ -339,6 +339,9 @@ svg{width:100%;height:auto;display:block}
 
 /* bottom bar */
 .to-review{position:fixed;left:50%;transform:translateX(-50%);bottom:140px;z-index:41;border:1.5px solid var(--teal);background:#fff;color:var(--teal-d);border-radius:22px;padding:9px 18px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.pill-review{background:var(--teal-d)!important;border-color:var(--teal-d)!important}
+.pill-review .pill-main,.pill-review .pn{color:#fff!important}
+.pill-review .pn{background:rgba(255,255,255,.25)!important}
 .mic-btn{position:fixed;right:14px;bottom:74px;z-index:42;width:46px;height:46px;border-radius:50%;border:none;background:var(--teal);color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .mic-btn .mic-ico{font-size:20px;line-height:1}
 .mic-btn.voiceoff{background:#9fb1ae}
@@ -1930,7 +1933,7 @@ function renderRemovableStage(stage){
  if(nm==='Buy a Splint'){ renderGuardStep(); return; }
  if(nm==='Review'){
    stage.innerHTML=renderReview();
-   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -2202,7 +2205,7 @@ function renderSharedEndStep(stage, nm){
 /* ===================== SURGICAL GUIDES GUIDED FLOW ===================== */
 function renderGuidesStage(stage){
  var nm=STEPS()[step];
- if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; }); return; }
+ if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); return; }
  if(nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
  if(nm==='Guide Type'){
@@ -2871,7 +2874,7 @@ function renderGdDenture(stage){
 
 function renderFullArchStage(stage){
  var nm=STEPS()[step];
- if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; }); return; }
+ if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); return; }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
  if(nm==='Arch'){
@@ -3565,7 +3568,7 @@ function renderOrthoStage(stage){
  var nm=STEPS()[step];
  if(nm==='Review'){
    stage.innerHTML=renderReview();
-   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -3760,7 +3763,7 @@ function renderAlignStage(stage){
   var nm=STEPS()[step];
   if(nm==='Review'){
     stage.innerHTML=renderReview();
-    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
     return;
   }
   if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -3901,7 +3904,7 @@ function renderSplintStage(stage){
  var nm=STEPS()[step];
  if(nm==='Review'){
    stage.innerHTML=renderReview();
-   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -4292,7 +4295,7 @@ function airxInit(ids){
   // Tap to start -> opens a WebSocket straight to Deepgram (authed by a 30-60s token minted
   // server-side) -> mic audio streams up, transcript streams back in REAL TIME as you talk.
   // Tap again to stop. No browser Web Speech API, so the repeat/stack bug cannot occur.
-  var dgSocket=null, dgRec=null, dgStream=null, recording=false;
+  var dgSocket=null, dgRec=null, dgStream=null, recording=false, dgSession=0;
   var startText='', committedFinal='';   // committedFinal = finalized words this session
   function setMicIdle(){ recording=false; mic.classList.remove('live'); mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; }
   function setMicLive(){ recording=true; mic.classList.add('live'); mic.style.background='#C0392B'; mic.style.color='#fff'; }
@@ -4306,6 +4309,7 @@ function airxInit(ids){
 
   function startStreaming(){
     if(recording) return;
+    dgSession++;                     // new session id; stale closes from prior sessions are ignored
     startText=(q.value||'').trim(); committedFinal='';
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder || !window.WebSocket){
       if(msg) msg.textContent='Live mic not supported here \u2014 type instead.'; return;
@@ -4357,8 +4361,9 @@ function airxInit(ids){
         }
         syncBtn();
       };
+      var mySession=dgSession;
       dgSocket.onerror=function(ev){ if(msg) msg.textContent='Mic connection error (socket). Check key is Member-level.'; };
-      dgSocket.onclose=function(ev){ if(msg && ev && ev.code && ev.code!==1000){ msg.textContent='Mic closed (code '+ev.code+(ev.reason?': '+ev.reason:'')+')'; } finishStreaming(); };
+      dgSocket.onclose=function(ev){ if(msg && ev && ev.code && ev.code!==1000 && mySession===dgSession){ msg.textContent='Mic closed (code '+ev.code+(ev.reason?': '+ev.reason:'')+')'; } finishStreaming(mySession); };
     }).catch(function(err){
       if(msg) msg.textContent = (err && (err.name==='NotAllowedError'||err.name==='SecurityError'))
         ? 'Microphone blocked \u2014 allow access and try again.' : 'Mic error: '+(err&&err.message?err.message:err);
@@ -4367,14 +4372,21 @@ function airxInit(ids){
 
   function stopStreaming(){
     if(!recording) return;
+    recording=false;                 // flip immediately so the next tap is treated as a fresh start
+    setMicIdle();
     if(msg) msg.textContent='Finishing\u2026';
+    // Stop recorder + RELEASE THE MIC NOW (don't wait for socket close — that was the 12s delay).
     try{ if(dgRec && dgRec.state!=='inactive') dgRec.stop(); }catch(e){}
-    // tell Deepgram we're done so it flushes the final transcript, then close
+    cleanupStream();                 // stop getUserMedia tracks right away -> mic is free for next tap
+    // Tell Deepgram we're done so it flushes the final transcript, then close the socket.
     try{ if(dgSocket && dgSocket.readyState===1){ dgSocket.send(JSON.stringify({type:'CloseStream'})); } }catch(e){}
-    setTimeout(function(){ try{ if(dgSocket) dgSocket.close(); }catch(e){} }, 400);
+    setTimeout(function(){ try{ if(dgSocket) dgSocket.close(); }catch(e){} }, 300);
   }
 
-  function finishStreaming(){
+  function finishStreaming(mySession){
+    // Ignore a late close from a previous session (user already tapped to start a new one).
+    if(typeof mySession==='number' && mySession!==dgSession) return;
+    if(recording) return;   // a new session is live; don't tear it down
     cleanupStream();
     q.value = joinSep(startText, committedFinal).trim(); syncBtn();
     setMicIdle(); if(msg) msg.textContent='';
@@ -4406,9 +4418,11 @@ function airxPrompt(text){
 '  - shade: if given set shade + matching shadeSystem (default \"VITA Classical A1-D4\"; BL shades use \"IPS e.max / Bleach BL\"). If none stated, OMIT both.',
 "",
 "IF engine = \"removable\":",
-'{ \"engine\":\"removable\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"appliance\":\"denture\", \"dentureKind\":\"new|immediate\", \"dentureType\":\"Traditional Handcrafted Premium\", \"dentureStage\":\"Set-Up and Finish\", \"teeth\":[19,20], \"ret\":\"Finish\", \"clasp\":\"Esthetic clasps (anterior)\", \"shadeSystem\":\"VITA Classical (A1\\u2013D4)\", \"shade\":\"B1\", \"interpretation\":\"short note\" }',
+'{ \"engine\":\"removable\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"appliance\":\"denture\", \"dentureKind\":\"new|immediate\", \"dentureType\":\"Traditional Handcrafted Premium\", \"dentureStage\":\"Set-Up and Finish\", \"teeth\":[19,20], \"ret\":\"Finish\", \"clasp\":\"Esthetic clasps (anterior)\", \"gingiva\":\"Original\", \"shadeSystem\":\"VITA Classical (A1\\u2013D4)\", \"shade\":\"B1\", \"interpretation\":\"short note\" }',
 '  - appliance KEY: \"denture\"(full denture) | \"partial\"(cast metal frame) | \"flexible\"(flexible/thermoplastic) | \"acrylic\"(flipper/all-acrylic) | \"unilateral\"(Nesbit) | \"essix\"(clear retainer) | \"snapon\"(Snap-On Smile).',
-'  - If appliance=\"denture\": dentureKind \"new\" (no teeth present) or \"immediate\" (teeth to be extracted). dentureType one of: \"Traditional Handcrafted Premium\",\"Traditional Handcrafted Value\",\"IMPACT Premium\",\"IMPACT Value\",\"Ivotion Premium\",\"Stabiliteeth Only\" (default \"Traditional Handcrafted Premium\"). dentureStage e.g. \"Set-Up and Finish\" if stated, else OMIT. For immediate dentures, list extraction teeth in \"teeth\".',
+'  - If appliance=\"denture\": dentureKind \"new\" (no teeth present) or \"immediate\" (teeth to be extracted). dentureType one of: \"Traditional Handcrafted Premium\",\"Traditional Handcrafted Value\",\"IMPACT Premium\",\"IMPACT Value\",\"Ivotion Premium\",\"Stabiliteeth Only\" (default \"Traditional Handcrafted Premium\"). For immediate dentures, list extraction teeth in \"teeth\".',
+'  - dentureStage (FULL DENTURES) \u2014 map the doctor\u2019s EXACT words; do NOT add steps they didn\u2019t say. \"finish\"/\"finished\"/\"just finish\" => \"Finish in Ivocap\" (finish only). \"set up and finish\"/\"setup and finish\" => \"Set-Up and Finish\". \"set up\"/\"set-up only\" => \"Set-Up Only\". \"bite block\" => \"Bite Block Only\". \"custom tray\"/\"tray\" => \"Custom Tray\". \"reset\" => \"Reset and Return\"; \"reset and finish\" => \"Reset + Finish\". OMIT if no stage stated.',
+'  - gingiva (denture/flexible/acrylic tissue shade) \u2014 ONE of: \"Light Pink\",\"Original\",\"Dark Pink\". \"pink\"/\"regular pink\"/\"standard pink\" => \"Original\". \"light pink\" => \"Light Pink\". \"dark pink\" => \"Dark Pink\". OMIT if not stated.',
 '  - If appliance is partial/flexible/acrylic/unilateral: put the teeth being replaced (missing) in \"teeth\".',
 '  - ret (what the lab returns) \u2014 match the doctor\u2019s words to ONE of: \"Bite Block Only\",\"Set-Up\",\"Set-Up + Finish\",\"Reset\",\"Reset + Finish\",\"Frame only\",\"Frame + Bite Block\",\"Frame + Set-Up\",\"Frame + Set-Up + Finish\",\"Frame + Set-Up + Flexible Finish (Hybrid)\",\"Finish\". \"finish\"/\"finished\"/\"completed\" => \"Finish\". OMIT if not stated.',
 '  - clasp \u2014 if partial/acrylic/unilateral, match to ONE of: \"Standard cast metal clasps\",\"Cast metal + flexible esthetic clasps\",\"Esthetic clasps (anterior)\". \"esthetic clasp(s)\" => \"Esthetic clasps (anterior)\"; \"flexible esthetic\" => \"Cast metal + flexible esthetic clasps\". If flexible appliance, clasp is \"Flexible (tissue-tone) clasps\" or \"Wire clasps\". OMIT if not stated.',
@@ -4582,6 +4596,12 @@ function airxApplyRemovable(c){
     var DT=['Traditional Handcrafted Premium','Traditional Handcrafted Value','IMPACT Premium','IMPACT Value','Ivotion Premium','Stabiliteeth Only'];
     if(c.dentureType && DT.indexOf(c.dentureType)>=0){ rem.dentureType=c.dentureType; applied.push(c.dentureType); }
     if(c.dentureStage){ rem.dentureStage=c.dentureStage; applied.push('stage: '+c.dentureStage); }
+  }
+  // Gingiva (tissue shade) for denture/flexible/acrylic
+  if(c.gingiva){
+    var GING=['Light Pink','Original','Dark Pink'];
+    if(GING.indexOf(c.gingiva)>=0){ rem.gingiva=c.gingiva; applied.push('gingiva: '+c.gingiva); }
+    else { skipped.push('gingiva "'+c.gingiva+'"'); }
   }
   // Teeth: extractions (immediate denture) or teeth-to-replace (partials)
   if(Array.isArray(c.teeth)){
@@ -5101,7 +5121,7 @@ function renderStage(){
  } else if(STEPS()[step]==='Review'){
   stage.innerHTML=renderReview();
   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){
-   b.onclick=function(){ var nm=b.getAttribute('data-step'); var idx=STEPS().indexOf(nm); if(idx>=0){ step=idx; refreshAll(); } };
+   b.onclick=function(){ var nm=b.getAttribute('data-step'); var idx=STEPS().indexOf(nm); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } };
   });
  } else if(STEPS()[step]==='Bespoke'){
   renderBespokeStep();
@@ -6105,6 +6125,12 @@ function renderSteps(){
  if(!caseStarted){ s.innerHTML=''; s.style.display='none'; return; }
  s.style.display='';
  s.innerHTML='';
+ // Pinned "Back to Review" pill at the FRONT of the rail — only when the user has gone
+ // back from a reachable Review. Lives in the rail so it never covers the form.
+ var reviewIdx0=STEPS().indexOf('Review');
+ if(reviewIdx0>=0 && maxStep>=reviewIdx0 && step<reviewIdx0){
+   s.innerHTML+='<button class="pill pill-review" data-review="1"><span class="pill-main"><span class="pn">\u21A9</span>Review</span></button>';
+ }
  STEPS().forEach(function(nm,i){
   // "done" if the user has walked at/past it OR its data is already satisfied
   // (so AI-prefilled steps show a checkmark immediately).
@@ -6117,7 +6143,8 @@ function renderSteps(){
   var choiceHtml = choice ? '<span class="pill-choice">'+choice+'</span>' : '';
   s.innerHTML+='<button class="'+cls+'" data-i="'+i+'"><span class="pill-main"><span class="pn">'+(done?'\u2713':(i+1))+'</span>'+label+'</span>'+choiceHtml+'</button>';
  });
- [].forEach.call(s.querySelectorAll('.pill'),function(b){ b.onclick=function(){ var t=+b.getAttribute('data-i'); if(t<=maxStep || stepOKAt(t)){ step=t; maxStep=Math.max(maxStep,t); refreshAll(); } else if(t===maxStep+1 && stepOK()){ step=t; refreshAll(); } }; });
+ [].forEach.call(s.querySelectorAll('.pill'),function(b){ b.onclick=function(){ var t=+b.getAttribute('data-i'); if(t<=maxStep || stepOKAt(t)){ step=t; maxStep=Math.max(maxStep,t); _userPickedStep=true; refreshAll(); } else if(t===maxStep+1 && stepOK()){ step=t; _userPickedStep=true; refreshAll(); } }; });
+ var rvp=s.querySelector('.pill-review'); if(rvp){ rvp.onclick=function(){ var ri=STEPS().indexOf('Review'); if(ri>=0){ step=ri; _userPickedStep=true; refreshAll(); } }; }
  // scroll current into view
  var cur=s.querySelector('.pill.cur'); if(cur)cur.scrollIntoView({inline:'center',block:'nearest'});
 }
@@ -6202,13 +6229,9 @@ function refreshAll(){
    var st=document.getElementById('stage'); if(st && st.scrollTop) st.scrollTop=0;
    if(window.scrollTo) window.scrollTo(0,0);
  }catch(e){}
- // "Back to Review" appears only when the user has gone backward AND Review is reachable.
- var reviewIdx=STEPS().indexOf('Review');
+ // "Back to Review" now lives in the rail (pill-review) so it never covers content.
  var btn=document.getElementById('toReview');
- if(btn){
-  var show = reviewIdx>=0 && maxStep>=reviewIdx && step<reviewIdx;
-  btn.style.display = show?'block':'none';
- }
+ if(btn){ btn.style.display='none'; }
  if(typeof autoAsk==='function') autoAsk();
 }
 
@@ -6223,14 +6246,15 @@ var _rec=null, _listening=false;
 var _lastAskedStep=-1;          // which step index we've already auto-asked
 var voiceOn=false;              // in-engine voice guidance OFF for now (was obnoxious/out-of-sync)
 var _autoSkipping=false;
+var _userPickedStep=false;       // true when the user explicitly taps a Review row to edit a step
 function autoAsk(){
  if(!caseStarted) return;
  var nm=STEPS()[step];
  var terminal=(nm==='Review'||nm==='Opposing Arch'||nm==='Finish');
- // Auto-advance past steps whose data is already satisfied (e.g. AI pre-filled),
- // so we never ask for / audible a step that's already answered. Never skip
- // OPTIONAL steps (Dial in Shade, Add-ons, Buy a Splint) — the user may want those.
- if(!_autoSkipping && !terminal && !OPTIONAL_STEPS[nm] && stepOK() && step<STEPS().length-1){
+ // If the user EXPLICITLY tapped a step to edit, honor it — do not auto-skip away from it.
+ if(_userPickedStep){ _userPickedStep=false; }
+ else if(!_autoSkipping && !terminal && !OPTIONAL_STEPS[nm] && stepOK() && step<STEPS().length-1){
+   // Auto-advance past already-satisfied steps (e.g. AI pre-filled) so we never re-ask them.
    _autoSkipping=true;
    step++; maxStep=Math.max(maxStep,step);
    _autoSkipping=false;
@@ -6788,9 +6812,28 @@ airxInit({q:'airxQ',go:'airxGo',mic:'airxMic',msg:'airxMsg',rep:'airxRep'});
 function airxEnterEngine(){
   var home=document.getElementById('airxHome'); if(home) home.style.display='none';
   var shell=document.getElementById('airxShell'); if(shell) shell.style.display='';
+  // Push a history entry so the phone's BACK gesture / swipe-left navigates inside the app
+  // (back one step, or to Review) instead of leaving the page.
+  try{ if(!window._airxInEngine){ history.pushState({airx:'engine'},'',location.href); window._airxInEngine=true; } }catch(e){}
 }
+// Phone back / left-swipe handler: stay in the app and move sensibly.
+window.addEventListener('popstate', function(){
+  if(!window._airxInEngine) return;            // on home — let normal back happen
+  // Re-arm a history entry so the NEXT back is also caught (until we deliberately leave).
+  try{ history.pushState({airx:'engine'},'',location.href); }catch(e){}
+  if(!caseStarted){ return; }
+  var nm = (typeof STEPS==='function') ? STEPS()[step] : '';
+  if(nm==='Review' || nm==='Finish' || nm==='Opposing Arch'){
+    // already at Review/end — back gesture does nothing destructive (stay put)
+    return;
+  }
+  // From any editable step, BACK returns to Review (where the user can pick another step).
+  var ri = (typeof STEPS==='function') ? STEPS().indexOf('Review') : -1;
+  if(ri>=0){ step=ri; _userPickedStep=true; refreshAll(); }
+});
 // Return to the standalone ROE AI Rx home (the true home base).
 function airxGoHome(){
+  window._airxInEngine=false;
   var shell=document.getElementById('airxShell'); if(shell) shell.style.display='none';
   var home=document.getElementById('airxHome'); if(home) home.style.display='';
   var tr=document.getElementById('airxTranscript'); if(tr) tr.innerHTML='';
