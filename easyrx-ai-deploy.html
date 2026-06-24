@@ -4289,36 +4289,44 @@ function airxInit(ids){
   q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(ids); } };
   go.onclick=function(){ airxSubmit(ids); };
   // voice (Web Speech API) — TAP to start, talk freely, TAP again (or submit) to stop.
-  // No hold, no auto-cutoff. Rebuild transcript from scratch each fire (never append) so
-  // results can't duplicate even when mobile Chrome restarts the recognizer mid-session.
+  // KEY INVARIANT (prevents the "are you going are you going" repeat bug):
+  //   committedTyped = whatever was in the box before mic-on (user typing) — NEVER changes while listening
+  //   finalWords     = ONLY finalized speech, accumulated once per final result — NEVER includes interim
+  //   onend NEVER copies q.value (which holds interim) into anything.
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, listening=false, userStopped=false;
-  var committed='';   // text already locked in from PRIOR recognizer sessions this mic-on
+  var committedTyped='', finalWords='';
   if(SR){
     rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang='en-US'; rec.maxAlternatives=1;
-    function joinSep(a,b){ if(!a) return b; if(!b) return a; return a + (/\s$/.test(a)?'':' ') + b; }
+    function joinSep(a,b){ a=a||''; b=b||''; if(!a) return b; if(!b) return a; return a + (/\s$/.test(a)?'':' ') + b; }
+    function paint(interim){ q.value = joinSep(joinSep(committedTyped, finalWords), interim||''); syncBtn(); }
     rec.onstart=function(){ listening=true; mic.classList.add('live'); mic.style.background='#C0392B'; mic.style.color='#fff'; if(msg)msg.textContent='Listening\u2026 tap mic to stop'; };
     rec.onresult=function(e){
-      // Rebuild THIS session's full text from index 0 every time — never += .
+      // Rebuild from index 0 every fire. Accumulate FINALS into finalWords ONCE; show interim live but never store it.
       var finals='', interim='';
       for(var i=0;i<e.results.length;i++){
-        var r=e.results[i];
-        if(r.isFinal){ finals = joinSep(finals, r[0].transcript.trim()); }
-        else { interim = joinSep(interim, r[0].transcript.trim()); }
+        var r=e.results[i], t=(r[0]&&r[0].transcript||'').trim();
+        if(r.isFinal){ finals = joinSep(finals, t); } else { interim = joinSep(interim, t); }
       }
-      var sessionText = joinSep(finals, interim);
-      q.value = joinSep(committed, sessionText);
-      syncBtn();
+      finalWords = finals;          // finals for THIS session, rebuilt (not +=) so it can't double
+      paint(interim);
     };
     rec.onerror=function(e){ if(msg)msg.textContent=e.error==='not-allowed'?'Microphone blocked \u2014 allow access in browser settings.':'Mic error: '+e.error; };
     rec.onend=function(){
-      // Lock this session's words into `committed`, then (if user didn't stop) restart cleanly.
-      committed = (q.value||'').trim();
-      if(listening && !userStopped){ try{ rec.start(); return; }catch(_){} }
+      // If the browser auto-ended but the user is still recording, fold finals into committedTyped
+      // and clear finalWords so the NEXT session starts clean (no interim ever folded in).
+      if(listening && !userStopped){
+        committedTyped = joinSep(committedTyped, finalWords);
+        finalWords='';
+        try{ rec.start(); return; }catch(_){}
+      }
+      // user tapped off (or start failed): finalize and stop
+      committedTyped = joinSep(committedTyped, finalWords); finalWords='';
+      q.value = committedTyped.trim(); syncBtn();
       listening=false; mic.classList.remove('live'); mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; if(msg)msg.textContent='';
     };
     mic.onclick=function(){
       if(listening){ userStopped=true; try{ rec.stop(); }catch(_){} return; }
-      userStopped=false; committed=(q.value||'').trim();   // keep anything already typed
+      userStopped=false; committedTyped=(q.value||'').trim(); finalWords='';
       try{ rec.start(); }
       catch(err){
         if(String(err).indexOf('InvalidState')>=0){ setTimeout(function(){ try{ rec.start(); }catch(e2){ if(msg)msg.textContent='Mic couldn\u2019t start: '+e2.message; } }, 250); }
