@@ -659,7 +659,7 @@ svg{width:100%;height:auto;display:block}
     <div class="airxh-brand">ROE <span>AI&nbsp;RX</span></div>
     <div class="airxh-sub" id="airxGreet">Let's see what you've got — Talk or Type</div>
     <div class="airxh-bar">
-      <textarea id="airxQ" rows="1" placeholder="Tell me about the case\u2026" autocomplete="off"></textarea>
+      <textarea id="airxQ" rows="1" placeholder="Tell me about the case…" autocomplete="off"></textarea>
       <button type="button" id="airxMic" title="Tap to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
       <button type="button" id="airxGo" title="Write up Rx" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
@@ -4288,82 +4288,100 @@ function airxInit(ids){
   syncBtn();
   q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(ids); } };
   go.onclick=function(){ airxSubmit(ids); };
-  // voice — REAL speech-to-text via Deepgram (server-side), like Claude's mic.
-  // Tap to record, talk, tap to stop -> audio is sent to /.netlify/functions/transcribe
-  // -> clean transcript drops into the box. No browser Web Speech API, so the old
-  // "repeat/stack" bug is structurally impossible (we record audio, not stitch text).
-  var mediaRec=null, chunks=[], stream=null, recording=false, startText='';
+  // voice — LIVE streaming speech-to-text via Deepgram, like Claude's mic.
+  // Tap to start -> opens a WebSocket straight to Deepgram (authed by a 30-60s token minted
+  // server-side) -> mic audio streams up, transcript streams back in REAL TIME as you talk.
+  // Tap again to stop. No browser Web Speech API, so the repeat/stack bug cannot occur.
+  var dgSocket=null, dgRec=null, dgStream=null, recording=false;
+  var startText='', committedFinal='';   // committedFinal = finalized words this session
   function setMicIdle(){ recording=false; mic.classList.remove('live'); mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; }
   function setMicLive(){ recording=true; mic.classList.add('live'); mic.style.background='#C0392B'; mic.style.color='#fff'; }
   function joinSep(a,b){ a=a||''; b=b||''; if(!a) return b; if(!b) return a; return a + (/\s$/.test(a)?'':' ') + b; }
-
   function pickMime(){
-    var prefs=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus','audio/ogg'];
-    if(window.MediaRecorder && MediaRecorder.isTypeSupported){
-      for(var i=0;i<prefs.length;i++){ if(MediaRecorder.isTypeSupported(prefs[i])) return prefs[i]; }
-    }
+    var prefs=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/ogg','audio/mp4'];
+    if(window.MediaRecorder && MediaRecorder.isTypeSupported){ for(var i=0;i<prefs.length;i++){ if(MediaRecorder.isTypeSupported(prefs[i])) return prefs[i]; } }
     return '';
   }
+  function cleanupStream(){ if(dgStream){ try{ dgStream.getTracks().forEach(function(t){t.stop();}); }catch(e){} dgStream=null; } }
 
-  function blobToBase64(blob){
-    return new Promise(function(resolve,reject){
-      var r=new FileReader();
-      r.onload=function(){ var s=String(r.result); resolve(s.indexOf(',')>=0 ? s.split(',')[1] : s); };
-      r.onerror=function(){ reject(new Error('read failed')); };
-      r.readAsDataURL(blob);
-    });
+  function startStreaming(){
+    if(recording) return;
+    startText=(q.value||'').trim(); committedFinal='';
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder || !window.WebSocket){
+      if(msg) msg.textContent='Live mic not supported here \u2014 type instead.'; return;
+    }
+    if(msg) msg.textContent='Starting\u2026';
+    // 1) get a short-lived token from our Netlify function (read as text first so an empty/HTML
+    //    response — e.g. function not deployed, 404 — gives a clear message instead of a JSON crash)
+    fetch('/.netlify/functions/transcribe',{method:'POST'})
+      .then(function(r){ return r.text().then(function(tx){ return {status:r.status, ok:r.ok, tx:tx}; }); })
+      .then(function(o){
+        if(!o.ok){ if(msg) msg.textContent='Mic auth failed ('+o.status+'). '+(o.tx?o.tx.slice(0,120):'no response \u2014 is the transcribe function deployed?'); return; }
+        var j; try{ j=JSON.parse(o.tx); }catch(e){ if(msg) msg.textContent='Mic auth: bad response from server (not JSON). Check the transcribe function & DEEPGRAM_API_KEY.'; return; }
+        if(!j || !j.access_token){ if(msg) msg.textContent='Mic auth: no token returned. '+((j&&j.error)||''); return; }
+        openMicAndSocket(j.access_token);
+      })
+      .catch(function(err){ if(msg) msg.textContent='Mic start failed: '+(err&&err.message?err.message:err); });
   }
 
-  function startRecording(){
-    if(recording) return;
-    startText=(q.value||'').trim();
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){
-      if(msg) msg.textContent='Recording not supported here \u2014 type instead.'; return;
-    }
-    navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
-      stream=s; chunks=[];
+  function openMicAndSocket(token){
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      dgStream=stream;
       var mime=pickMime();
-      try{ mediaRec = mime ? new MediaRecorder(stream,{mimeType:mime}) : new MediaRecorder(stream); }
-      catch(e){ mediaRec = new MediaRecorder(stream); }
-      mediaRec.ondataavailable=function(ev){ if(ev.data && ev.data.size>0) chunks.push(ev.data); };
-      mediaRec.onstop=function(){ stopTracks(); transcribe(); };
-      mediaRec.start();
-      setMicLive(); if(msg) msg.textContent='Recording\u2026 tap mic to stop';
+      // Deepgram live params: medical model for dental vocab, smart_format/numerals, interim results for live feel.
+      var url='wss://api.deepgram.com/v1/listen?model=nova-3-medical&smart_format=true&punctuate=true&numerals=true&interim_results=true&language=en';
+      // Browser WebSocket can't set Authorization header -> use the token subprotocol form.
+      // Browser WebSocket can't set headers. A JWT from /auth/grant uses the BEARER scheme,
+      // passed as the Sec-WebSocket-Protocol subprotocol: ['bearer', <jwt>]. (A raw API key
+      // would use ['token', <key>] — different scheme; using the wrong one connects but returns nothing.)
+      dgSocket=new WebSocket(url, ['bearer', token]);
+      dgSocket.onopen=function(){
+        setMicLive(); if(msg) msg.textContent='Listening\u2026 tap mic to stop';
+        try{ dgRec = mime ? new MediaRecorder(dgStream,{mimeType:mime}) : new MediaRecorder(dgStream); }
+        catch(e){ dgRec=new MediaRecorder(dgStream); }
+        dgRec.ondataavailable=function(ev){ if(ev.data && ev.data.size>0 && dgSocket && dgSocket.readyState===1) dgSocket.send(ev.data); };
+        dgRec.start(250);   // send a chunk every 250ms for low-latency live transcript
+      };
+      dgSocket.onmessage=function(ev){
+        var d; try{ d=JSON.parse(ev.data); }catch(e){ return; }
+        // Deepgram sends a Metadata/Error type too — surface anything that isn't a transcript.
+        if(d.type==='Error' || d.error){ if(msg) msg.textContent='Deepgram: '+(d.description||d.error||d.message||'error'); return; }
+        if(!d.channel || !d.channel.alternatives || !d.channel.alternatives[0]) return;
+        var t=(d.channel.alternatives[0].transcript||'').trim();
+        if(!t) return;
+        if(d.is_final){
+          committedFinal = joinSep(committedFinal, t);
+          q.value = joinSep(startText, committedFinal);
+        } else {
+          q.value = joinSep(startText, joinSep(committedFinal, t));
+        }
+        syncBtn();
+      };
+      dgSocket.onerror=function(ev){ if(msg) msg.textContent='Mic connection error (socket). Check key is Member-level.'; };
+      dgSocket.onclose=function(ev){ if(msg && ev && ev.code && ev.code!==1000){ msg.textContent='Mic closed (code '+ev.code+(ev.reason?': '+ev.reason:'')+')'; } finishStreaming(); };
     }).catch(function(err){
       if(msg) msg.textContent = (err && (err.name==='NotAllowedError'||err.name==='SecurityError'))
-        ? 'Microphone blocked \u2014 allow access and try again.'
-        : 'Mic error: '+(err&&err.message?err.message:err);
+        ? 'Microphone blocked \u2014 allow access and try again.' : 'Mic error: '+(err&&err.message?err.message:err);
     });
   }
 
-  function stopTracks(){ if(stream){ try{ stream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} stream=null; } }
-
-  function stopRecording(){
-    if(!recording || !mediaRec) return;
-    setMicIdle(); if(msg) msg.textContent='Transcribing\u2026';
-    try{ mediaRec.stop(); }catch(e){ stopTracks(); if(msg) msg.textContent=''; }
+  function stopStreaming(){
+    if(!recording) return;
+    if(msg) msg.textContent='Finishing\u2026';
+    try{ if(dgRec && dgRec.state!=='inactive') dgRec.stop(); }catch(e){}
+    // tell Deepgram we're done so it flushes the final transcript, then close
+    try{ if(dgSocket && dgSocket.readyState===1){ dgSocket.send(JSON.stringify({type:'CloseStream'})); } }catch(e){}
+    setTimeout(function(){ try{ if(dgSocket) dgSocket.close(); }catch(e){} }, 400);
   }
 
-  function transcribe(){
-    var type=(mediaRec && mediaRec.mimeType) || 'audio/webm';
-    var blob=new Blob(chunks,{type:type});
-    if(!blob.size){ if(msg) msg.textContent='Didn\u2019t catch any audio \u2014 try again.'; return; }
-    blobToBase64(blob).then(function(b64){
-      return fetch('/.netlify/functions/transcribe',{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ audio:b64, mime:type })
-      });
-    }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
-    .then(function(o){
-      if(!o.ok){ if(msg) msg.textContent='Transcription error: '+((o.j&&o.j.error)||'unknown'); return; }
-      var t=(o.j && o.j.transcript || '').trim();
-      if(!t){ if(msg) msg.textContent='Didn\u2019t catch that \u2014 tap and try again.'; setTimeout(function(){ if(msg && msg.textContent.indexOf('Didn')===0) msg.textContent=''; },2500); return; }
-      q.value = joinSep(startText, t);   // append to anything already typed
-      syncBtn(); if(msg) msg.textContent='';
-    }).catch(function(err){ if(msg) msg.textContent='Could not transcribe: '+(err&&err.message?err.message:err); });
+  function finishStreaming(){
+    cleanupStream();
+    q.value = joinSep(startText, committedFinal).trim(); syncBtn();
+    setMicIdle(); if(msg) msg.textContent='';
+    dgSocket=null; dgRec=null;
   }
 
-  mic.onclick=function(){ if(recording) stopRecording(); else startRecording(); };
+  mic.onclick=function(){ if(recording) stopStreaming(); else startStreaming(); };
 }
 function airxPrompt(text){
   return [
