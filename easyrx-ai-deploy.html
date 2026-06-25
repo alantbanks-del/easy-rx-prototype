@@ -4407,7 +4407,8 @@ function airxPrompt(text){
 '- \"fixed\": crowns, bridges, veneers, inlays/onlays, implant crowns (single-tooth fixed restorations).',
 '- \"removable\": full dentures, partial dentures (cast metal frame), flexible/thermoplastic partials, all-acrylic partials/flippers, unilateral (Nesbit), Essix retainers, Snap-On Smile.',
 '- \"splint\": night guards, bite/occlusal splints, bruxism or TMJ appliances, sports mouthguards, bleaching/whitening trays, and sleep-apnea appliances (Herbst, EMA, TAP, etc.).',
-'- If it is clearly none of these (full-arch hybrid, surgical guide, clear aligners/ortho appliance), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
+'- \"guide\": surgical guides for implant placement (single or full-arch), guided surgery, CHROME GuidedSMILE, All-on-X guides, zygomatic/pterygoid guided cases.',
+'- If it is clearly none of these (full-arch hybrid prosthesis without a guide, clear aligners/ortho appliance), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
 "",
 "STEP 2 \u2014 EXTRACT. Output shape depends on engine.",
 "",
@@ -4439,6 +4440,14 @@ function airxPrompt(text){
 '  - ffColor (ONLY for forcefield): one of Green, Red, White, Purple, Black. OMIT otherwise.',
 '  - fabricator: \"roe\"(ROE makes it \u2014 default) or \"client\"(design & send file, client prints in-office). OMIT if not stated.',
 '  - arch: \"upper\" or \"lower\". If product is lower-only (minicomfort/tanner/gelb/lvi) force lower; if upper-only (tmjspecial) force upper. Derive from \"upper\"/\"lower\"/\"maxillary\"/\"mandibular\" words.',
+"",
+"IF engine = \"guide\" (surgical guides for implant placement, full-arch guided surgery, zygomatic/pterygoid cases):",
+'{ \"engine\":\"guide\", \"caseLabel\":\"short label\", \"guideFlow\":\"standard\", \"arch\":\"upper|lower|both\", \"sites\":[{\"tooth\":5,\"mode\":\"implant\"},{\"tooth\":12,\"mode\":\"implant\"}], \"guideSupport\":\"tooth|tissue|bone\", \"guidedTemp\":true, \"implantBrand\":\"\", \"implantLine\":\"\", \"implantPlatform\":\"\", \"interpretation\":\"short note\" }',
+'  - guideFlow KEY (pick closest): \"standard\"(tooth/tissue/bone-supported single guide \u2014 the DEFAULT for a plain \"surgical guide\" or \"tooth-supported guide\"), \"bonechannel\"(bone-supported WITH bone reduction), \"chrome\"(CHROME GuidedSMILE full-arch fixed package / All-on-X guided), \"combi\"(CombiGuide, stackable metal or LITE plastic), \"roezygo\"(zygomatic implants, per-side planning), \"ezgoma\"(EZGoma zygomatic express). \"all on x\"/\"full arch guide\"/\"guided full arch\" => chrome. \"zygo\"/\"zygomatic\" => roezygo. Never invent.',
+'  - sites: list every implant/anchorage site as {tooth, mode}. mode KEY: \"implant\"(default, regular implant), \"zygo\"(zygomatic), \"ptery\"(pterygoid), \"trans\"(transnasal), \"tpal\"(trans-palatal), \"nasal\"(nasalus). Lower-arch sites are implant-only. Derive arch from tooth numbers (1-16 upper, 17-32 lower).',
+'  - guideSupport (standard/bonechannel): \"tooth\"(\"tooth-supported\"/\"tooth supported\") | \"tissue\"(\"tissue-supported\") | \"bone\"(\"bone-supported\"). OMIT if not stated.',
+'  - guidedTemp: true if the doctor asks to ADD a GuidedTEMP / guided temp / guided provisional / temporary. OMIT (or false) otherwise.',
+'  - implantBrand / implantLine / implantPlatform: the implant system named for the guide (e.g. \"BioHorizons\", \"Nobel\", \"Straumann\") and size if stated. OMIT if not named.',
 "",
 "IF engine = \"other\":",
 '{ \"engine\":\"other\", \"caseLabel\":\"short label\", \"otherKind\":\"fullarch|guide|aligner|ortho|splint|unknown\", \"arch\":\"upper|lower|both\", \"interpretation\":\"what it is\" }',
@@ -4563,10 +4572,74 @@ function airxApply(c){
   if(go){ go.disabled=false; go.style.opacity='1'; }
   var eng=c && c.engine;
   if(eng==='splint' || (eng==='other' && c && c.otherKind==='splint')){ airxApplySplint(c); return; }
+  if(eng==='guide' || (eng==='other' && c && c.otherKind==='guide')){ airxApplyGuide(c); return; }
   if(eng==='other'){ airxApplyOther(c); return; }
   if(eng==='removable'){ airxApplyRemovable(c); return; }
   // default + fixed (also covers a malformed/empty parse: Fixed handler shows its own notice)
   airxApplyFixed(c);
+}
+// ===== Surgical Guides AI mapper =====
+// Routes to the right flow, sets arch, and places implant/anchorage sites on the chart.
+// Flow-specific detail (CHROME package, Combi type, Zygo per-side, Standard support) is left
+// for the on-screen steps for now — the mapper gets the doctor to the right flow, pre-charted.
+var GD_FLOW_KEYS={ standard:'standard', bonechannel:'bonechannel', bone:'bonechannel', chrome:'chrome',
+  guidedsmile:'chrome', combi:'combi', combiguide:'combi', roezygo:'roezygo', zygo:'roezygo',
+  zygomatic:'roezygo', ezgoma:'ezgoma', ez:'ezgoma' };
+var GD_MODE_KEYS={ implant:'implant', zygo:'zygo', zygomatic:'zygo', ptery:'ptery', pterygoid:'ptery',
+  trans:'trans', transnasal:'trans', tpal:'tpal', transpalatal:'tpal', 'trans-palatal':'tpal',
+  nasal:'nasal', nasalus:'nasal' };
+function airxApplyGuide(c){
+  startCase('guides');
+  airxEnterEngine();
+  var applied=[], skipped=[];
+  // 1) Flow
+  var flowKey = c.guideFlow ? (GD_FLOW_KEYS[String(c.guideFlow).toLowerCase().replace(/[^a-z]/g,'')]||'') : '';
+  if(c.guideFlow && !flowKey){ skipped.push('guide type "'+c.guideFlow+'"'); }
+  if(flowKey){
+    gd.flow=flowKey;
+    // arch defaults per flow (mirrors the UI flow-pick logic)
+    if(flowKey==='roezygo'||flowKey==='ezgoma') gd.arch='upper';
+    else gd.arch='both';
+    if(flowKey==='bonechannel'){ gd.stdSupport='Bone-Supported'; gd.stdBoneReduction='Yes'; }
+    applied.push(gdFlowName());
+  }
+  // 2) Arch override if explicitly stated (standard/combi can be single-arch by site)
+  if(c.arch==='upper'||c.arch==='lower'){ gd.arch=c.arch; }
+  // 3) Sites: array of {tooth, mode}. mode defaults to implant.
+  if(Array.isArray(c.sites)){
+    c.sites.forEach(function(s){
+      var n=parseInt(s.tooth,10); if(!n||n<1||n>32) { skipped.push('site '+s.tooth); return; }
+      var arch = (n>=1&&n<=16)?'upper':'lower';
+      var mode = s.mode ? (GD_MODE_KEYS[String(s.mode).toLowerCase().replace(/[^a-z]/g,'')]||'implant') : 'implant';
+      // lower arch supports implant only (mirrors chart rule)
+      if(arch==='lower' && mode!=='implant') mode='implant';
+      gd.sites[arch]=gd.sites[arch]||{};
+      gd.sites[arch][n]=mode;
+      applied.push('#'+n+' '+(GD_MODES[mode]?GD_MODES[mode].label:mode));
+    });
+  }
+  // Standard support type if stated
+  if(c.guideSupport && gdIsStd()){
+    var SUP={tooth:'Tooth-Supported',toothsupported:'Tooth-Supported',tissue:'Tissue-Supported',tissuesupported:'Tissue-Supported',bone:'Bone-Supported',bonesupported:'Bone-Supported'};
+    var sk=String(c.guideSupport).toLowerCase().replace(/[^a-z]/g,'');
+    if(SUP[sk]){ gd.stdSupport=SUP[sk]; applied.push(SUP[sk]); }
+  }
+  // GuidedTEMP add-on (tooth-supported standard guides)
+  if(c.guidedTemp){ gd.stdGuidedTemp='Yes'; applied.push('GuidedTEMP'); }
+  // Implant brand on a guide (Standard/CHROME/Combi/Zygo all have an implant brand field: gd.implantBrand/Line/Size)
+  if(c.implantBrand){
+    var bName=airxMatchImplantBrand(c.implantBrand);
+    if(bName){ gd.implantBrand=bName;
+      if(c.implantLine){ var ln=airxMatchImplantLine(bName,c.implantLine); if(ln) gd.implantLine=ln; }
+      if(c.implantPlatform){ gd.implantSize=c.implantPlatform; }
+      applied.push(bName+(gd.implantLine?' '+gd.implantLine:''));
+    } else { skipped.push('implant brand "'+c.implantBrand+'"'); }
+  }
+  renderSteps(); refreshBar();
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+  airxSpeakHandoff();
 }
 // ===== Splints & Guards AI mapper =====
 // Maps a parsed splint case onto spl.* + arch, validating against SPL_CATALOG so we never
