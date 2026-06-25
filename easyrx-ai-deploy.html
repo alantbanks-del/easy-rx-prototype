@@ -6991,8 +6991,45 @@ document.getElementById('next').onclick=function(){
    if(note) note.textContent='Save your shade map first \u2014 tap the flashing Save button.';
    return;
  }
- if(!stepOK())return; if(step<STEPS().length-1){step++;refreshAll();}
+ if(!stepOK()){
+   // Don't silently do nothing — tell the doctor exactly what's still needed (never feels "locked").
+   var miss=stepNeedsMsg(STEPS()[step]);
+   var nb=document.getElementById('next');
+   if(nb){ nb.classList.remove('blink'); void nb.offsetWidth; }
+   airxFlashNeed(miss||'One more choice is needed on this step before continuing.');
+   return;
+ }
+ if(step<STEPS().length-1){step++;refreshAll();}
 };
+// Short human message describing what a given step still needs.
+function stepNeedsMsg(nm){
+  if(nm==='Standard Restoration'){
+    if(gd.stdSupport==='Tooth-Supported'){
+      var need=[]; if(!gd.stdRestoType) need.push('a Restoration type'); if(!gd.stdRestoRet) need.push('a Retention');
+      if(need.length) return 'Pick '+need.join(' and ')+' to continue.';
+    } else if(!gd.stdRestoArch){ return 'Pick the final restoration to continue.'; }
+  }
+  if(nm==='Arch') return 'Pick an arch (or tap a tooth) to continue.';
+  if(nm==='Restoration') return 'Tap at least one tooth and choose Crown & Bridge or Implant.';
+  if(nm==='Material') return 'Give each non-implant tooth a material.';
+  if(nm==='Shade') return 'Pick a shade to continue.';
+  if(nm==='Implant Brand'||nm==='Std Brand'||nm==='Zygo Brand'||nm==='CR Brand') return 'Pick the implant brand (and line) to continue.';
+  if(nm==='Guide Type') return 'Pick which surgical guide to continue.';
+  if(nm==='Implant Chart') return 'Mark at least one implant site on the chart.';
+  if(nm==='Standard Support') return 'Pick the guide support (tooth / tissue / bone).';
+  return 'One more choice is needed on this step before continuing.';
+}
+// Flash a clear "what's needed" note near the Next button.
+function airxFlashNeed(msg){
+  var bar=document.querySelector('.botbar')||document.body;
+  var n=document.getElementById('needNote');
+  if(!n){ n=document.createElement('div'); n.id='needNote';
+    n.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:96px;z-index:60;background:#9C0006;color:#fff;font:700 13px/1.35 Arial;padding:9px 16px;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.2);max-width:88%;text-align:center';
+    document.body.appendChild(n);
+  }
+  n.textContent=msg; n.style.display='block';
+  clearTimeout(window._needT); window._needT=setTimeout(function(){ if(n) n.style.display='none'; },3200);
+}
 
 refreshAll();
 
