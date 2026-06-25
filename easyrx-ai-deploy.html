@@ -609,7 +609,7 @@ svg{width:100%;height:auto;display:block}
 #airxHome{position:fixed;inset:0;z-index:200;background:radial-gradient(1100px 560px at 50% -8%, #e7f1f1, transparent 60%),var(--bg);display:flex;justify-content:center;overflow-y:auto;padding:0 18px 40px}
 .airxh-inner{width:100%;max-width:560px;padding-top:16vh}
 .airxh-brand{text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:52px;color:var(--teal-d);line-height:1}
-.airxh-sub{text-align:center;color:var(--muted);font-size:16px;font-weight:500;margin-top:8px;letter-spacing:.3px}
+.airxh-sub{text-align:center;color:var(--muted);font-size:18px;font-weight:500;margin-top:8px;letter-spacing:.3px}
 .airxh-tag{text-align:center;color:var(--teal-d);font-size:15.5px;margin:18px auto 0;max-width:440px;line-height:1.5;min-height:23px;font-style:italic;opacity:0;transition:opacity .5s}
 .airxh-tag.show{opacity:.9}
 .airxh-eg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-top:16px;color:var(--muted);font-size:12.5px}
@@ -4406,15 +4406,17 @@ function airxPrompt(text){
 "STEP 1 \u2014 ROUTE. Choose engine:",
 '- \"fixed\": crowns, bridges, veneers, inlays/onlays, implant crowns (single-tooth fixed restorations).',
 '- \"removable\": full dentures, partial dentures (cast metal frame), flexible/thermoplastic partials, all-acrylic partials/flippers, unilateral (Nesbit), Essix retainers, Snap-On Smile.',
-'- If it is clearly neither (full-arch hybrid, surgical guide, clear aligners/ortho appliance, night guard/splint), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
+'- \"splint\": night guards, bite/occlusal splints, bruxism or TMJ appliances, sports mouthguards, bleaching/whitening trays, and sleep-apnea appliances (Herbst, EMA, TAP, etc.).',
+'- If it is clearly none of these (full-arch hybrid, surgical guide, clear aligners/ortho appliance), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
 "",
 "STEP 2 \u2014 EXTRACT. Output shape depends on engine.",
 "",
 "IF engine = \"fixed\":",
-'{ \"engine\":\"fixed\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"units\":[{\"tooth\":8,\"resto\":\"Crown\",\"material\":\"TLZ\"}], \"shadeSystem\":\"VITA Classical A1-D4\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
+'{ \"engine\":\"fixed\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"units\":[{\"tooth\":8,\"resto\":\"Crown\",\"material\":\"TLZ\",\"retention\":\"\",\"implantBrand\":\"\",\"implantLine\":\"\",\"implantPlatform\":\"\"}], \"shadeSystem\":\"VITA Classical A1-D4\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
 "  - arch: teeth 1-16 upper, 17-32 lower; both => \"both\".",
-'  - resto: \"Crown\" | \"Bridge\" | \"Veneer\" | \"Implant Crown\". Unspecified crown => \"Crown\".',
-'  - material KEY: \"TLZ\"(default zirconia/monolithic/unspecified), \"zRc\"(economy zirconia), \"emaxMono\"(e.max/lithium disilicate), \"emaxLay\"(e.max layered), \"PFZ\". Never invent.',
+'  - resto: \"Crown\" | \"Bridge\" | \"Veneer\" | \"Implant Crown\". Unspecified crown => \"Crown\". If the doctor mentions an implant, screw-retained/cement-retained, an implant brand, or a platform size, set resto=\"Implant Crown\".',
+'  - material KEY: \"TLZ\"(default zirconia/monolithic/unspecified), \"zRc\"(economy zirconia), \"emaxMono\"(e.max/lithium disilicate), \"emaxLay\"(e.max layered), \"PFZ\". Never invent. (Material is ignored for implant crowns.)',
+'  - IMPLANT FIELDS (only when resto=\"Implant Crown\"): retention = \"Screw-Retained\" | \"Cement-Retained\" | \"Screwmentable\" (\"screw retained\"/\"screw-retained\" => Screw-Retained; \"cement\" => Cement-Retained; \"screwmentable\"/\"screw-mentable\" => Screwmentable). implantBrand = the implant manufacturer/system as spoken (e.g. \"Zimmer TSV\", \"Nobel Active\", \"Straumann BLX\", \"BioHorizons Tapered\"). implantLine = the product line if distinguishable (e.g. \"Tapered Screw-Vent TSV\"). implantPlatform = the platform/diameter number if stated (e.g. \"4.5\", \"RC 4.1\"). OMIT any not stated.',
 '  - shade: if given set shade + matching shadeSystem (default \"VITA Classical A1-D4\"; BL shades use \"IPS e.max / Bleach BL\"). If none stated, OMIT both.',
 "",
 "IF engine = \"removable\":",
@@ -4428,6 +4430,15 @@ function airxPrompt(text){
 '  - clasp \u2014 if partial/acrylic/unilateral, match to ONE of: \"Standard cast metal clasps\",\"Cast metal + flexible esthetic clasps\",\"Esthetic clasps (anterior)\". \"esthetic clasp(s)\" => \"Esthetic clasps (anterior)\"; \"flexible esthetic\" => \"Cast metal + flexible esthetic clasps\". If flexible appliance, clasp is \"Flexible (tissue-tone) clasps\" or \"Wire clasps\". OMIT if not stated.',
 '  - shade: if given, set shade + shadeSystem (default \"VITA Classical (A1\\u2013D4)\"). If none, OMIT. NOTE: shade only matters when ret includes a set-up/finish/reset \u2014 still extract it if stated.',
 "  - Only include fields actually stated or clearly implied; OMIT anything unknown so the engine asks.",
+"",
+"IF engine = \"splint\" (night guards, bite splints, bruxism/TMJ appliances, sports mouthguards, sleep appliances):",
+'{ \"engine\":\"splint\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower\", \"prod\":\"clearguard\", \"opt\":\"hard\", \"hardVariant\":\"stone\", \"ffColor\":\"Black\", \"fabricator\":\"roe|client\", \"interpretation\":\"short note\" }',
+'  - prod KEY (pick the closest): \"clearguard\"(CLEARguard, general bruxism/TMJ night guard, the DEFAULT for a plain \"night guard\"/\"bite splint\"/\"occlusal guard\"), \"minicomfort\"(miniComfort, soft, lower only), \"comforthardsoft\"(Comfort Hard/Soft hybrid), \"comforthard\"(Comfort Hard), \"astron\"(Astron, severe bruxism hard), \"tmjspecial\"(TMJ Appliance, upper only), \"digitaldesign\"(design/STL file only, no appliance), \"forcefield\"(ForceField sports mouthguard), \"vac01\"(soft vacuum nightguard), \"vac03\"(athletic mouthguard), \"tanner\"(Tanner, lower only), \"gelb\"(Gelb, lower only), \"lvi\"(LVI orthotic, lower only), \"bleachtray\"(bleaching/whitening tray), \"dorsal\",\"ema\",\"herbst\",\"tap3\",\"dreamtap\"(sleep apnea appliances). \"hard night guard\" => clearguard with opt \"hard\". \"soft night guard\" => vac01. Never invent a key.',
+'  - opt (ONLY for clearguard): \"hard\" | \"memory\"(hard + memory liner) | \"semisoft\". (ONLY for herbst): \"std\" | \"hanks\" | \"snap\". OMIT otherwise.',
+'  - hardVariant (ONLY when opt=hard on clearguard): \"stone\"(hard, stone models \u2014 default) | \"digstone\"(digital hard, stone) | \"digios\"(digital hard, IOS scan). OMIT unless a hard clearguard.',
+'  - ffColor (ONLY for forcefield): one of Green, Red, White, Purple, Black. OMIT otherwise.',
+'  - fabricator: \"roe\"(ROE makes it \u2014 default) or \"client\"(design & send file, client prints in-office). OMIT if not stated.',
+'  - arch: \"upper\" or \"lower\". If product is lower-only (minicomfort/tanner/gelb/lvi) force lower; if upper-only (tmjspecial) force upper. Derive from \"upper\"/\"lower\"/\"maxillary\"/\"mandibular\" words.',
 "",
 "IF engine = \"other\":",
 '{ \"engine\":\"other\", \"caseLabel\":\"short label\", \"otherKind\":\"fullarch|guide|aligner|ortho|splint|unknown\", \"arch\":\"upper|lower|both\", \"interpretation\":\"what it is\" }',
@@ -4464,6 +4475,43 @@ function airxSelEntry(resto){
   if(resto==='Veneer') return {type:'cb', val:'Veneer'};
   if(resto==='Bridge') return {type:'cb', val:'Bridge'};
   return {type:'cb', val:'Crown'};
+}
+// Fuzzy-match a spoken implant brand to a key in IMPLANTS_ALL (e.g. "Zimmer TSV" -> "ZimVie / Zimmer Biomet").
+function airxNorm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+function airxMatchImplantBrand(q){
+  if(!q) return '';
+  var keys=Object.keys(IMPLANTS_ALL), nq=airxNorm(q);
+  // exact / contains on the brand key
+  for(var i=0;i<keys.length;i++){ if(airxNorm(keys[i])===nq) return keys[i]; }
+  for(var j=0;j<keys.length;j++){ var nk=airxNorm(keys[j]); if(nk.indexOf(nq)>=0 || nq.indexOf(nk)>=0) return keys[j]; }
+  // token overlap (handles "zimmer" -> "ZimVie / Zimmer Biomet")
+  var qt=nq.split(' ').filter(Boolean), best='', bestScore=0;
+  keys.forEach(function(k){ var kt=airxNorm(k).split(' '); var sc=qt.filter(function(t){return kt.indexOf(t)>=0;}).length; if(sc>bestScore){bestScore=sc;best=k;} });
+  // also try matching against the line names (e.g. user says "TSV" which is in the line, not brand)
+  if(bestScore===0){
+    keys.forEach(function(k){ Object.keys(IMPLANTS_ALL[k]).forEach(function(ln){ var lt=airxNorm(ln).split(' '); var sc=qt.filter(function(t){return lt.indexOf(t)>=0;}).length; if(sc>bestScore){bestScore=sc;best=k;} }); });
+  }
+  return bestScore>0?best:'';
+}
+function airxMatchImplantLine(brandName, q){
+  var b=IMPLANTS_ALL[brandName]; if(!b||!q) return '';
+  var lines=Object.keys(b), nq=airxNorm(q);
+  for(var i=0;i<lines.length;i++){ if(airxNorm(lines[i])===nq) return lines[i]; }
+  for(var j=0;j<lines.length;j++){ var nl=airxNorm(lines[j]); if(nl.indexOf(nq)>=0 || nq.indexOf(nl)>=0) return lines[j]; }
+  var qt=nq.split(' ').filter(Boolean), best='', bestScore=0;
+  lines.forEach(function(l){ var lt=airxNorm(l).split(' '); var sc=qt.filter(function(t){return lt.indexOf(t)>=0;}).length; if(sc>bestScore){bestScore=sc;best=l;} });
+  // if only one line, default to it
+  if(!best && lines.length===1) return lines[0];
+  return bestScore>0?best:'';
+}
+function airxMatchPlatform(brandName, lineName, q){
+  var sizes=implantPlatforms(brandName,lineName); if(!sizes||!sizes.length||!q) return '';
+  var nq=airxNorm(q);
+  for(var i=0;i<sizes.length;i++){ if(airxNorm(sizes[i])===nq) return sizes[i]; }
+  // numeric match: "4.5" matches "RC 4.5" or "4.5"
+  var num=(String(q).match(/[0-9]+(\.[0-9]+)?/)||[])[0];
+  if(num){ for(var j=0;j<sizes.length;j++){ if(String(sizes[j]).indexOf(num)>=0) return sizes[j]; } }
+  return '';
 }
 // ===================== AI Rx multi-case QUEUE =====================
 // A single request may contain several cases. We apply them one at a time:
@@ -4514,10 +4562,50 @@ function airxApply(c){
       rep=document.getElementById('airxRep');
   if(go){ go.disabled=false; go.style.opacity='1'; }
   var eng=c && c.engine;
+  if(eng==='splint' || (eng==='other' && c && c.otherKind==='splint')){ airxApplySplint(c); return; }
   if(eng==='other'){ airxApplyOther(c); return; }
   if(eng==='removable'){ airxApplyRemovable(c); return; }
   // default + fixed (also covers a malformed/empty parse: Fixed handler shows its own notice)
   airxApplyFixed(c);
+}
+// ===== Splints & Guards AI mapper =====
+// Maps a parsed splint case onto spl.* + arch, validating against SPL_CATALOG so we never
+// write a product the engine doesn't have. Lands on Review if complete, else the first gap.
+function airxApplySplint(c){
+  startCase('splints');
+  airxEnterEngine();
+  var applied=[], skipped=[];
+  // Arch
+  var a=(c.arch==='lower')?'lower':(c.arch==='upper'?'upper':'');
+  // Product (validate against catalog). c.prod is a catalog key.
+  var prod = c.prod ? splFindProd(c.prod) : null;
+  if(c.prod && !prod){ skipped.push('product "'+c.prod+'"'); }
+  if(prod){
+    // honor upper/lower-only constraints
+    if(prod.lowerOnly) a='lower';
+    if(prod.upperOnly) a='upper';
+    spl.group = (function(){ for(var g in SPL_CATALOG){ if(SPL_CATALOG[g].some(function(p){return p.key===prod.key;})) return g; } return 'guards'; })();
+    spl.prod = prod.key;
+    applied.push(prod.name);
+    // sub-option (for products with options: clearguard, herbst)
+    if(c.opt && prod.options){
+      var oo=prod.options.find(function(x){return x.k===c.opt;});
+      if(oo){ spl.opt=oo.k; applied.push(oo.label); } else { skipped.push('option "'+c.opt+'"'); }
+    } else if(prod.options){ spl.opt=prod.options[0].k; }
+    // hard variant (for clearguard hard, or any hardVariants option)
+    if(c.hardVariant){ var hv=SPL_HARD_VARIANTS.find(function(h){return h.k===c.hardVariant;}); if(hv){ spl.hardVariant=hv.k; applied.push(hv.label); } }
+    // ForceField color
+    if(c.ffColor && prod.key==='forcefield'){ var col=SPL_FF_COLORS.find(function(x){return x.toLowerCase()===String(c.ffColor).toLowerCase();}); if(col){ spl.ffColor=col; applied.push(col); } }
+  }
+  if(!a && prod){ a = prod.lowerOnly?'lower':(prod.upperOnly?'upper':''); }
+  if(a){ curArch=a; applied.unshift(a==='lower'?'Lower':'Upper'); }
+  // Fabricator
+  if(c.fabricator==='client'||c.fabricator==='roe'){ spl.fabricator=c.fabricator; applied.push(c.fabricator==='client'?'client-fabricated':'ROE-fabricated'); }
+  renderSteps(); refreshBar();
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+  airxSpeakHandoff();
 }
 // 'other' engine: not auto-fillable yet. Open the matching department screen blank
 // (so a multi-case request still routes the user to the right place) with a note.
@@ -4562,10 +4650,37 @@ function airxApplyFixed(c){
     var n=parseInt(u.tooth,10);
     var onArch = (curArch==='both') ? (n>=1&&n<=32) : (curArch==='upper' ? (n>=1&&n<=16) : (n>=17&&n<=32));
     if(!onArch){ skipped.push('tooth '+u.tooth+' not on '+curArch+' arch'); return; }
-    sel[n]=airxSelEntry(u.resto);
-    var m = VALID_MAT[u.material] ? u.material : 'TLZ';
-    mat[n]=m;
-    applied.push('#'+n+' '+(u.resto||'Crown')+' ('+m+')');
+    var isImplant = (u.resto==='Implant Crown') || !!u.retention || !!u.implantBrand;
+    if(isImplant){
+      // retention type drives the chart color/tag (Screw-Retained=orchid SR, Cement-Retained=periwinkle CR, Screwmentable=gold)
+      var RET={ 'screw':'Screw-Retained','screwretained':'Screw-Retained','screw-retained':'Screw-Retained',
+                'cement':'Cement-Retained','cementretained':'Cement-Retained','cement-retained':'Cement-Retained',
+                'screwmentable':'Screwmentable','screwment':'Screwmentable' };
+      var rkey=(u.retention||'').toLowerCase().replace(/[^a-z]/g,'');
+      var retVal = RET[rkey] || (u.retention && /screw/i.test(u.retention) && /cement|ment/i.test(u.retention) ? 'Screwmentable'
+                   : u.retention && /cement/i.test(u.retention) ? 'Cement-Retained'
+                   : u.retention && /screw/i.test(u.retention) ? 'Screw-Retained' : '');
+      sel[n] = { type:'imp', val: retVal || 'Crown' };
+      applied.push('#'+n+' implant'+(retVal?' ('+retVal+')':''));
+      // brand / line / platform -> brand[n], validated against IMPLANTS_ALL
+      if(u.implantBrand){
+        var bName = airxMatchImplantBrand(u.implantBrand);
+        if(bName){
+          brand[n] = brand[n] || {brand:'',line:'',platform:''};
+          brand[n].brand = bName;
+          var lName = u.implantLine ? airxMatchImplantLine(bName, u.implantLine) : '';
+          if(lName){ brand[n].line=lName;
+            if(u.implantPlatform){ var pl=airxMatchPlatform(bName,lName,u.implantPlatform); if(pl){ brand[n].platform=pl; } else skipped.push('platform "'+u.implantPlatform+'" not listed for '+bName+' '+lName); }
+          } else if(u.implantLine){ skipped.push('implant line "'+u.implantLine+'" not found for '+bName); }
+          applied.push(bName+(lName?' '+lName:'')+(brand[n].platform?' '+brand[n].platform:''));
+        } else { skipped.push('implant brand "'+u.implantBrand+'"'); }
+      }
+    } else {
+      sel[n]=airxSelEntry(u.resto);
+      var m = VALID_MAT[u.material] ? u.material : 'TLZ';
+      mat[n]=m;
+      applied.push('#'+n+' '+(u.resto||'Crown')+' ('+m+')');
+    }
   });
   // 4) Shade
   if(c.shade){
@@ -6173,10 +6288,12 @@ function _stepOKCurrent(){
    return rk.every(function(n){ var s=sel[n]; return !(s.type==='imp' && subOptionsFor(s.val)) || !!s.sub; });
  }
  if(nm==='Material'){
-   var teeth=Object.keys(sel);
+   // Implant crowns don't take a chairside material here — only C&B teeth need mat[].
+   var teeth=Object.keys(sel).filter(function(n){ return !(sel[n] && sel[n].type==='imp'); });
+   if(teeth.length===0) return true;   // implant-only case: nothing to material
    var allSet=teeth.every(function(n){return !!mat[n];});
    var alloyOk=teeth.every(function(n){ return !materialNeedsAlloy(mat[n]) || !!alloy[n]; });
-   return teeth.length>0 && allSet && alloyOk && Object.keys(emaxOver()).length===0;
+   return allSet && alloyOk && Object.keys(emaxOver()).length===0;
  }
  if(nm==='Bespoke') return !anyBespokeTooth() || (!!bespoke.material && !!bespoke.vita);
  if(nm==='Shade') return !!shade.code && (!stumpNeeded() || !!stump.code);
@@ -6886,8 +7003,25 @@ var AIRX_GREETINGS=[
  "Bite me\u2026 nicely."
 ];
 function airxShowGreeting(){
- // Home sub-line is fixed ("Let's see what you've got — Talk or Type"); no rotation.
- var el=document.getElementById('airxGreet'); if(el) el.classList.add('show');
+ var el=document.getElementById('airxGreet'); if(!el) return;
+ var line=AIRX_GREETINGS[Math.floor(Math.random()*AIRX_GREETINGS.length)];
+ // strip trailing punctuation then always end with the same call to action
+ var base=line.replace(/\s*[—–-]\s*Talk or Type\s*$/i,'').replace(/[\s.!…]+$/,'');
+ var full=base+' — Talk or Type';
+ el.classList.remove('show');
+ setTimeout(function(){ el.textContent=full; el.classList.add('show'); }, 50);
+ airxSpeakGreeting(base);   // speak the witty part aloud (without the "Talk or Type" tag)
+}
+// Speak the greeting aloud (best-effort; silent if speech synthesis is unavailable or blocked).
+var _airxGreetSpoke=false;
+function airxSpeakGreeting(text){
+ try{
+   if(!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+   speechSynthesis.cancel();
+   var u=new SpeechSynthesisUtterance(text);
+   u.rate=1.0; u.pitch=1.0; u.volume=1.0;
+   speechSynthesis.speak(u);
+ }catch(e){}
 }
 (function(){
   var chips=document.querySelectorAll('.airxh-chip'), q=document.getElementById('airxQ');
