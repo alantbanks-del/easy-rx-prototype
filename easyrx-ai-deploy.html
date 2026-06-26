@@ -610,6 +610,19 @@ svg{width:100%;height:auto;display:block}
 .airxh-inner{width:100%;max-width:560px;padding-top:16vh}
 .airxh-brand{text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:52px;color:var(--teal-d);line-height:1}
 .airxh-sub{text-align:center;color:var(--muted);font-size:18px;font-weight:500;margin-top:8px;letter-spacing:.3px}
+.estim-wrap{margin-top:34px;opacity:.72;transform:scale(.87);transform-origin:top center;max-width:420px;margin-left:auto;margin-right:auto}
+.estim-wrap:hover,.estim-wrap:focus-within{opacity:.96}
+.estim-divider{display:flex;align-items:center;text-align:center;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin:4px 0 13px}
+.estim-divider::before,.estim-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.estim-divider span{padding:0 12px}
+.estim-brand{font-size:15px;color:var(--muted);letter-spacing:3px;font-weight:700;font-family:system-ui,sans-serif;line-height:1;display:flex;align-items:baseline;justify-content:center;gap:6px}
+.estim-brand span{color:var(--teal-d);vertical-align:baseline;font-size:15px;letter-spacing:3px;font-family:system-ui,sans-serif;font-weight:700}
+.estim-sub{font-size:12px;margin-bottom:3px;margin-top:3px;color:var(--muted)}
+.estim-wrap .airxh-bar{box-shadow:none;border:1.5px solid var(--line);background:#fafbfb;padding:7px 9px}
+.estim-wrap .airxh-bar textarea{font-size:13.5px}
+.estim-wrap .airxh-bar button{transform:scale(.9)}
+.esth-chip{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px 11px;margin:3px 4px 0;font-size:12.5px;color:var(--teal-d);cursor:pointer}
+.estim-wrap .esth-chip{font-size:11px;opacity:.9;padding:4px 9px}
 .airxh-tag{text-align:center;color:var(--teal-d);font-size:15.5px;margin:18px auto 0;max-width:440px;line-height:1.5;min-height:23px;font-style:italic;opacity:0;transition:opacity .5s}
 .airxh-tag.show{opacity:.9}
 .airxh-eg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-top:16px;color:var(--muted);font-size:12.5px}
@@ -668,8 +681,22 @@ svg{width:100%;height:auto;display:block}
     </div>
     <div id="airxMsg"></div>
     <div class="airxh-eg">Try: <span class="airxh-chip">Zirconia crown #8, A2</span><span class="airxh-chip">Lower partial 19,20, finish, B1</span></div>
-    <button type="button" id="airxPush" class="airxh-push">Click here for old school</button>
+    <button type="button" id="airxPush" class="airxh-push">Click here for old school Rx</button>
     <div id="airxRep"></div>
+
+    <div class="estim-wrap">
+      <div class="estim-divider"><span>or</span></div>
+      <div class="airxh-brand estim-brand">AI <span>CASE&nbsp;COST&nbsp;ESTIMATOR</span></div>
+      <div class="airxh-sub estim-sub">Ask a price — "How much is a denture?"</div>
+      <div class="airxh-bar estim-bar">
+        <textarea id="estQ" rows="1" placeholder="How much is…" autocomplete="off"></textarea>
+        <button type="button" id="estMic" title="Tap to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+        <button type="button" id="estGo" title="Estimate" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div id="estMsg"></div>
+      <div class="airxh-eg">Try: <span class="esth-chip">How much is a night guard?</span><span class="esth-chip">Cost of a CHROME guide?</span></div>
+      <div id="estPanel"></div>
+    </div>
   </div>
 </div>
 
@@ -1666,7 +1693,7 @@ function renderRecordsEmail(stage){
 }
 var OPTIONAL_STEPS={'Dial in Shade':1,'Add-ons':1,'Buy a Splint':1}; // never block these
 // Implant dataset (Brand → Line → Platform) ported from rx.html / Implants_USA spreadsheet.
-var IMPLANTS_ALL={"ACE Surgical":{"Infinity / Internal Hex":{"sizes":["3.3","3.7","4.2","4.7","5.7"]}},"Adin":{"Touareg / Touareg-S":{"sizes":["3.0","3.5","3.75","4.2","5.0","6.0"]},"Swell":{"sizes":["3.5","3.75","4.2","5.0","6.0"]},"CloseFit":{"sizes":["3.3","3.75","4.2","5.0"]},"One / Narrow":{"sizes":["3.0","3.3","3.75"]}},"Bicon":{"Bicon SHORT Implants":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0"],"notes":["MUA not available"]},"Bicon Max 2.5 / 3.0 connection implants":{"sizes":["2.5 connection","3.0 connection"],"notes":["MUA not available"]}},"BioHorizons":{"Tapered Internal":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Plus":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Pro":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered 3.0":{"sizes":["3.0"]},"Internal":{"sizes":["3.5","4.0","5.0","6.0"]},"External":{"sizes":["3.5","4.0","5.0","6.0"]}},"BlueSkyBio":{"Bio | Max | Narrow / Internal Hex lines":{"sizes":["3.3","3.7","4.0","4.6","5.0","5.5"]}},"CAMLOG":{"CAMLOG Screw-Line":{"sizes":["3.3","3.8","4.3","5.0","6.0"],"notes":["MUA not available"]},"CONELOG Progressive-Line":{"sizes":["3.3","3.8","4.3","5.0"],"notes":["MUA not available"]}},"Dentium":{"Implantium":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"SuperLine":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"NR Line / SlimLine":{"sizes":["2.5","3.1"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"Bright / other regional lines":{"sizes":["3.5","4.0","4.5","5.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]}},"Dentsply Sirona":{"Astra Tech Implant System EV":{"sizes":["3.0","3.6","4.2","4.8","5.4"]},"Astra Tech OsseoSpeed TX":{"sizes":["3.0","3.5","4.0","4.5","5.0"],"notes":["MUA not available"]},"DS PrimeTaper EV":{"sizes":["3.6","4.2","4.8"]},"DS OmniTaper EV":{"sizes":["3.4","3.8","4.5","5.5"]},"Ankylos C/X":{"sizes":["A 3.5","B 4.5","C 5.5","D 7.0"],"notes":["MUA not available"]},"XiVE":{"sizes":["3.0","3.4","3.8","4.5","5.5"],"notes":["MUA not available"]},"Frialit-2":{"sizes":["3.4","3.8","4.5","5.5","6.5"],"notes":["MUA not available"]}},"Ditron Dental USA":{"MPI Molecular Precision Implant":{"sizes":["3.3","3.5","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"ULT Ultimate Precision Implant":{"sizes":["3.75","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"OPI One-Piece Implant":{"sizes":["3.0","3.3"],"notes":["MUA not available","Must be 3rd-party parts"]},"Tissue Level 1":{"sizes":["3.75","4.2","5.0"],"notes":["MUA not available","Must be 3rd-party parts"]}},"Glidewell":{"Hahn Tapered Implant":{"sizes":["3.0","3.5","4.3","5.0","7.0"]},"Inclusive Tapered Implant":{"sizes":["3.2","3.7","4.2","4.7","5.7"]},"Inclusive Tapered Implant System":{"sizes":["3.0","3.5","4.5"]}},"Hiossen / Osstem":{"ETIII SA / ETIII NH":{"sizes":["3.2","3.5","4.0","4.5","5.0","6.0","7.0"]},"ETIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]}},"Implant Direct":{"Legacy / Legacy1 / Legacy2 / Legacy3":{"sizes":["3.2","3.7","4.2","4.7","5.7","7.0"]},"InterActive":{"sizes":["3.2","3.7","4.3","5.0"]},"RePlant":{"sizes":["3.2","3.7","4.7","5.7"]},"SwishPlant / SwishPlus":{"sizes":["3.3","4.1","4.8"]},"GoDirect":{"sizes":["3.7","4.7","5.7"]},"ScrewPlant / ScrewPlus":{"sizes":["3.2","3.7","4.7","5.7"]}},"Intra-Lock":{"Blossom / Gold&Blue / Internal Connection":{"sizes":["3.3","3.75","4.0","4.75","5.0","6.0"],"notes":["MUA not available"]}},"Keystone Dental":{"Genesis":{"sizes":["3.5","3.8","4.5","5.5"]},"Genesis Active":{"sizes":["3.2","3.7","4.2","5.2"]},"PrimaConnex Tapered":{"sizes":["3.5","4.1","5.0"]},"Prima Plus Conical":{"sizes":["3.5","4.0","4.5","5.0"]},"Molaris":{"sizes":["5.0","6.0"]}},"MegaGen":{"AnyRidge":{"sizes":["3.3","3.5","4.0","4.5","5.0","5.5","6.0","6.5","7.0","8.0"]},"AnyOne":{"sizes":["3.5","4.0","4.5","5.0","5.5","6.0","7.0"]},"BlueDiamond":{"sizes":["3.5","4.0","4.5","5.0"]},"EZPlus / Rescue / M-series legacy":{"sizes":["3.3","3.5","4.0","4.5","5.0","6.0"]}},"MIS Implants":{"SEVEN":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"C1":{"sizes":["3.3","3.75","4.2","5.0"]},"V3":{"sizes":["3.3","3.9","4.3","5.0"]},"M4":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"B+":{"sizes":["3.3","3.75","4.2","5.0","6.0"]}},"Neodent":{"Grand Morse Helix GM":{"sizes":["2.9","3.5","3.75","4.0","4.3","5.0","6.0"]},"Grand Morse Drive GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Titamax GM / Titamax EX GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Alvim CM / Drive CM / Helix CM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Facility / Narrow GM":{"sizes":["2.9"]},"Zi Ceramic Implant":{"sizes":["3.75","4.3"],"notes":["MUA not available"]},"Zygoma-S GM":{"sizes":["4.0","4.3"]}},"Neoss":{"ProActive / NeoLoc":{"sizes":["3.25","3.5","4.0","4.5","5.0","5.5"],"notes":["MUA not available"]}},"Nobel Biocare":{"NobelActive TiUltra":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelActive Internal / NobelActive":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelParallel Conical Connection":{"sizes":["3.75","4.3","5.0"]},"NobelReplace Conical Connection":{"sizes":["3.5","4.3","5.0","6.0"]},"NobelReplace Tapered / Select Tapered":{"sizes":["3.5","4.3","5.0","6.0"]},"Brånemark System Mk III / Mk IV":{"sizes":["3.3","3.75","4.0","5.0","6.0"]},"NobelSpeedy Groovy / NobelSpeedy Replace":{"sizes":["3.3","4.0","4.3","5.0"]},"NobelPearl Ceramic Implant":{"sizes":["3.75","4.2","5.0"]},"NobelZygoma / Zygoma TiUltra":{"sizes":["4.0","4.2"]}},"Noris Medical":{"Tuff / Tuff Pro":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"Cortical / PteryFit":{"sizes":["3.3","3.75","4.2","5.0"]},"Zygomatic":{"sizes":["4.2","4.5"]}},"NucleOSS":{"T6 / T5":{"sizes":["3.3","3.7","4.1","4.8","5.5"]}},"OCO Biomedical":{"Engage":{"sizes":["3.0","3.25","4.0","5.0","6.0"]},"ERI / Mini / One-piece variants":{"sizes":["2.8","3.0","3.25","4.0"]}},"Osstem":{"TSIII":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0","7.0"]},"TSIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]},"SS / US / MS legacy lines":{"sizes":["3.0","3.5","4.0","4.5","5.0"]}},"Paltop / Keystone":{"Paltop Advanced / Dynamic":{"sizes":["3.25","3.75","4.2","5.0","6.0"],"notes":["MUA not available"]}},"Preat / LOCATOR Implant":{"Legacy overdenture implants":{"sizes":["2.4","2.9","3.3"]}},"Shatkin F.I.R.S.T.":{"Mini Dental Implants":{"sizes":["1.8","2.1","2.4","2.9"]}},"Southern Implants":{"External Hex / Internal Hex / Tri-Nex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"Co-Axis":{"sizes":["3.5","4.0","5.0","6.0"]},"INVERTA":{"sizes":["3.5","4.0","4.5","5.0"]}},"Straumann":{"Tissue Level Standard / Standard Plus":{"sizes":["NNC 3.5","RN 4.8","WN 6.5"]},"Bone Level":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"Bone Level Tapered BLT":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"BLX":{"sizes":["RB 3.5","RB 3.75","RB 4.0","RB 4.5","WB 5.0","WB 5.5","WB 6.5"]},"TLX":{"sizes":["NT 3.75","RT 4.5","WT 5.5","WT 6.5"]},"PURE Ceramic Implant":{"sizes":["3.3","4.1"]},"SP / TE / SLA legacy tissue-level variants":{"sizes":["3.3","4.1","4.8"],"notes":["MUA not available"]}},"Sweden & Martina":{"Prama":{"sizes":["3.3","3.8","4.25","5.0"],"notes":["MUA not available"]},"Outlink2 / Shelta":{"sizes":["3.3","3.8","4.25","5.0","6.0"],"notes":["MUA not available"]}},"ZimVie":{"TSX":{"sizes":["3.7","4.1","4.7","6.0"]},"Trabecular Metal Dental Implant":{"sizes":["3.7","4.1","4.7","6.0"]},"Eztetic":{"sizes":["3.1"],"notes":["MUA not available"]},"Encode Emergence 3-in-1 Healing Abutment System":{"sizes":[]}},"ZimVie / 3i":{"OSSEOTITE Certain":{"sizes":["3.25","4.0","5.0","6.0"]},"OSSEOTITE External Hex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"T3 / T3 PRO":{"sizes":["3.25","4.0","5.0","6.0"]}},"ZimVie / Zimmer Biomet":{"Tapered Screw-Vent TSV":{"sizes":["3.7","4.1","4.7","6.0"]}},"Zuga Medical":{"Zuga Dental Implant System / Bone Level":{"sizes":["3.5","4.3","5.0"],"notes":["MUA not available"]}},"Little Implant Co. / OsteoReady":{"The Marc Nevins":{"sizes":["3.5 internal hex; implant diameters 3.85","4.2","5.0","6.0"],"notes":["MUA not available"]},"The Pamela Ray":{"sizes":["3.5 internal hex; implant diameter 3.85"],"notes":["MUA not available"]},"Performance":{"sizes":["3.5 internal hex;"],"notes":["MUA not available"]}},"Paragon / Core-Vent":{"Core-Vent":{"sizes":["3.5","4.5"],"notes":["MUA not available"]}},"Paragon / Centerpulse / Zimmer":{"Screw-Vent / Tapered Screw-Vent":{"sizes":["3.5","4.5","5.7"]}},"Nobel Biocare / Steri-Oss":{"Nobel Replace External Hex / Steri-Oss Replace":{"sizes":["3.5","4.3","5.0","6.0"]}},"Steri-Oss":{"Hex-Loc":{"sizes":["3.25 / 3.3"]}},"Sulzer Calcitek":{"Omniloc":{"sizes":["3.25","4.0"],"notes":["MUA not available"]}},"Calcitek / Zimmer legacy":{"Integral":{"sizes":["3.25","4.0"]}},"Paragon Implant Mfg.":{"GEN5 / GEN5+":{"sizes":["3.5","4.5"]}}};
+var IMPLANTS_ALL={"ACE Surgical":{"Infinity / Internal Hex":{"sizes":["3.3","3.7","4.2","4.7","5.7"]}},"Adin":{"Touareg / Touareg-S":{"sizes":["3.0","3.5","3.75","4.2","5.0","6.0"]},"Swell":{"sizes":["3.5","3.75","4.2","5.0","6.0"]},"CloseFit":{"sizes":["3.3","3.75","4.2","5.0"]},"One / Narrow":{"sizes":["3.0","3.3","3.75"]}},"Bicon":{"Bicon SHORT Implants":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0"],"notes":["MUA not available"]},"Bicon Max 2.5 / 3.0 connection implants":{"sizes":["2.5 connection","3.0 connection"],"notes":["MUA not available"]}},"BioHorizons":{"Tapered Internal":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Plus":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Pro":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered 3.0":{"sizes":["3.0"]},"Internal":{"sizes":["3.5","4.0","5.0","6.0"]},"External":{"sizes":["3.5","4.0","5.0","6.0"]}},"BlueSkyBio":{"Bio | Max | Narrow / Internal Hex lines":{"sizes":["3.3","3.7","4.0","4.6","5.0","5.5"]}},"CAMLOG":{"CAMLOG Screw-Line":{"sizes":["3.3","3.8","4.3","5.0","6.0"],"notes":["MUA not available"]},"CONELOG Progressive-Line":{"sizes":["3.3","3.8","4.3","5.0"],"notes":["MUA not available"]}},"Dentium":{"Implantium":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"SuperLine":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"NR Line / SlimLine":{"sizes":["2.5","3.1"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"Bright / other regional lines":{"sizes":["3.5","4.0","4.5","5.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]}},"Dentsply Sirona":{"Astra Tech Implant System EV":{"sizes":["3.0","3.6","4.2","4.8","5.4"]},"Astra Tech OsseoSpeed TX":{"sizes":["3.0","3.5","4.0","4.5","5.0"],"notes":["MUA not available"]},"DS PrimeTaper EV":{"sizes":["3.6","4.2","4.8"]},"DS OmniTaper EV":{"sizes":["3.4","3.8","4.5","5.5"]},"Ankylos C/X":{"sizes":["A 3.5","B 4.5","C 5.5","D 7.0"],"notes":["MUA not available"]},"XiVE":{"sizes":["3.0","3.4","3.8","4.5","5.5"],"notes":["MUA not available"]},"Frialit-2":{"sizes":["3.4","3.8","4.5","5.5","6.5"],"notes":["MUA not available"]}},"Ditron Dental USA":{"MPI Molecular Precision Implant":{"sizes":["3.3","3.5","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"ULT Ultimate Precision Implant":{"sizes":["3.75","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"OPI One-Piece Implant":{"sizes":["3.0","3.3"],"notes":["MUA not available","Must be 3rd-party parts"]},"Tissue Level 1":{"sizes":["3.75","4.2","5.0"],"notes":["MUA not available","Must be 3rd-party parts"]}},"Glidewell":{"Hahn Tapered Implant":{"sizes":["3.0","3.5","4.3","5.0","7.0"]},"Inclusive Tapered Implant":{"sizes":["3.2","3.7","4.2","4.7","5.7"]},"Inclusive Tapered Implant System":{"sizes":["3.0","3.5","4.5"]}},"Hiossen / Osstem":{"ETIII SA / ETIII NH":{"sizes":["3.2","3.5","4.0","4.5","5.0","6.0","7.0"]},"ETIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]}},"Implant Direct":{"Legacy / Legacy1 / Legacy2 / Legacy3":{"sizes":["3.2","3.7","4.2","4.7","5.7","7.0"]},"InterActive":{"sizes":["3.2","3.7","4.3","5.0"]},"RePlant":{"sizes":["3.2","3.7","4.7","5.7"]},"SwishPlant / SwishPlus":{"sizes":["3.3","4.1","4.8"]},"GoDirect":{"sizes":["3.7","4.7","5.7"]},"ScrewPlant / ScrewPlus":{"sizes":["3.2","3.7","4.7","5.7"]}},"Intra-Lock":{"Blossom / Gold&Blue / Internal Connection":{"sizes":["3.3","3.75","4.0","4.75","5.0","6.0"],"notes":["MUA not available"]}},"Keystone Dental":{"Genesis":{"sizes":["3.5","3.8","4.5","5.5"]},"Genesis Active":{"sizes":["3.2","3.7","4.2","5.2"]},"PrimaConnex Tapered":{"sizes":["3.5","4.1","5.0"]},"Prima Plus Conical":{"sizes":["3.5","4.0","4.5","5.0"]},"Molaris":{"sizes":["5.0","6.0"]}},"MegaGen":{"AnyRidge":{"sizes":["3.3","3.5","4.0","4.5","5.0","5.5","6.0","6.5","7.0","8.0"]},"AnyOne":{"sizes":["3.5","4.0","4.5","5.0","5.5","6.0","7.0"]},"BlueDiamond":{"sizes":["3.5","4.0","4.5","5.0"]},"EZPlus / Rescue / M-series legacy":{"sizes":["3.3","3.5","4.0","4.5","5.0","6.0"]}},"MIS Implants":{"SEVEN":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"C1":{"sizes":["3.3","3.75","4.2","5.0"]},"V3":{"sizes":["3.3","3.9","4.3","5.0"]},"M4":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"B+":{"sizes":["3.3","3.75","4.2","5.0","6.0"]}},"Neodent":{"Grand Morse Helix GM":{"sizes":["2.9","3.5","3.75","4.0","4.3","5.0","6.0"]},"Grand Morse Drive GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Titamax GM / Titamax EX GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Alvim CM / Drive CM / Helix CM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Facility / Narrow GM":{"sizes":["2.9"]},"Zi Ceramic Implant":{"sizes":["3.75","4.3"],"notes":["MUA not available"]},"Zygoma-S GM":{"sizes":["4.0","4.3"]}},"Neoss":{"ProActive / NeoLoc":{"sizes":["3.25","3.5","4.0","4.5","5.0","5.5"],"notes":["MUA not available"]}},"Nobel Biocare":{"NobelActive TiUltra":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelActive Internal / NobelActive":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelParallel Conical Connection":{"sizes":["3.75","4.3","5.0"]},"NobelReplace Conical Connection":{"sizes":["3.5","4.3","5.0","6.0"]},"NobelReplace Tapered / Select Tapered":{"sizes":["3.5","4.3","5.0","6.0"]},"Brånemark System Mk III / Mk IV":{"sizes":["3.3","3.75","4.0","5.0","6.0"]},"NobelSpeedy Groovy / NobelSpeedy Replace":{"sizes":["3.3","4.0","4.3","5.0"]},"NobelPearl Ceramic Implant":{"sizes":["3.75","4.2","5.0"]},"NobelZygoma / Zygoma TiUltra":{"sizes":["4.0","4.2"]}},"Noris Medical":{"Tuff / Tuff Pro":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"Cortical / PteryFit":{"sizes":["3.3","3.75","4.2","5.0"]},"Zygomatic":{"sizes":["4.2","4.5"]}},"NucleOSS":{"T6 / T5":{"sizes":["3.3","3.7","4.1","4.8","5.5"]}},"OCO Biomedical":{"Engage":{"sizes":["3.0","3.25","4.0","5.0","6.0"]},"ERI / Mini / One-piece variants":{"sizes":["2.8","3.0","3.25","4.0"]}},"Osstem":{"TSIII":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0","7.0"]},"TSIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]},"SS / US / MS legacy lines":{"sizes":["3.0","3.5","4.0","4.5","5.0"]}},"Paltop / Keystone":{"Paltop Advanced / Dynamic":{"sizes":["3.25","3.75","4.2","5.0","6.0"],"notes":["MUA not available"]}},"Preat / LOCATOR Implant":{"Legacy overdenture implants":{"sizes":["2.4","2.9","3.3"]}},"Shatkin F.I.R.S.T.":{"Mini Dental Implants":{"sizes":["1.8","2.1","2.4","2.9"]}},"Southern Implants":{"External Hex / Internal Hex / Tri-Nex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"Co-Axis":{"sizes":["3.5","4.0","5.0","6.0"]},"INVERTA":{"sizes":["3.5","4.0","4.5","5.0"]}},"Straumann":{"Tissue Level Standard / Standard Plus":{"sizes":["NNC 3.5","RN 4.8","WN 6.5"]},"Bone Level":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"Bone Level Tapered BLT":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"BLX":{"sizes":["RB 3.5","RB 3.75","RB 4.0","RB 4.5","WB 5.0","WB 5.5","WB 6.5"]},"TLX":{"sizes":["NT 3.75","RT 4.5","WT 5.5","WT 6.5"]},"PURE Ceramic Implant":{"sizes":["3.3","4.1"]},"SP / TE / SLA legacy tissue-level variants":{"sizes":["3.3","4.1","4.8"],"notes":["MUA not available"]}},"Sweden & Martina":{"Prama":{"sizes":["3.3","3.8","4.25","5.0"],"notes":["MUA not available"]},"Outlink2 / Shelta":{"sizes":["3.3","3.8","4.25","5.0","6.0"],"notes":["MUA not available"]}},"ZimVie":{"TSX":{"sizes":["3.7","4.1","4.7","6.0"]},"TSV (Tapered Screw-Vent)":{"sizes":["3.7","4.1","4.7","6.0"]},"Trabecular Metal Dental Implant":{"sizes":["3.7","4.1","4.7","6.0"]},"Eztetic":{"sizes":["3.1"],"notes":["MUA not available"]},"Encode Emergence 3-in-1 Healing Abutment System":{"sizes":[]}},"ZimVie / 3i":{"OSSEOTITE Certain":{"sizes":["3.25","4.0","5.0","6.0"]},"OSSEOTITE External Hex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"T3 / T3 PRO":{"sizes":["3.25","4.0","5.0","6.0"]}},"ZimVie / Zimmer Biomet":{"Tapered Screw-Vent TSV":{"sizes":["3.7","4.1","4.7","6.0"]}},"Zuga Medical":{"Zuga Dental Implant System / Bone Level":{"sizes":["3.5","4.3","5.0"],"notes":["MUA not available"]}},"Little Implant Co. / OsteoReady":{"The Marc Nevins":{"sizes":["3.5 internal hex; implant diameters 3.85","4.2","5.0","6.0"],"notes":["MUA not available"]},"The Pamela Ray":{"sizes":["3.5 internal hex; implant diameter 3.85"],"notes":["MUA not available"]},"Performance":{"sizes":["3.5 internal hex;"],"notes":["MUA not available"]}},"Paragon / Core-Vent":{"Core-Vent":{"sizes":["3.5","4.5"],"notes":["MUA not available"]}},"Paragon / Centerpulse / Zimmer":{"Screw-Vent / Tapered Screw-Vent":{"sizes":["3.5","4.5","5.7"]}},"Nobel Biocare / Steri-Oss":{"Nobel Replace External Hex / Steri-Oss Replace":{"sizes":["3.5","4.3","5.0","6.0"]}},"Steri-Oss":{"Hex-Loc":{"sizes":["3.25 / 3.3"]}},"Sulzer Calcitek":{"Omniloc":{"sizes":["3.25","4.0"],"notes":["MUA not available"]}},"Calcitek / Zimmer legacy":{"Integral":{"sizes":["3.25","4.0"]}},"Paragon Implant Mfg.":{"GEN5 / GEN5+":{"sizes":["3.5","4.5"]}}};
 // Step 6 — Implant Brand (only when implants exist). Per-site cascading: Brand → Line → Platform.
 var brand={}; // tooth -> {brand:'', line:'', platform:''}
 function implantTeeth(){ return archTeeth().filter(function(n){ return sel[n] && sel[n].type==='imp'; }); }
@@ -4287,10 +4314,12 @@ function airxInit(ids){
       mic=document.getElementById(ids.mic), msg=document.getElementById(ids.msg);
   if(!q) return;
   function syncBtn(){ q.style.height='auto'; q.style.height=Math.min(q.scrollHeight,140)+'px'; var on=!!q.value.trim(); go.disabled=!on; go.style.opacity=on?'1':'.4'; }
-  q.oninput=syncBtn; q.addEventListener('change',syncBtn); q.addEventListener('keyup',syncBtn); q.addEventListener('paste',function(){ setTimeout(syncBtn,0); });
-  syncBtn();
-  q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(ids); } };
-  go.onclick=function(){ airxSubmit(ids); };
+  if(!ids.estimator){
+    q.oninput=syncBtn; q.addEventListener('change',syncBtn); q.addEventListener('keyup',syncBtn); q.addEventListener('paste',function(){ setTimeout(syncBtn,0); });
+    syncBtn();
+    q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(ids); } };
+    go.onclick=function(){ airxSubmit(ids); };
+  }
   // voice — LIVE streaming speech-to-text via Deepgram, like Claude's mic.
   // Tap to start -> opens a WebSocket straight to Deepgram (authed by a 30-60s token minted
   // server-side) -> mic audio streams up, transcript streams back in REAL TIME as you talk.
@@ -5243,6 +5272,110 @@ function startCase(engine){
  refreshAll();
 }
 
+// ===================== In-session DRAFTS =====================
+// Saved drafts live in memory for this session only (cleared when the app/tab closes).
+// A draft snapshots the full case state so reopening restores every step for editing.
+var AIRX_DRAFTS=[];   // [{id, label, engine, ts, snap}]
+function _clone(o){ try{ return JSON.parse(JSON.stringify(o)); }catch(e){ return o; } }
+function draftSnapshot(){
+  return {
+    curEngine:curEngine, curArch:curArch, step:step, maxStep:maxStep, oppChoice:oppChoice,
+    caseStarted:caseStarted,
+    sel:_clone(sel), mat:_clone(mat), alloy:(typeof alloy!=='undefined'?_clone(alloy):{}),
+    brand:_clone(brand), shade:_clone(shade),
+    rem:_clone(rem), spl:_clone(spl), gd:_clone(gd),
+    fa:(typeof fa!=='undefined'?_clone(fa):null),
+    ortho:(typeof ortho!=='undefined'?_clone(ortho):null),
+    align:(typeof align!=='undefined'?_clone(align):null),
+    recEmail:(typeof recEmail!=='undefined'?recEmail:''),
+    savedImages:(typeof savedImages!=='undefined'?_clone(savedImages):[])
+  };
+}
+function _restoreInto(target, src){ if(!target||!src) return; for(var k in target){ delete target[k]; } for(var k2 in src){ target[k2]=src[k2]; } }
+function draftRestore(snap){
+  caseStarted=true; curEngine=snap.curEngine; curArch=snap.curArch;
+  _restoreInto(sel,snap.sel); _restoreInto(mat,snap.mat);
+  if(typeof alloy!=='undefined') _restoreInto(alloy,snap.alloy||{});
+  _restoreInto(brand,snap.brand||{}); 
+  if(snap.shade){ for(var sk in shade) delete shade[sk]; for(var sk2 in snap.shade) shade[sk2]=snap.shade[sk2]; }
+  _restoreInto(rem,snap.rem); _restoreInto(spl,snap.spl); _restoreInto(gd,snap.gd);
+  if(typeof fa!=='undefined' && snap.fa) _restoreInto(fa,snap.fa);
+  if(typeof ortho!=='undefined' && snap.ortho) _restoreInto(ortho,snap.ortho);
+  if(typeof align!=='undefined' && snap.align) _restoreInto(align,snap.align);
+  if(typeof recEmail!=='undefined') recEmail=snap.recEmail||'';
+  if(typeof savedImages!=='undefined'){ savedImages.length=0; (snap.savedImages||[]).forEach(function(x){ savedImages.push(x); }); }
+  step=snap.step||0; maxStep=Math.max(snap.maxStep||0, step); _caseCaptured=false;
+  airxEnterEngine();
+  refreshAll();
+}
+function draftLabel(){
+  // A short human label from the current case state.
+  try{
+    if(curEngine==='fixed'){ var ts=Object.keys(sel); if(ts.length) return (curArch||'')+' '+(sel[ts[0]]&&sel[ts[0]].type==='imp'?'implant':'fixed')+' #'+ts.join(','); return 'Fixed case'; }
+    if(curEngine==='removable'){ return (curArch||'')+' '+(rem.appliance||'removable'); }
+    if(curEngine==='splints'){ return 'Splint '+(spl.prod||''); }
+    if(curEngine==='guides'){ return 'Guide '+(gd.flow||''); }
+    return curEngine+' case';
+  }catch(e){ return 'Case'; }
+}
+function saveDraft(){
+  var d={ id:'d'+Date.now(), label:draftLabel(), engine:curEngine, ts:Date.now(), snap:draftSnapshot() };
+  AIRX_DRAFTS.unshift(d);
+  renderDraftButton();
+  return d;
+}
+function deleteDraft(id){ AIRX_DRAFTS=AIRX_DRAFTS.filter(function(d){return d.id!==id;}); renderDraftPanel(); renderDraftButton(); }
+function openDraft(id){
+  var d=AIRX_DRAFTS.find(function(x){return x.id===id;}); if(!d) return;
+  // remove from list (it's being reopened to edit; re-save makes a fresh draft)
+  AIRX_DRAFTS=AIRX_DRAFTS.filter(function(x){return x.id!==id;});
+  closeDraftPanel();
+  draftRestore(d.snap);
+  renderDraftButton();
+}
+function fmtDraftTime(ts){ try{ var d=new Date(ts); var h=d.getHours(), m=('0'+d.getMinutes()).slice(-2); var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }catch(e){ return ''; } }
+function renderDraftButton(){
+  var host=document.getElementById('airxShell')||document.body;
+  var btn=document.getElementById('draftTopBtn');
+  if(!AIRX_DRAFTS.length){ if(btn) btn.style.display='none'; return; }
+  if(!btn){
+    btn=document.createElement('button'); btn.id='draftTopBtn'; btn.type='button';
+    btn.style.cssText='position:fixed;top:8px;right:10px;z-index:55;background:var(--teal-d);color:#fff;border:none;border-radius:18px;padding:7px 13px;font:800 12px/1 Arial;box-shadow:0 4px 12px rgba(0,0,0,.18);cursor:pointer';
+    btn.onclick=openDraftPanel;
+    document.body.appendChild(btn);
+  }
+  btn.style.display='block';
+  btn.innerHTML='\u{1F4C1} Drafts ('+AIRX_DRAFTS.length+')';
+}
+function openDraftPanel(){
+  closeDraftPanel();
+  var ov=document.createElement('div'); ov.id='draftOverlay';
+  ov.style.cssText='position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.35);display:flex;align-items:flex-start;justify-content:center;padding:54px 14px';
+  ov.onclick=function(e){ if(e.target===ov) closeDraftPanel(); };
+  var box=document.createElement('div');
+  box.style.cssText='background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:80vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.3)';
+  box.innerHTML='<div style="padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><b style="color:var(--teal-d);font-size:16px">Saved Drafts</b><button id="draftClose" style="border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer">\u00D7</button></div><div id="draftList" style="padding:8px 12px 14px"></div>';
+  ov.appendChild(box); document.body.appendChild(ov);
+  document.getElementById('draftClose').onclick=closeDraftPanel;
+  renderDraftPanel();
+}
+function renderDraftPanel(){
+  var list=document.getElementById('draftList'); if(!list) return;
+  if(!AIRX_DRAFTS.length){ list.innerHTML='<div style="color:var(--muted);padding:18px;text-align:center">No drafts saved.</div>'; return; }
+  list.innerHTML=AIRX_DRAFTS.map(function(d){
+    return '<div style="border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+      '<div style="min-width:0"><div style="font-weight:800;color:var(--ink);text-transform:capitalize">'+airxEsc(d.label)+'</div>'+
+      '<div style="color:var(--muted);font-size:12px">'+airxEsc(d.engine)+' \u00B7 saved '+fmtDraftTime(d.ts)+'</div></div>'+
+      '<div style="display:flex;gap:7px;flex-shrink:0">'+
+        '<button data-edit="'+d.id+'" style="background:var(--teal-d);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-weight:800;font-size:13px;cursor:pointer">Edit</button>'+
+        '<button data-del="'+d.id+'" style="background:#fff;color:#9C0006;border:1px solid #f1c9cc;border-radius:9px;padding:8px 11px;font-weight:700;font-size:13px;cursor:pointer">Delete</button>'+
+      '</div></div>';
+  }).join('');
+  [].forEach.call(list.querySelectorAll('[data-edit]'),function(b){ b.onclick=function(){ openDraft(b.getAttribute('data-edit')); }; });
+  [].forEach.call(list.querySelectorAll('[data-del]'),function(b){ b.onclick=function(){ deleteDraft(b.getAttribute('data-del')); }; });
+}
+function closeDraftPanel(){ var ov=document.getElementById('draftOverlay'); if(ov) ov.remove(); }
+
 function renderStage(){
  var stage=document.getElementById('stage');
  if(!caseStarted){ renderLauncher(); return; }
@@ -5399,7 +5532,7 @@ function bindRxReady(){
    }, 900);
  };
  var d=document.getElementById('rxDraft');
- if(d) d.onclick=function(){ rxState.draftSaved=true; this.textContent='\u2713 Draft saved'; this.classList.add('on'); };
+ if(d) d.onclick=function(){ saveDraft(); rxState.draftSaved=true; this.textContent='\u2713 Draft saved'; this.classList.add('on'); };
  var am=document.getElementById('rxAddMore');
  if(am) am.onclick=function(){ addAnotherProduct(); };
  var a=document.getElementById('rxAttn');
@@ -7067,6 +7200,113 @@ refreshAll();
 
 /* ===== AI Rx home overlay boot (local Google-style front) ===== */
 airxInit({q:'airxQ',go:'airxGo',mic:'airxMic',msg:'airxMsg',rep:'airxRep'});
+
+/* ===== AI Case Cost Estimator boot ===== */
+(function estBoot(){
+  var q=document.getElementById('estQ'), go=document.getElementById('estGo'),
+      mic=document.getElementById('estMic'), msg=document.getElementById('estMsg'),
+      panel=document.getElementById('estPanel');
+  if(!q) return;
+  function sync(){ if(go){ var on=(q.value||'').trim().length>0; go.disabled=!on; go.style.opacity=on?'1':'.4'; } }
+  q.addEventListener('input',function(){ q.style.height='auto'; q.style.height=Math.min(q.scrollHeight,120)+'px'; sync(); });
+  q.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); estSubmit(); } });
+  if(go) go.onclick=estSubmit;
+  // example chips
+  [].forEach.call(document.querySelectorAll('.esth-chip'),function(c){ c.onclick=function(){ q.value=c.textContent; sync(); estSubmit(); }; });
+
+  function estSubmit(){
+    var text=(q.value||'').trim(); if(!text) return;
+    var hits=estFind(text);
+    if(!hits.length){ panel.innerHTML='<div style="padding:14px;color:var(--muted);text-align:center">No match found. Try naming the product — e.g. "denture", "night guard", "CHROME guide", "zirconia crown".</div>'; return; }
+    estRenderOptions(text, hits.slice(0,8));
+  }
+
+  function estRenderOptions(query, hits){
+    var rows=hits.map(function(f,i){
+      return '<button type="button" class="est-opt" data-i="'+i+'" style="width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+        '<span style="min-width:0"><span style="font-weight:700;color:var(--ink);display:block">'+airxEsc(f.p)+'</span>'+
+        '<span style="color:var(--muted);font-size:12px">'+airxEsc(f.c)+(f.n?' \u00B7 '+airxEsc(f.n):'')+'</span></span>'+
+        '<span style="font-weight:800;color:var(--teal-d);white-space:nowrap">'+estMoney(f.pr)+'</span></button>';
+    }).join('');
+    panel.innerHTML='<div style="margin-top:14px;text-align:left">'+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:8px">Which one?</div>'+rows+'</div>';
+    [].forEach.call(panel.querySelectorAll('.est-opt'),function(b){ b.onclick=function(){ estPick(hits[+b.getAttribute('data-i')]); }; });
+  }
+
+  function estPick(f){
+    EST_CART.push({product:f.p, price:f.pr, category:f.c});
+    q.value=''; sync();
+    estRenderCart();
+  }
+
+  function estRenderCart(){
+    var total=EST_CART.reduce(function(s,x){return s+x.price;},0);
+    var items=EST_CART.map(function(x,i){
+      return '<div style="display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">'+
+        '<span style="min-width:0"><span style="font-weight:600">'+airxEsc(x.product)+'</span></span>'+
+        '<span style="white-space:nowrap;font-weight:700">'+estMoney(x.price)+' <button data-rm="'+i+'" style="border:none;background:none;color:#9C0006;cursor:pointer;font-size:15px">\u00D7</button></span></div>';
+    }).join('');
+    panel.innerHTML='<div style="margin-top:14px;text-align:left;border:1px solid var(--teal);border-radius:14px;overflow:hidden">'+
+      '<div style="background:#e3f3ec;padding:9px 14px;font-weight:800;color:var(--teal-d)">Your Estimate</div>'+
+      '<div style="padding:8px 14px">'+items+
+        '<div style="display:flex;justify-content:space-between;padding:10px 0 4px;font-weight:900;font-size:17px;color:var(--teal-d)"><span>Estimated Total</span><span>'+estMoney(total)+'</span></div>'+
+      '</div>'+
+      '<div style="padding:0 14px 14px">'+
+        '<div style="font-weight:700;margin:6px 0 8px">Would you like another product added to this estimate?</div>'+
+        '<div style="display:flex;gap:8px">'+
+          '<button id="estAddYes" style="flex:1;background:var(--teal-d);color:#fff;border:none;border-radius:10px;padding:11px;font-weight:800;cursor:pointer">Yes \u2014 add another</button>'+
+          '<button id="estAddNo" style="flex:1;background:#fff;color:var(--teal-d);border:1.5px solid var(--teal);border-radius:10px;padding:11px;font-weight:800;cursor:pointer">No \u2014 send it</button>'+
+        '</div>'+
+      '</div></div>';
+    [].forEach.call(panel.querySelectorAll('[data-rm]'),function(b){ b.onclick=function(){ EST_CART.splice(+b.getAttribute('data-rm'),1); if(EST_CART.length) estRenderCart(); else panel.innerHTML=''; }; });
+    document.getElementById('estAddYes').onclick=function(){ panel.innerHTML='<div style="margin-top:12px;color:var(--teal-d);font-weight:700;text-align:center">Tap the mic and ask about the next product \u2014 or type it above.</div>'; q.focus(); };
+    document.getElementById('estAddNo').onclick=estSendForm;
+  }
+
+  function estSendForm(){
+    var total=EST_CART.reduce(function(s,x){return s+x.price;},0);
+    panel.innerHTML='<div style="margin-top:14px;text-align:left;border:1px solid var(--line);border-radius:14px;padding:14px">'+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:4px">Where should we send your estimate?</div>'+
+      '<div style="color:var(--muted);font-size:13px;margin-bottom:10px">Total: '+estMoney(total)+' \u00B7 '+EST_CART.length+' item'+(EST_CART.length>1?'s':'')+'</div>'+
+      '<input id="estDest" type="text" inputmode="email" placeholder="Cell number or email address" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px;margin-bottom:10px">'+
+      '<button id="estSend" style="width:100%;background:var(--teal-d);color:#fff;border:none;border-radius:10px;padding:12px;font-weight:800;cursor:pointer">Send my ROE estimate</button>'+
+      '<div id="estSent" style="margin-top:10px"></div></div>';
+    document.getElementById('estSend').onclick=function(){
+      var dest=(document.getElementById('estDest').value||'').trim();
+      if(!dest){ document.getElementById('estSent').innerHTML='<span style="color:#9C0006">Please enter a cell or email.</span>'; return; }
+      estDeliver(dest, total);
+    };
+  }
+
+  function estDeliver(dest, total){
+    var isEmail=/@/.test(dest);
+    var when=new Date().toLocaleString('en-US');
+    var lines=EST_CART.map(function(x){ return x.product+' — '+estMoney(x.price); }).join('\n');
+    var body='ROE Dental Laboratory — AI Cost Estimate\n'+
+      '────────────────────────\n'+lines+'\n────────────────────────\n'+
+      'ESTIMATED TOTAL: '+estMoney(total)+'\n\n'+
+      'Date: '+when+'\n\n'+
+      'This is an ESTIMATE ONLY and is subject to pricing changes. Tax and shipping are not included. '+
+      'Final pricing is confirmed at the time your case is received. Prices per the ROE 2026 Fee Schedule.\n\n'+
+      'ROE Dental Laboratory · 7165 E Pleasant Valley Rd, Independence, OH 44131 · (216) 663-2233 · 100% manufactured in USA';
+    var subject='Your ROE Dental Lab AI Estimate';
+    if(isEmail){
+      var href='mailto:'+encodeURIComponent(dest)+'?bcc='+encodeURIComponent('marketing@roedentallab.com')+
+        '&subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+      try{ window.location.href=href; }catch(e){}
+    } else {
+      var sms='sms:'+dest+'?&body='+encodeURIComponent('ROE AI Estimate — Total '+estMoney(total)+'. '+EST_CART.length+' item(s). Estimate only, subject to change. Full details emailed on request. ROE Dental Lab (216) 663-2233.');
+      try{ window.location.href=sms; }catch(e){}
+    }
+    document.getElementById('estSent').innerHTML='<div style="color:var(--green);font-weight:800;padding:8px 0">\u2713 Estimate ready for '+airxEsc(dest)+(isEmail?' (BCC marketing@roedentallab.com)':'')+'. Your messaging app should open.</div>'+
+      '<button id="estNew" style="margin-top:6px;background:#fff;border:1.5px solid var(--teal);color:var(--teal-d);border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer">Start a new estimate</button>';
+    document.getElementById('estNew').onclick=function(){ EST_CART.length=0; panel.innerHTML=''; q.value=''; sync(); };
+  }
+
+  // Reuse the streaming Deepgram mic for the estimator bar.
+  if(typeof airxInit==='function'){ try{ airxInit({q:'estQ',go:'estGo',mic:'estMic',msg:'estMsg',rep:'estPanel',estimator:true}); }catch(e){} }
+  sync();
+})();
 // Reveal the live Easy Rx launcher/engine (ROE Ai Rx sits in its own rail).
 function airxEnterEngine(){
   var home=document.getElementById('airxHome'); if(home) home.style.display='none';
@@ -7102,7 +7342,77 @@ function airxGoHome(){
   airxShowGreeting();
 }
 // Rotating greeting library (shown fresh each time the home appears).
+
+// ===================== AI CASE COST ESTIMATOR =====================
+var ROE_FEES=[{c:"Implant Packages",p:"TLZ-SR (screw-retained TLZ crown) \u2014 Model-free (IOS)",pr:299,t:"4 days",n:"OEM parts not included"},{c:"Implant Packages",p:"TLZ-SR (screw-retained TLZ crown) \u2014 Standard (Models)",pr:319,t:"5 days",n:"OEM parts not included"},{c:"Implant Packages",p:"TLZ-SR Special \u2014 Model-free (IOS)",pr:259,t:"4 days",n:"OEM parts not included"},{c:"Implant Packages",p:"TLZ-SR Special \u2014 Standard (Models)",pr:279,t:"5 days",n:"OEM parts not included"},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic TLZ \u2014 Model-free (IOS)",pr:411,t:"7 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic TLZ \u2014 Standard (Models)",pr:497,t:"8 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic zRc \u2014 Model-free (IOS)",pr:382,t:"7 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic zRc \u2014 Standard (Models)",pr:468,t:"8 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ PFZ layered restoration",pr:579,t:"11 days",n:""},{c:"Implant Packages",p:"Ti abutment w/ PFM High Noble White",pr:549,t:"11 days",n:"+alloy (Au 51.5% Pd 38.5% In 8.5%)"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 Full-service, with sleeves (1 implant)",pr:315,t:"8 days",n:"each add'l implant +43"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 each add'l implant",pr:43,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 GuidedTEMP (1 implant + parts)",pr:395,t:"11 days",n:"each add'l implant +99"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 GuidedTEMP each add'l implant",pr:99,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"Full-Arch \u2014 Tissue-supported (4 sites)",pr:358,t:"8 days",n:"each add'l site +43"},{c:"Surgical Guides",p:"Full-Arch \u2014 Tissue-supported each add'l site",pr:43,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"Full-Arch \u2014 Bone-supported with bone reduction (4 sites)",pr:668,t:"11 days",n:"each add'l site +43"},{c:"Surgical Guides",p:"Full-Arch \u2014 Bone-supported without bone reduction (4 sites)",pr:578,t:"10 days",n:"each add'l site +43"},{c:"Surgical Guides",p:"Full-Arch \u2014 Bone-supported each add'l site",pr:43,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"CombiGuide (unlimited sites)",pr:1420,t:"13 days",n:""},{c:"Surgical Guides",p:"CHROME GuidedSMILE \u2014 Surgical only (unlimited sites)",pr:2800,t:"18 days",n:""},{c:"Surgical Guides",p:"CHROME GuidedSMILE \u2014 Complete (prepaid package)",pr:6199,t:"18 days",n:"includes all restorative steps & discounts"},{c:"Crown & Bridge",p:"TLZ zirconia with MiYO \u2014 Model-free (IOS)",pr:122,t:"3 days",n:""},{c:"Crown & Bridge",p:"zRc zirconia \u2014 Model-free (IOS)",pr:93,t:"3 days",n:""},{c:"Crown & Bridge",p:"IPS e.max monolithic \u2014 Model-free (IOS)",pr:134,t:"3 days",n:""},{c:"Crown & Bridge",p:"TLZ zirconia with MiYO \u2014 Printed Models",pr:142,t:"5 days",n:""},{c:"Crown & Bridge",p:"zRc zirconia \u2014 Printed Models",pr:113,t:"5 days",n:""},{c:"Crown & Bridge",p:"IPS e.max monolithic \u2014 Printed Models",pr:154,t:"5 days",n:""},{c:"Crown & Bridge",p:"Bespoke C&B zirconia",pr:204,t:"7 days",n:"Bespoke Premium Collection"},{c:"Crown & Bridge",p:"Bespoke C&B IPS e.max",pr:210,t:"7 days",n:"Bespoke Premium Collection"},{c:"Crown & Bridge",p:"IPS e.max layered",pr:224,t:"7 days",n:""},{c:"Crown & Bridge",p:"PFZ posterior",pr:218,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFZ anterior",pr:224,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFZ bridge units",pr:245,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFM Base/NP White",pr:205,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFM High Noble White",pr:194,t:"9 days",n:"+alloy"},{c:"Crown & Bridge",p:"PFM Noble White",pr:194,t:"9 days",n:"+alloy"},{c:"Crown & Bridge",p:"Full Cast Metal Crown or Inlay/Onlay \u2014 Base/NP White",pr:167,t:"5 days",n:""},{c:"Crown & Bridge",p:"Full Cast \u2014 High Noble Yellow",pr:156,t:"5 days",n:"+alloy"},{c:"Crown & Bridge",p:"Full Cast \u2014 Noble Yellow",pr:156,t:"5 days",n:"+alloy"},{c:"Crown & Bridge",p:"Digital BluePrint wax-up (w/o matrix)",pr:22,t:"3 days",n:""},{c:"Crown & Bridge",p:"Conventional wax-up (w/o matrix)",pr:39,t:"3 days",n:""},{c:"Crown & Bridge",p:"Dual Laminate Matrix",pr:70,t:"1 day",n:""},{c:"Crown & Bridge",p:"Putty Matrix",pr:27,t:"1 day",n:""},{c:"Crown & Bridge",p:"SureTemps provisionals",pr:42,t:"3 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Final only with copings",pr:2870,t:"11 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Final only coping-free (photogrammetry)",pr:2420,t:"9 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Digital photogrammetry/office print",pr:2847,t:"call",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Digital workflow (5 implants)",pr:4235,t:"call",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Analog workflow (5 implants, 1 reset)",pr:4309,t:"call",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"TLZ-IB with Ti-bar \u2014 Final only",pr:3695,t:"12 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB with Ti-bar \u2014 Digital workflow (5 implants)",pr:5060,t:"12 days",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"TLZ-IB with Ti-bar \u2014 Analog workflow (5 implants, 1 reset)",pr:5134,t:"call",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"NobelProcera zirconia \u2014 Final only (coping-free, 12 teeth)",pr:2888,t:"12 days",n:""},{c:"Fixed Full-Arch",p:"G-CAM Nanoceramic \u2014 Final only (coping-free)",pr:750,t:"10 days",n:""},{c:"Fixed Full-Arch",p:"G-CAM Nanoceramic \u2014 Final only with Ti-bar",pr:1575,t:"10 days",n:""},{c:"Fixed Full-Arch",p:"Fixed traditional hybrid (unlimited implants)",pr:3540,t:"call",n:""},{c:"Fixed Full-Arch",p:"each add'l implant (full-arch workflows)",pr:136,t:"-",n:"add-on"},{c:"Removable Full-Arch",p:"Bar overdenture (5 implants, 1 reset)",pr:3899,t:"9 days",n:""},{c:"Removable Full-Arch",p:"Ivotion LOCATOR Overdenture \u2014 2 abutments",pr:585,t:"9 days",n:"from IOS denture cap scan"},{c:"Removable Full-Arch",p:"Ivotion LOCATOR Overdenture \u2014 4 abutments",pr:675,t:"9 days",n:"from IOS denture cap scan"},{c:"Grammetry",p:"Design Services \u2014 1-hour express",pr:335,t:"1 hour",n:""},{c:"Grammetry",p:"Design Services \u2014 24-hour express",pr:287,t:"1 day",n:""},{c:"Grammetry",p:"Design Services \u2014 48-hour",pr:236,t:"2 days",n:""},{c:"Grammetry",p:"Grammetry Prepaid (5 implants)",pr:2872,t:"10 days",n:"includes 1-hr design, redesign & zirconia coping-free final"},{c:"Complete Dentures",p:"Full Denture Premium (w/ teeth, bite block, ID, reset)",pr:529,t:"8 days",n:""},{c:"Complete Dentures",p:"Full Denture Value",pr:340,t:"8 days",n:""},{c:"Complete Dentures",p:"Full Denture \u2014 Finish only",pr:113,t:"3 days",n:""},{c:"Complete Dentures",p:"Hypoallergenic upgrade",pr:23,t:"-",n:"add-on"},{c:"Complete Dentures",p:"IMPACT Digital Denture Premium (w/o bite block/mount)",pr:359,t:"3 days",n:""},{c:"Complete Dentures",p:"IMPACT Digital Denture Value",pr:259,t:"3 days",n:""},{c:"Complete Dentures",p:"Duplicate or back-up denture",pr:158,t:"1 day",n:""},{c:"Complete Dentures",p:"Reverse Reset (finish)",pr:71,t:"4 days",n:""},{c:"Complete Dentures",p:"Ivotion Digital Denture",pr:409,t:"5 days",n:""},{c:"Complete Dentures",p:"Ivotion Digital Denture w/ printed try-in",pr:490,t:"5 days",n:""},{c:"Partial Dentures",p:"Acetal Partial Denture complete",pr:439,t:"12 days",n:"teeth & model fees not included"},{c:"Partial Dentures",p:"Acetal frame only",pr:204,t:"4 days",n:""},{c:"Partial Dentures",p:"All acrylic partial (>4 teeth, w/ mount)",pr:155,t:"5 days",n:""},{c:"Partial Dentures",p:"SLM Partial Denture complete - CoCr",pr:444,t:"12 days",n:""},{c:"Partial Dentures",p:"SLM Partial Denture complete - Titanium",pr:489,t:"13 days",n:""},{c:"Partial Dentures",p:"SLM frame only - CoCr",pr:209,t:"4 days",n:""},{c:"Partial Dentures",p:"SLM frame only - Titanium",pr:254,t:"5 days",n:""},{c:"Partial Dentures",p:"Thermoplastic \u2014 Set & finish complete",pr:301,t:"8 days",n:""},{c:"Partial Dentures",p:"Thermoplastic \u2014 Hybrid (w/ metal substructure)",pr:408,t:"12 days",n:""},{c:"Partial Dentures",p:"Unilateral / flipper (metal-free)",pr:235,t:"4 days",n:""},{c:"Partial Dentures",p:"Thermoplastic \u2014 Finish only",pr:101,t:"3 days",n:""},{c:"Partial Dentures",p:"Flexible pre-fab clasp (pink/clear)",pr:45,t:"1 day",n:"each add'l +33"},{c:"Partial Dentures",p:"Flipper (acrylic, w/ mount) \u2014 1 tooth",pr:128,t:"3 days",n:""},{c:"Partial Dentures",p:"Flipper (acrylic, w/ mount) \u2014 2 teeth",pr:136,t:"3 days",n:""},{c:"Partial Dentures",p:"Flipper (acrylic, w/ mount) \u2014 3 teeth",pr:141,t:"3 days",n:""},{c:"Partial Dentures",p:"Setup only (w/ mount)",pr:98,t:"3 days",n:""},{c:"Partial Dentures",p:"Snap-On Smile (w/ mount) \u2014 1-5 teeth",pr:397,t:"16 days",n:""},{c:"Partial Dentures",p:"Snap-On Smile (w/ mount) \u2014 6+ teeth",pr:620,t:"16 days",n:""},{c:"Splints & Guards",p:"CLEARguard Hard w/ memory liner (w/ mount)",pr:154,t:"4 days",n:""},{c:"Splints & Guards",p:"CLEARguard Hard splint (w/ mount)",pr:111,t:"3 days",n:""},{c:"Splints & Guards",p:"CLEARguard Semi-soft splint (w/ mount)",pr:102,t:"3 days",n:""},{c:"Splints & Guards",p:"CLEARguard Hard Model-free splint",pr:69,t:"3 days",n:""},{c:"Splints & Guards",p:"CLEARguard Semi-soft Model-free splint",pr:69,t:"3 days",n:""},{c:"Splints & Guards",p:"miniComfort Guard - Qty 2",pr:107,t:"3 days",n:""},{c:"Splints & Guards",p:"Articulation",pr:21,t:"1 day",n:"add-on"},{c:"Splints & Guards",p:"ForceField athletic mouthguard",pr:61,t:"3 days",n:"red, white, green, purple, or black"},{c:"Splints & Guards",p:"Essix retainer",pr:51,t:"2 days",n:""},{c:"Splints & Guards",p:"Hawley (w/ ball clasps)",pr:83,t:"7 days",n:""},{c:"Splints & Guards",p:"Opalescent bleaching tray",pr:57,t:"3 days",n:""},{c:"Splints & Guards",p:"Poured model",pr:21,t:"1 day",n:""},{c:"Splints & Guards",p:"Printed digital model",pr:25,t:"1 day",n:""},{c:"Splints & Guards",p:"Spring aligner - 1 tooth",pr:132,t:"7 days",n:"each add'l tooth +8"},{c:"Sleep Appliances",p:"Dorsal",pr:499,t:"16 days",n:""},{c:"Sleep Appliances",p:"EMA",pr:400,t:"16 days",n:""},{c:"Sleep Appliances",p:"Herbst Sleep",pr:456,t:"16 days",n:""},{c:"Sleep Appliances",p:"Herbst Snap-fit",pr:821,t:"16 days",n:""},{c:"Sleep Appliances",p:"TAP 3",pr:485,t:"16 days",n:""},{c:"Sleep Appliances",p:"dreamTAP",pr:565,t:"16 days",n:""},{c:"Aligners",p:"CLEARaline \u2014 Treatment plan (anterior/premolar)",pr:130,t:"5 days",n:""},{c:"Aligners",p:"CLEARaline \u2014 Advanced treatment plan (molar)",pr:185,t:"5 days",n:""},{c:"Aligners",p:"CLEARaline \u2014 Per aligner",pr:31,t:"0 days",n:"complete treatment manufactured 8 days"},{c:"Add-on Fees",p:"Bite block \u2014 Standard",pr:39,t:"2 days",n:"add-on"},{c:"Add-on Fees",p:"Bite block \u2014 Digital",pr:53,t:"2 days",n:"add-on"},{c:"Add-on Fees",p:"Buccal hook, ball clasp, Adams clasp (each)",pr:12,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Custom tray",pr:35,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Denture I.D.",pr:21,t:"0 days",n:"add-on"},{c:"Add-on Fees",p:"Handpack pontics 1-3",pr:36,t:"1 day",n:"each add'l +30"},{c:"Add-on Fees",p:"Metal lingual / boxing for HP",pr:13,t:"0 days",n:"add-on"},{c:"Add-on Fees",p:"Models \u2014 Boxed",pr:21,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Models \u2014 CAD",pr:25,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Models \u2014 Tissue",pr:21,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Mount on adjustable articulator",pr:34,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Soft liner (new denture)",pr:84,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Reset for try-in",pr:41,t:"1 day",n:"add-on"},{c:"Repairs & Relines",p:"Acrylic repair 1 tooth (w/ model)",pr:107,t:"1 day",n:"each add'l tooth +32"},{c:"Repairs & Relines",p:"Cast clasp / Cast metal section (w/ model)",pr:95,t:"2 days",n:""},{c:"Repairs & Relines",p:"Flexible pre-fab clasp (pink/clear, w/ acrylic repair & model)",pr:152,t:"2 days",n:"each add'l +65"},{c:"Repairs & Relines",p:"FiberForce reinforcement (w/o repair/model)",pr:58,t:"0 days",n:""},{c:"Repairs & Relines",p:"Fracture repair (w/ model)",pr:112,t:"1 day",n:""},{c:"Repairs & Relines",p:"Laser weld (w/o clasps/acrylic repairs)",pr:46,t:"1 day",n:"additional welds +23"},{c:"Repairs & Relines",p:"Rebase (w/ model, mount, finish, denture ID)",pr:306,t:"3 days",n:""},{c:"Repairs & Relines",p:"Reline (w/ model)",pr:118,t:"1 day",n:""},{c:"Repairs & Relines",p:"Silicone gasket 1 tooth (w/ model)",pr:77,t:"1 day",n:"each add'l tooth +23"},{c:"Repairs & Relines",p:"Soft reline (w/ model)",pr:174,t:"2 days",n:""}];
+var EST_CART=[];  // [{product, price, category}]
+function estNorm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+// Match a spoken product query to fee-schedule items. Returns ranked candidates.
+function estFind(query){
+  var q=estNorm(query);
+  // strip trigger words
+  q=q.replace(/^(how much (is|for|are)?|what(s| is| does)? (the )?(cost|price) (of|for)?|can i (have|get) (an? )?(estimated? )?(cost|price) (of|for)?|estimate (for|of)?|price (of|for)?|cost (of|for)?)/g,'').trim();
+  if(!q) return [];
+  var SYN=[
+    {rx:/flipper/, must:/flipper/i},
+    {rx:/snap.?on/, must:/snap-on/i},
+    {rx:/night ?guard|occlusal guard|bite splint|splint|bruxism|clearguard/, cat:'Splints & Guards', extra:/CLEARguard|guard|splint|miniComfort/i},
+    {rx:/sleep|apnea|dorsal|herbst|tap|ema|snore/, cat:'Sleep Appliances'},
+    {rx:/aligner|clearaline/, cat:'Aligners'},
+    {rx:/sports|athletic|mouthguard|forcefield/, must:/ForceField/i},
+    {rx:/essix|hawley|retainer/, must:/Essix|Hawley/i},
+    {rx:/bleach|whiten/, must:/bleaching/i},
+    {rx:/full.?arch|all.?on|hybrid|overdenture/, cat:/Full-Arch/},
+    {rx:/ezgoma|zygoma|zygo/, must:/EZGoma|Zygo/i},
+    {rx:/pterygoid|ptery/, must:/Pterygoid/i},
+    {rx:/surgical guide|guide\b|chrome|combiguide|guidedtemp|tooth.?supported|bone.?supported|tissue.?supported|combi/, cat:'Surgical Guides'},
+    {rx:/denture/, cat:/Dentures/},
+    {rx:/partial/, cat:'Partial Dentures'},
+    {rx:/crown|bridge|veneer|inlay|onlay|zirconia|emax|pfm|pfz|cast/, cat:'Crown & Bridge'},
+    {rx:/implant/, cat:/Implant|Full-Arch|Surgical Guides/}
+  ];
+  var rule=null;
+  for(var r=0;r<SYN.length;r++){ if(SYN[r].rx.test(q)){ rule=SYN[r]; break; } }
+  var toks=q.split(' ').filter(function(t){return t.length>1;});
+  var scored=ROE_FEES.map(function(f){
+    var hay=estNorm(f.p+' '+f.c+' '+f.n);
+    var sc=0; toks.forEach(function(t){ if(hay.indexOf(t)>=0) sc+= (t.length>=4?2:1); });
+    if(rule){
+      if(rule.must && !rule.must.test(f.p)) return {f:f,sc:-99};
+      if(rule.cat){ var catOk=(rule.cat instanceof RegExp)?rule.cat.test(f.c+' '+f.p):(f.c===rule.cat); if(!catOk && !(rule.extra&&rule.extra.test(f.p))) return {f:f,sc:-99}; sc+=4; }
+      if(rule.extra && rule.extra.test(f.p)) sc+=3;
+    }
+    if(/finish only|reverse reset|each add|add-on|model|articulation|reset for|hypoallergenic|upgrade|frame only|setup only|duplicate|back-up|reline|repair|rebase|matrix|wax-up|provisional/i.test(f.p) || f.c==='Add-on Fees' || f.c==='Repairs & Relines') sc-=2;
+    if(/premium|value|complete\b|full denture|athletic|hard splint/i.test(f.p)) sc+=2;
+    return {f:f, sc:sc};
+  }).filter(function(x){return x.sc>0;}).sort(function(a,b){return b.sc-a.sc;});
+  return scored.map(function(x){return x.f;});
+}
+function estMoney(n){ return (!n||Number(n)===0) ? 'Call for quote' : '$'+Number(n).toLocaleString('en-US'); }
+window.ROE_FEES=ROE_FEES; window.estFind=estFind; window.EST_CART=EST_CART;
+// Specialty guide pricing not in the public PDF but provided/built into the engine.
+ROE_FEES.push(
+ {c:'Surgical Guides',p:'EZGoma Zygomatic Guide — one side',pr:1604.05,t:'call',n:'+$139 per 2nd zygo on the side'},
+ {c:'Surgical Guides',p:'EZGoma Zygomatic Guide — both sides',pr:2432.05,t:'call',n:'+$139 per additional zygo/side'},
+ {c:'Surgical Guides',p:'ROE Zygo Guide — chart-driven (per-side planning)',pr:0,t:'call',n:'Priced by sides/anchorage — starts from CTSKUL $150 + FDS02 $85 + per-side planning; call for exact'},
+ {c:'Surgical Guides',p:'Additional Zygo Site (per side)',pr:139,t:'0 days',n:'add-on'},
+ {c:'Surgical Guides',p:'Additional Pterygoid / Standard Site',pr:49,t:'0 days',n:'add-on'}
+);
+
 var AIRX_GREETINGS=[
+ "Oh I love your nails",
+ "Let's Rock another Rx",
+ "Let's keep Rx'ing in the USA",
+ "I was born to write this Rx",
+ "Click that mic, wait a sec, talk to me, then green arrow",
+ "Let's memorialize this together",
+ "You're live with ROE's Ai Rx",
+ "Speak clearly please, I'm sensitive",
+ "Splint, aligner, surgical guide\u2026 the world's your oyster",
+ "Let's do this captain",
+ "Stay focused, and this'll be easy",
+ "Write me up before you go go",
+ "Click and Enunciate :)",
  "Welcome back. Let's build something exceptional.",
  "Tell me about the case. I'll take notes.",
  "Talk to me. What's up?",
