@@ -7320,15 +7320,16 @@ window.addEventListener('popstate', function(){
   if(!window._airxInEngine) return;            // on home — let normal back happen
   // Re-arm a history entry so the NEXT back is also caught (until we deliberately leave).
   try{ history.pushState({airx:'engine'},'',location.href); }catch(e){}
-  if(!caseStarted){ return; }
-  var nm = (typeof STEPS==='function') ? STEPS()[step] : '';
-  if(nm==='Review' || nm==='Finish' || nm==='Opposing Arch'){
-    // already at Review/end — back gesture does nothing destructive (stay put)
-    return;
-  }
-  // From any editable step, BACK returns to Review (where the user can pick another step).
-  var ri = (typeof STEPS==='function') ? STEPS().indexOf('Review') : -1;
-  if(ri>=0){ step=ri; _userPickedStep=true; refreshAll(); }
+  if(!caseStarted){ airxGoHome(); return; }     // no case yet — back leaves to home
+  var steps = (typeof STEPS==='function') ? STEPS() : [];
+  var nm = steps[step] || '';
+  // If we're at the very first real step, back goes HOME (don't trap the user).
+  if(step<=0){ airxGoHome(); return; }
+  // Otherwise step back exactly ONE step — never force-jump to Review on an unfilled case
+  // (that was writing up phantom cases). Going back one is predictable and safe.
+  step = Math.max(0, step-1);
+  _userPickedStep=true;                         // honor the manual move; don't auto-skip
+  refreshAll();
 });
 // Return to the standalone ROE AI Rx home (the true home base).
 function airxGoHome(){
@@ -7357,7 +7358,8 @@ function estFind(query){
     {rx:/flipper/, must:/flipper/i},
     {rx:/snap.?on/, must:/snap-on/i},
     {rx:/night ?guard|occlusal guard|bite splint|splint|bruxism|clearguard/, cat:'Splints & Guards', extra:/CLEARguard|guard|splint|miniComfort/i},
-    {rx:/sleep|apnea|dorsal|herbst|tap|ema|snore/, cat:'Sleep Appliances'},
+    {rx:/\bemax\b|\be\.?max\b|e max|lithium disilicate/, cat:'Crown & Bridge', extra:/e\.max/i},
+    {rx:/sleep|apnea|dorsal|herbst|\btap\b|\bema\b|snore|dreamtap/, cat:'Sleep Appliances'},
     {rx:/aligner|clearaline/, cat:'Aligners'},
     {rx:/sports|athletic|mouthguard|forcefield/, must:/ForceField/i},
     {rx:/essix|hawley|retainer/, must:/Essix|Hawley/i},
@@ -7382,6 +7384,8 @@ function estFind(query){
       if(rule.cat){ var catOk=(rule.cat instanceof RegExp)?rule.cat.test(f.c+' '+f.p):(f.c===rule.cat); if(!catOk && !(rule.extra&&rule.extra.test(f.p))) return {f:f,sc:-99}; sc+=4; }
       if(rule.extra && rule.extra.test(f.p)) sc+=3;
     }
+    // strong boost when the product name itself contains the user's distinctive material word
+    if(/\bemax\b|e max|e\.max/.test(q) && /e\.max/i.test(f.p)) sc+=5;
     if(/finish only|reverse reset|each add|add-on|model|articulation|reset for|hypoallergenic|upgrade|frame only|setup only|duplicate|back-up|reline|repair|rebase|matrix|wax-up|provisional/i.test(f.p) || f.c==='Add-on Fees' || f.c==='Repairs & Relines') sc-=2;
     if(/premium|value|complete\b|full denture|athletic|hard splint/i.test(f.p)) sc+=2;
     return {f:f, sc:sc};
