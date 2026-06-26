@@ -252,7 +252,7 @@ svg{width:100%;height:auto;display:block}
 .dial-tool{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer}
 .dial-tool:active{background:var(--paper)}
 .dial-canvas-wrap{background:#0c1414;border-radius:12px;padding:8px;text-align:center}
-.dial-canvas-wrap canvas{max-width:100%;touch-action:none;cursor:crosshair;border-radius:7px;display:block}
+.dial-canvas-wrap canvas{max-width:100%;max-height:44vh;touch-action:none;cursor:crosshair;border-radius:7px;display:block;margin:0 auto}
 .dial-teeth-note{font-size:10.5px;color:#bdd6d6;margin-top:7px;font-weight:600}
 .dial-toothrow{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px}
 .dial-toothbtn{border:1.5px solid var(--teal);background:#fff;color:#156468;border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:800;cursor:pointer}
@@ -673,15 +673,15 @@ svg{width:100%;height:auto;display:block}
 <div id="airxHome">
   <div class="airxh-inner">
     <div class="airxh-brand">ROE <span>AI&nbsp;RX</span></div>
-    <div class="airxh-sub" id="airxGreet">Let's see what you've got — Talk or Type</div>
+    <div class="airxh-sub" id="airxGreet">Let's see what you've got — <b>Talk</b> or <b>Click</b></div>
     <div class="airxh-bar">
-      <textarea id="airxQ" rows="1" placeholder="Tell me about the case…" autocomplete="off"></textarea>
+      <textarea id="airxQ" rows="1" placeholder="'Talk' me through the case…" autocomplete="off"></textarea>
       <button type="button" id="airxMic" title="Tap to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
       <button type="button" id="airxGo" title="Write up Rx" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
     <div id="airxMsg"></div>
     <div class="airxh-eg">Try: <span class="airxh-chip">Zirconia crown #8, A2</span><span class="airxh-chip">Lower partial 19,20, finish, B1</span></div>
-    <button type="button" id="airxPush" class="airxh-push">Click here for old school Rx</button>
+    <button type="button" id="airxPush" class="airxh-push"><b>Click</b> me through the case</button>
     <div id="airxRep"></div>
 
     <div class="estim-wrap">
@@ -2364,17 +2364,31 @@ function renderGdStdBrand(stage){
 // Guided Kit (type-to-search single select; verified ROE list, no per-item price)
 function renderGdStdKit(stage){
  var q=(gd._kitQuery||'').toLowerCase();
+ // Which implant brand did the doctor pick on the chart? Use it to suggest the matching kit.
+ var pickedBrand='';
+ try{ var ss=gd.stdSites||{}; for(var k in ss){ if(ss[k]&&ss[k].brand){ pickedBrand=ss[k].brand; break; } } }catch(e){}
+ var suggested=[];
+ if(pickedBrand && !q){
+   var bw=pickedBrand.toLowerCase().split(/[ \/]/).filter(function(w){return w.length>2 && w!=='implant' && w!=='dental';})[0]||'';
+   if(bw){ suggested=GUIDED_KITS.filter(function(k){ return k.toLowerCase().indexOf(bw)>=0; }); }
+ }
  var list=GUIDED_KITS.filter(function(k){ return !q || k.toLowerCase().indexOf(q)>=0; });
- var opts=list.map(function(k){ var on=gd.stdKit===k; return '<button type="button" class="rem-opt'+(on?' on':'')+'" data-kit="'+k.replace(/"/g,'')+'"><span class="zb-check'+(on?' on':'')+'"></span>'+k+'</button>'; }).join('');
+ function optHtml(k){ var on=gd.stdKit===k; return '<button type="button" class="rem-opt'+(on?' on':'')+'" data-kit="'+k.replace(/"/g,'')+'"><span class="zb-check'+(on?' on':'')+'"></span>'+k+'</button>'; }
+ var suggHtml='';
+ if(suggested.length){
+   suggHtml='<div style="margin-bottom:10px"><div class="rem-sub-lbl" style="color:var(--teal-d);font-weight:800">\u2713 Suggested for '+pickedBrand+'</div>'+
+     suggested.map(optHtml).join('')+
+     '<div style="border-bottom:1px solid var(--line);margin:10px 0 8px"></div><div class="rem-sub-lbl" style="color:var(--muted)">Or choose any kit</div></div>';
+ }
+ var opts=list.map(optHtml).join('');
  var isOther = (gd.stdKit||'').indexOf('Other')>=0;
  var notesUI='<div id="kitNotesWrap" style="margin-top:8px'+(isOther?'':';display:none')+'"><div class="rem-sub-lbl">Kit details (notes)</div><textarea id="kitNotes" rows="3" placeholder="Enter the kit / system details\u2026" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;resize:vertical">'+(gd.stdKitNotes||'').replace(/</g,'&lt;')+'</textarea></div>';
  stage.innerHTML='<p class="hint">Guided Kit <span style="color:var(--muted)">(required)</span></p><div style="padding:6px 16px">'+
    '<input id="kitSearch" type="text" placeholder="Type to search kits\u2026" value="'+(gd._kitQuery||'').replace(/"/g,'&quot;')+'" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:14px;margin-bottom:8px">'+
-   '<div id="kitList" style="max-height:46vh;overflow-y:auto">'+opts+(list.length?'':'<div class="rem-note">No kit matches \u2014 pick \u201COther\u201D and add a note.</div>')+'</div>'+notesUI+'</div>';
+   '<div id="kitList" style="max-height:46vh;overflow-y:auto">'+suggHtml+opts+(list.length?'':'<div class="rem-note">No kit matches \u2014 pick \u201COther\u201D and add a note.</div>')+'</div>'+notesUI+'</div>';
  var si=stage.querySelector('#kitSearch'); if(si){ si.oninput=function(){ gd._kitQuery=si.value; renderGdStdKit(stage); var s2=stage.querySelector('#kitSearch'); if(s2){ s2.focus(); s2.setSelectionRange(s2.value.length,s2.value.length); } }; }
  [].forEach.call(stage.querySelectorAll('.rem-opt[data-kit]'),function(b){ b.onclick=function(){
     gd.stdKit=b.getAttribute('data-kit');
-    // update selection in place (no full re-render -> no scroll jump)
     [].forEach.call(stage.querySelectorAll('.rem-opt[data-kit]'),function(x){ var on=x.getAttribute('data-kit')===gd.stdKit; x.classList.toggle('on',on); var c=x.querySelector('.zb-check'); if(c) c.classList.toggle('on',on); });
     var wrap=document.getElementById('kitNotesWrap'); if(wrap) wrap.style.display=(gd.stdKit.indexOf('Other')>=0)?'':'none';
     refreshBar();
@@ -5304,7 +5318,13 @@ function draftRestore(snap){
   if(typeof align!=='undefined' && snap.align) _restoreInto(align,snap.align);
   if(typeof recEmail!=='undefined') recEmail=snap.recEmail||'';
   if(typeof savedImages!=='undefined'){ savedImages.length=0; (snap.savedImages||[]).forEach(function(x){ savedImages.push(x); }); }
-  step=snap.step||0; maxStep=Math.max(snap.maxStep||0, step); _caseCaptured=false;
+  // Land on Review (every row tappable to edit), not wherever the draft was saved from
+  // (saving happens on Finish, which is a dead-end screen and feels "not editable").
+  var steps = (typeof STEPS==='function') ? STEPS() : [];
+  var rIdx = steps.indexOf('Review');
+  step = (rIdx>=0) ? rIdx : (snap.step||0);
+  maxStep = Math.max(snap.maxStep||0, step, rIdx>=0?rIdx:0);
+  _caseCaptured=false; _userPickedStep=true;
   airxEnterEngine();
   refreshAll();
 }
@@ -6108,8 +6128,12 @@ function initDialCanvas(teeth){
    var maxW=Math.min((cv.parentElement.clientWidth||400),440);
    // Single-tooth close-up uses a large image to draw on (not a tiny thumbnail).
    if(hasPhoto){ maxW=Math.min((cv.parentElement.clientWidth||400),360); }
-   cv.width=maxW; cv.height=Math.round(img.height*(maxW/img.width));
-   cv.style.margin=hasPhoto?'0 auto':''; cv.style.display=hasPhoto?'block':'';
+   var w=maxW, h=Math.round(img.height*(maxW/img.width));
+   // Cap height so the tooth never takes the whole screen — leave room to scroll.
+   var maxH=Math.round((window.innerHeight||700)*0.42);
+   if(h>maxH){ var k=maxH/h; h=maxH; w=Math.round(w*k); }
+   cv.width=w; cv.height=h;
+   cv.style.margin='0 auto'; cv.style.display='block';
    redrawDial(cv,img);
  };
  if(hasPhoto){ img.src=TOOTH_IMG[view]; if(note) note.textContent='Painting tooth #'+view+'.'; }
@@ -7217,11 +7241,71 @@ airxInit({q:'airxQ',go:'airxGo',mic:'airxMic',msg:'airxMsg',rep:'airxRep'});
   function estSubmit(){
     var text=(q.value||'').trim(); if(!text) return;
     var hits=estFind(text);
-    if(!hits.length){ panel.innerHTML='<div style="padding:14px;color:var(--muted);text-align:center">No match found. Try naming the product — e.g. "denture", "night guard", "CHROME guide", "zirconia crown".</div>'; return; }
-    estRenderOptions(text, hits.slice(0,8));
+    if(!hits.length){ panel.innerHTML='<div style="padding:14px;color:var(--muted);text-align:center">No match found. Try naming the product \u2014 e.g. "denture", "night guard", "CHROME guide", "zirconia crown".</div>'; return; }
+    // If a lot of options, group them by sub-type and let the user drill down first.
+    if(hits.length>5){
+      var groups=estSubGroup(hits);
+      var keys=Object.keys(groups);
+      if(keys.length>1){ estRenderGroups(groups); return; }
+    }
+    estRenderOptions(hits.slice(0,10));
   }
 
-  function estRenderOptions(query, hits){
+  // Derive a sub-category label from a product name (SLM, Thermoplastic, Acetal, etc.)
+  function estSubType(f){
+    var p=f.p.toLowerCase();
+    if(/clearguard/.test(p)) return 'CLEARguard';
+    if(/minicomfort/.test(p)) return 'miniComfort';
+    if(/forcefield/.test(p)) return 'ForceField (sports)';
+    if(/essix/.test(p)) return 'Essix retainer';
+    if(/hawley/.test(p)) return 'Hawley retainer';
+    if(/bleaching|opalescent/.test(p)) return 'Bleaching tray';
+    if(/spring aligner/.test(p)) return 'Spring aligner';
+    if(/slm/.test(p)) return 'SLM (cast metal)';
+    if(/thermoplastic|flexible/.test(p)) return 'Thermoplastic / Flexible';
+    if(/acetal/.test(p)) return 'Acetal';
+    if(/all acrylic|acrylic partial/.test(p)) return 'All-Acrylic';
+    if(/flipper/.test(p)) return 'Flipper';
+    if(/unilateral|nesbit/.test(p)) return 'Unilateral / Nesbit';
+    if(/snap-on/.test(p)) return 'Snap-On Smile';
+    if(/e\.max/.test(p)) return 'e.max';
+    if(/zirconia|tlz|zrc/.test(p)) return 'Zirconia';
+    if(/pfz/.test(p)) return 'PFZ';
+    if(/pfm/.test(p)) return 'PFM';
+    if(/full cast|cast metal/.test(p)) return 'Full Cast';
+    if(/premium/.test(p)) return 'Premium';
+    if(/value/.test(p)) return 'Value';
+    if(/impact/.test(p)) return 'IMPACT Digital';
+    if(/ivotion/.test(p)) return 'Ivotion';
+    if(/tooth-supported|tissue-supported|bone-supported|guidedtemp/.test(p)) return 'Standard guide';
+    if(/chrome/.test(p)) return 'CHROME';
+    if(/combi/.test(p)) return 'CombiGuide';
+    if(/ezgoma|zygo/.test(p)) return 'Zygomatic';
+    return f.c;  // fall back to the fee-schedule category
+  }
+  function estSubGroup(hits){
+    var g={};
+    hits.forEach(function(f){ var k=estSubType(f); (g[k]=g[k]||[]).push(f); });
+    return g;
+  }
+  function estRenderGroups(groups){
+    var keys=Object.keys(groups);
+    var rows=keys.map(function(k,i){
+      var items=groups[k];
+      var prices=items.map(function(f){return f.pr;}).filter(function(n){return n>0;});
+      var lo=prices.length?Math.min.apply(null,prices):0, hi=prices.length?Math.max.apply(null,prices):0;
+      var range = !prices.length ? 'Call for quote' : (lo===hi ? estMoney(lo) : estMoney(lo)+'\u2013'+estMoney(hi));
+      return '<button type="button" class="est-grp" data-k="'+i+'" style="width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+        '<span><span style="font-weight:700;color:var(--ink);display:block">'+airxEsc(k)+'</span>'+
+        '<span style="color:var(--muted);font-size:12px">'+items.length+' option'+(items.length>1?'s':'')+'</span></span>'+
+        '<span style="font-weight:700;color:var(--teal-d);white-space:nowrap;font-size:13px">'+range+' \u203A</span></button>';
+    }).join('');
+    panel.innerHTML='<div style="margin-top:14px;text-align:left">'+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:8px">What kind? Pick a type:</div>'+rows+'</div>';
+    [].forEach.call(panel.querySelectorAll('.est-grp'),function(b){ b.onclick=function(){ estRenderOptions(groups[keys[+b.getAttribute('data-k')]], keys[+b.getAttribute('data-k')]); }; });
+  }
+
+  function estRenderOptions(hits, groupLabel){
     var rows=hits.map(function(f,i){
       return '<button type="button" class="est-opt" data-i="'+i+'" style="width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
         '<span style="min-width:0"><span style="font-weight:700;color:var(--ink);display:block">'+airxEsc(f.p)+'</span>'+
@@ -7229,8 +7313,10 @@ airxInit({q:'airxQ',go:'airxGo',mic:'airxMic',msg:'airxMsg',rep:'airxRep'});
         '<span style="font-weight:800;color:var(--teal-d);white-space:nowrap">'+estMoney(f.pr)+'</span></button>';
     }).join('');
     panel.innerHTML='<div style="margin-top:14px;text-align:left">'+
-      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:8px">Which one?</div>'+rows+'</div>';
+      (groupLabel?'<button id="estBackGrp" style="background:none;border:none;color:var(--teal-d);font-weight:700;cursor:pointer;padding:0 0 8px">\u2039 back to types</button>':'')+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:8px">'+(groupLabel?airxEsc(groupLabel)+' \u2014 which one?':'Which one?')+'</div>'+rows+'</div>';
     [].forEach.call(panel.querySelectorAll('.est-opt'),function(b){ b.onclick=function(){ estPick(hits[+b.getAttribute('data-i')]); }; });
+    var bk=document.getElementById('estBackGrp'); if(bk) bk.onclick=function(){ estSubmit(); };
   }
 
   function estPick(f){
@@ -7357,37 +7443,67 @@ function estFind(query){
   var SYN=[
     {rx:/flipper/, must:/flipper/i},
     {rx:/snap.?on/, must:/snap-on/i},
-    {rx:/night ?guard|occlusal guard|bite splint|splint|bruxism|clearguard/, cat:'Splints & Guards', extra:/CLEARguard|guard|splint|miniComfort/i},
-    {rx:/\bemax\b|\be\.?max\b|e max|lithium disilicate/, cat:'Crown & Bridge', extra:/e\.max/i},
+    {rx:/night ?guard|occlusal guard|bite splint|\bsplint\b|bruxism|clearguard|comfort|astron|\btmj\b/, must:/CLEARguard|miniComfort|Comfort|Astron|TMJ/i},
+    // Specific materials/products — literal: return only that product, no category-wide bleed.
+    {rx:/implant crown|screw.?retained|cement.?retained|implant package/, must:/TLZ-SR|abutment|Ti or Zi/i},
+    {rx:/\bemax\b|\be\.?max\b|e max|lithium disilicate/, must:/e\.max/i},
+    {rx:/zirconia crown|\btlz\b crown|\bzirconia\b/, must:/zirconia (with MiYO|—)|TLZ zirconia|zRc zirconia/i},
+    {rx:/\bzrc\b/, must:/zRc/i},
+    {rx:/\bpfz\b|porcelain.*zirconia/, must:/PFZ/i},
+    {rx:/\bpfm\b|porcelain.*metal/, must:/PFM/i},
+    {rx:/full cast|cast metal|cast crown/, must:/Full Cast/i},
+    {rx:/bespoke/, must:/Bespoke/i},
     {rx:/sleep|apnea|dorsal|herbst|\btap\b|\bema\b|snore|dreamtap/, cat:'Sleep Appliances'},
     {rx:/aligner|clearaline/, cat:'Aligners'},
-    {rx:/sports|athletic|mouthguard|forcefield/, must:/ForceField/i},
-    {rx:/essix|hawley|retainer/, must:/Essix|Hawley/i},
-    {rx:/bleach|whiten/, must:/bleaching/i},
-    {rx:/full.?arch|all.?on|hybrid|overdenture/, cat:/Full-Arch/},
-    {rx:/ezgoma|zygoma|zygo/, must:/EZGoma|Zygo/i},
+    {rx:/sports|athletic|mouthguard|forcefield/, must:/ForceField|Athletic/i},
+    {rx:/essix/, must:/Essix/i},
+    {rx:/hawley/, must:/Hawley/i},
+    {rx:/bleach|whiten|opalescent/, must:/bleaching/i},
+    // Specific guide products — literal
+    {rx:/\bchrome\b|guidedsmile/, must:/CHROME/i},
+    {rx:/combiguide|\bcombi\b/, must:/CombiGuide/i},
+    {rx:/ezgoma/, must:/EZGoma/i},
+    {rx:/zygoma|\bzygo\b/, must:/Zygo/i},
     {rx:/pterygoid|ptery/, must:/Pterygoid/i},
-    {rx:/surgical guide|guide\b|chrome|combiguide|guidedtemp|tooth.?supported|bone.?supported|tissue.?supported|combi/, cat:'Surgical Guides'},
-    {rx:/denture/, cat:/Dentures/},
+    {rx:/tooth.?supported/, must:/Tooth-Supported/i},
+    {rx:/tissue.?supported/, must:/Tissue-supported/i},
+    {rx:/bone.?supported|bone channel/, must:/Bone-supported/i},
+    {rx:/guidedtemp|guided temp/, must:/GuidedTEMP/i},
+    {rx:/full.?arch|all.?on|hybrid|overdenture/, cat:/Full-Arch/},
+    {rx:/surgical guide|\bguide\b/, cat:'Surgical Guides'},
+    {rx:/complete denture|full denture|^denture|immediate denture/, cat:/Complete Dentures/},
+    {rx:/\bdenture\b/, cat:/Complete Dentures/},
     {rx:/partial/, cat:'Partial Dentures'},
-    {rx:/crown|bridge|veneer|inlay|onlay|zirconia|emax|pfm|pfz|cast/, cat:'Crown & Bridge'},
-    {rx:/implant/, cat:/Implant|Full-Arch|Surgical Guides/}
+    {rx:/crown|bridge|veneer|inlay|onlay/, cat:'Crown & Bridge'},
+    {rx:/implant/, cat:/Implant Packages/}
   ];
   var rule=null;
   for(var r=0;r<SYN.length;r++){ if(SYN[r].rx.test(q)){ rule=SYN[r]; break; } }
   var toks=q.split(' ').filter(function(t){return t.length>1;});
+  // STRICT MODE: when a category/product rule matches, results are LIMITED to that rule's
+  // products only. No cross-category bleed. Ranking within the set uses the spoken words.
+  if(rule){
+    var inSet=ROE_FEES.filter(function(f){
+      if(rule.must) return rule.must.test(f.p);
+      if(rule.cat){ var ok=(rule.cat instanceof RegExp)?rule.cat.test(f.c):(f.c===rule.cat); return ok || (rule.extra&&rule.extra.test(f.p)); }
+      return false;
+    });
+    var rankedR=inSet.map(function(f){
+      var hay=estNorm(f.p+' '+f.n);
+      var sc=10; toks.forEach(function(t){ if(hay.indexOf(t)>=0) sc+=(t.length>=4?2:1); });
+      if(rule.extra && rule.extra.test(f.p)) sc+=4;
+      // demote add-ons / sub-stages so primary products lead
+      if(/finish only|reverse reset|each add|frame only|setup only|duplicate|back-up|articulation|reset for|hypoallergenic|upgrade|model only|poured model|printed digital model|wax-up|matrix|provisional/i.test(f.p)) sc-=4;
+      if(/premium|value|complete\b|full denture|hard splint|monolithic/i.test(f.p)) sc+=2;
+      return {f:f,sc:sc};
+    }).sort(function(a,b){return b.sc-a.sc;});
+    return rankedR.map(function(x){return x.f;});
+  }
+  // NO RULE MATCHED: be literal/conservative. Require the product NAME to actually contain a
+  // spoken word (4+ chars), not just the category/notes. Avoids scattering unrelated items.
   var scored=ROE_FEES.map(function(f){
-    var hay=estNorm(f.p+' '+f.c+' '+f.n);
-    var sc=0; toks.forEach(function(t){ if(hay.indexOf(t)>=0) sc+= (t.length>=4?2:1); });
-    if(rule){
-      if(rule.must && !rule.must.test(f.p)) return {f:f,sc:-99};
-      if(rule.cat){ var catOk=(rule.cat instanceof RegExp)?rule.cat.test(f.c+' '+f.p):(f.c===rule.cat); if(!catOk && !(rule.extra&&rule.extra.test(f.p))) return {f:f,sc:-99}; sc+=4; }
-      if(rule.extra && rule.extra.test(f.p)) sc+=3;
-    }
-    // strong boost when the product name itself contains the user's distinctive material word
-    if(/\bemax\b|e max|e\.max/.test(q) && /e\.max/i.test(f.p)) sc+=5;
-    if(/finish only|reverse reset|each add|add-on|model|articulation|reset for|hypoallergenic|upgrade|frame only|setup only|duplicate|back-up|reline|repair|rebase|matrix|wax-up|provisional/i.test(f.p) || f.c==='Add-on Fees' || f.c==='Repairs & Relines') sc-=2;
-    if(/premium|value|complete\b|full denture|athletic|hard splint/i.test(f.p)) sc+=2;
+    var nameHay=estNorm(f.p);
+    var sc=0; toks.forEach(function(t){ if(t.length>=4 && nameHay.indexOf(t)>=0) sc+=2; });
     return {f:f, sc:sc};
   }).filter(function(x){return x.sc>0;}).sort(function(a,b){return b.sc-a.sc;});
   return scored.map(function(x){return x.f;});
@@ -7467,11 +7583,12 @@ function airxShowGreeting(){
  var el=document.getElementById('airxGreet'); if(!el) return;
  var line=AIRX_GREETINGS[Math.floor(Math.random()*AIRX_GREETINGS.length)];
  // strip trailing punctuation then always end with the same call to action
- var base=line.replace(/\s*[—–-]\s*Talk or Type\s*$/i,'').replace(/[\s.!…]+$/,'');
- var full=base+' — Talk or Type';
+ var base=line.replace(/\s*[—–-]\s*Talk or Click\s*$/i,'').replace(/[\s.!…]+$/,'');
+ var safe=base.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ var full=safe+' \u2014 <b>Talk</b> or <b>Click</b>';
  el.classList.remove('show');
- setTimeout(function(){ el.textContent=full; el.classList.add('show'); }, 50);
- airxSpeakGreeting(base);   // speak the witty part aloud (without the "Talk or Type" tag)
+ setTimeout(function(){ el.innerHTML=full; el.classList.add('show'); }, 50);
+ airxSpeakGreeting(base);   // speak the witty part aloud (without the "Talk or Click" tag)
 }
 // Speak the greeting aloud (best-effort; silent if speech synthesis is unavailable or blocked).
 var _airxGreetSpoke=false;
