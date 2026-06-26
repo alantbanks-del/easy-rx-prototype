@@ -4447,6 +4447,7 @@ function airxPrompt(text){
 '  - sites: list every implant/anchorage site as {tooth, mode}. mode KEY: \"implant\"(default, regular implant), \"zygo\"(zygomatic), \"ptery\"(pterygoid), \"trans\"(transnasal), \"tpal\"(trans-palatal), \"nasal\"(nasalus). Lower-arch sites are implant-only. Derive arch from tooth numbers (1-16 upper, 17-32 lower).',
 '  - guideSupport (standard/bonechannel): \"tooth\"(\"tooth-supported\"/\"tooth supported\") | \"tissue\"(\"tissue-supported\") | \"bone\"(\"bone-supported\"). OMIT if not stated.',
 '  - guidedTemp: true if the doctor asks to ADD a GuidedTEMP / guided temp / guided provisional / temporary. OMIT (or false) otherwise.',
+'  - guidedKit: the guided drill/surgical kit named (e.g. \"BioHorizons 4000\", \"Nobel Guided\", \"Straumann locking keys\"). Capture the brand + any number/model the doctor says. OMIT if not named.',
 '  - implantBrand / implantLine / implantPlatform: the implant system named for the guide (e.g. \"BioHorizons\", \"Nobel\", \"Straumann\") and size if stated. OMIT if not named.',
 "",
 "IF engine = \"other\":",
@@ -4626,14 +4627,45 @@ function airxApplyGuide(c){
   }
   // GuidedTEMP add-on (tooth-supported standard guides)
   if(c.guidedTemp){ gd.stdGuidedTemp='Yes'; applied.push('GuidedTEMP'); }
-  // Implant brand on a guide (Standard/CHROME/Combi/Zygo all have an implant brand field: gd.implantBrand/Line/Size)
+  // Implant brand on a guide. The STANDARD flow stores brand/line PER SITE in gd.stdSites[n];
+  // CHROME/Combi/Zygo use gd.implantBrand/Line/Size. Write to the correct place for the flow.
   if(c.implantBrand){
     var bName=airxMatchImplantBrand(c.implantBrand);
-    if(bName){ gd.implantBrand=bName;
-      if(c.implantLine){ var ln=airxMatchImplantLine(bName,c.implantLine); if(ln) gd.implantLine=ln; }
-      if(c.implantPlatform){ gd.implantSize=c.implantPlatform; }
-      applied.push(bName+(gd.implantLine?' '+gd.implantLine:''));
+    if(bName){
+      var lName = c.implantLine ? airxMatchImplantLine(bName, c.implantLine) : '';
+      // if only one line exists for the brand, default to it so the step can complete
+      if(!lName){ var lk=Object.keys(IMPLANTS_ALL[bName]||{}); if(lk.length===1) lName=lk[0]; }
+      var pSize = (c.implantPlatform && lName) ? airxMatchPlatform(bName,lName,c.implantPlatform) : '';
+      if(gdIsStd()){
+        // apply to every charted site
+        gd.stdSites=gd.stdSites||{};
+        var anySite=false;
+        gdArches().forEach(function(ar){ Object.keys(gd.sites[ar]||{}).forEach(function(n){
+          n=+n; gd.stdSites[n]=gd.stdSites[n]||{}; gd.stdSites[n].brand=bName; if(lName) gd.stdSites[n].line=lName; if(pSize) gd.stdSites[n].size=pSize; anySite=true;
+        }); });
+        if(!anySite){ /* no sites yet — stash for when chart is filled */ }
+      } else {
+        gd.implantBrand=bName; if(lName) gd.implantLine=lName; if(pSize) gd.implantSize=pSize;
+      }
+      applied.push(bName+(lName?' '+lName:'')+(pSize?' '+pSize:''));
     } else { skipped.push('implant brand "'+c.implantBrand+'"'); }
+  }
+  // Guided drill kit (Standard flow: gd.stdKit). Match the doctor's spoken kit to a GUIDED_KITS option.
+  if(c.guidedKit && gdIsStd()){
+    var kitList=(typeof GUIDED_KITS!=='undefined') ? GUIDED_KITS : [];
+    // combine brand + kit words so "BioHorizon 4000" can find "BioHorizons - Pro Surgical System - PRO4000"
+    var kraw=((c.implantBrand?c.implantBrand+' ':'')+c.guidedKit).toLowerCase();
+    var ktoks=kraw.match(/[a-z]+|[0-9]+/g)||[];
+    var best='', bestScore=0;
+    kitList.forEach(function(k){
+      var nk=k.toLowerCase();
+      var sc=ktoks.filter(function(t){ return t.length>1 && nk.indexOf(t)>=0; }).length;
+      // strong boost if a number token (e.g. 4000) appears in the kit name
+      ktoks.forEach(function(t){ if(/^[0-9]+$/.test(t) && nk.indexOf(t)>=0) sc+=2; });
+      if(sc>bestScore){ bestScore=sc; best=k; }
+    });
+    if(best && bestScore>=2){ gd.stdKit=best; applied.push('Kit: '+best); }
+    else { gd.stdKit='Other \u2014 enter information into Notes'; gd.stdKitNotes=String(c.guidedKit); applied.push('Kit: '+c.guidedKit+' (noted)'); }
   }
   renderSteps(); refreshBar();
   var landed=airxAutoAdvance();
