@@ -7447,12 +7447,17 @@ var AIRX_GREETINGS=[
  "I'm rooting for you.",
  "Rx me \u2014 you earned it.",
  "Brace yourself for some cool Rx'ing.",
- "Crown me impressed.",
  "Tooth be told\u2026 talk to me.",
  "Keep calm and talk on.",
  "Wisdom comes one tooth at a time.",
  "You're the crown jewel of our day.",
- "Bite me\u2026 nicely."
+ "Here's lookin' at you kid",
+ "Scroll down for our click Rx",
+ "Let's knock another Rx out of the park",
+ "21 CDT's, we'll get this right",
+ "Founded in 1931, oh my!",
+ "We're about to celebrate 100 Years",
+ "It's all up to you an me now"
 ];
 function airxShowGreeting(){
  var el=document.getElementById('airxGreet'); if(!el) return;
@@ -7470,7 +7475,10 @@ function airxSpeakGreeting(text){
  try{
    if(!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
    speechSynthesis.cancel();
-   var u=new SpeechSynthesisUtterance(text);
+   // Pronunciation fixes for TTS only (display text is unchanged):
+   // "live" here means broadcasting (long-i, rhymes with "hive"), not "live"=reside.
+   var spoken=text.replace(/\blive\b/gi,'lyve');
+   var u=new SpeechSynthesisUtterance(spoken);
    u.rate=1.0; u.pitch=1.0; u.volume=1.0;
    speechSynthesis.speak(u);
  }catch(e){}
