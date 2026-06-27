@@ -252,7 +252,7 @@ svg{width:100%;height:auto;display:block}
 .dial-tool{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer}
 .dial-tool:active{background:var(--paper)}
 .dial-canvas-wrap{background:#0c1414;border-radius:12px;padding:8px;text-align:center}
-.dial-canvas-wrap canvas{max-width:100%;touch-action:none;cursor:crosshair;border-radius:7px;display:block}
+.dial-canvas-wrap canvas{max-width:100%;max-height:44vh;touch-action:none;cursor:crosshair;border-radius:7px;display:block;margin:0 auto}
 .dial-teeth-note{font-size:10.5px;color:#bdd6d6;margin-top:7px;font-weight:600}
 .dial-toothrow{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px}
 .dial-toothbtn{border:1.5px solid var(--teal);background:#fff;color:#156468;border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:800;cursor:pointer}
@@ -339,6 +339,9 @@ svg{width:100%;height:auto;display:block}
 
 /* bottom bar */
 .to-review{position:fixed;left:50%;transform:translateX(-50%);bottom:140px;z-index:41;border:1.5px solid var(--teal);background:#fff;color:var(--teal-d);border-radius:22px;padding:9px 18px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.pill-review{background:var(--teal-d)!important;border-color:var(--teal-d)!important}
+.pill-review .pill-main,.pill-review .pn{color:#fff!important}
+.pill-review .pn{background:rgba(255,255,255,.25)!important}
 .mic-btn{position:fixed;right:14px;bottom:74px;z-index:42;width:46px;height:46px;border-radius:50%;border:none;background:var(--teal);color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .mic-btn .mic-ico{font-size:20px;line-height:1}
 .mic-btn.voiceoff{background:#9fb1ae}
@@ -601,14 +604,106 @@ svg{width:100%;height:auto;display:block}
   .mic-btn{z-index:60 !important;bottom:96px !important}
   .voice-toggle{z-index:60 !important;bottom:100px !important}
 }
+@keyframes airxspin{to{transform:rotate(360deg)}}
+/* ===== AI Rx home overlay (Google-style) ===== */
+#airxHome{position:fixed;inset:0;z-index:200;background:radial-gradient(1100px 560px at 50% -8%, #e7f1f1, transparent 60%),var(--bg);display:flex;justify-content:center;overflow-y:auto;padding:0 18px 40px}
+.airxh-inner{width:100%;max-width:560px;padding-top:16vh}
+.airxh-brand{text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:52px;color:var(--teal-d);line-height:1}
+.airxh-sub{text-align:center;color:var(--muted);font-size:18px;font-weight:500;margin-top:8px;letter-spacing:.3px}
+.estim-wrap{margin-top:34px;opacity:.72;transform:scale(.87);transform-origin:top center;max-width:420px;margin-left:auto;margin-right:auto}
+.estim-wrap:hover,.estim-wrap:focus-within{opacity:.96}
+.estim-divider{display:flex;align-items:center;text-align:center;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin:4px 0 13px}
+.estim-divider::before,.estim-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.estim-divider span{padding:0 12px}
+.estim-brand{font-size:15px;color:var(--muted);letter-spacing:3px;font-weight:700;font-family:system-ui,sans-serif;line-height:1;display:flex;align-items:baseline;justify-content:center;gap:6px}
+.estim-brand span{color:var(--teal-d);vertical-align:baseline;font-size:15px;letter-spacing:3px;font-family:system-ui,sans-serif;font-weight:700}
+.estim-sub{font-size:12px;margin-bottom:3px;margin-top:3px;color:var(--muted)}
+.estim-wrap .airxh-bar{box-shadow:none;border:1.5px solid var(--line);background:#fafbfb;padding:7px 9px}
+.estim-wrap .airxh-bar textarea{font-size:13.5px}
+.estim-wrap .airxh-bar button{transform:scale(.9)}
+.esth-chip{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px 11px;margin:3px 4px 0;font-size:12.5px;color:var(--teal-d);cursor:pointer}
+.estim-wrap .esth-chip{font-size:11px;opacity:.9;padding:4px 9px}
+.airxh-tag{text-align:center;color:var(--teal-d);font-size:15.5px;margin:18px auto 0;max-width:440px;line-height:1.5;min-height:23px;font-style:italic;opacity:0;transition:opacity .5s}
+.airxh-tag.show{opacity:.9}
+.airxh-eg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-top:16px;color:var(--muted);font-size:12.5px}
+.airxh-brand span{font-family:inherit;font-weight:700;font-size:15px;letter-spacing:3px;color:var(--gold);vertical-align:super;font-family:system-ui,sans-serif}
+.airxh-tag{text-align:center;color:var(--muted);font-size:14.5px;margin:12px auto 0;max-width:420px;line-height:1.5}
+.airxh-bar{display:flex;align-items:flex-end;gap:8px;background:#fff;border:1px solid var(--line);border-radius:26px;padding:8px 8px 8px 20px;box-shadow:0 10px 30px -16px rgba(20,58,64,.4);margin-top:26px;transition:border-color .2s,box-shadow .2s}
+.airxh-bar:focus-within{border-color:var(--teal);box-shadow:0 12px 36px -14px rgba(20,58,64,.5)}
+.airxh-bar textarea{flex:1;border:0;outline:0;resize:none;background:transparent;font:inherit;font-size:17px;line-height:1.5;color:var(--ink);padding:9px 0;max-height:160px;min-height:24px}
+.airxh-bar textarea::placeholder{color:#9AA6A4}
+.airxh-bar button{flex:none;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#e7f1f1;color:var(--teal-d);transition:transform .12s,background .2s,color .2s}
+.airxh-bar button:active{transform:scale(.92)}
+.airxh-bar #airxGo{background:var(--teal-d);color:#fff}
+.airxh-bar #airxGo:disabled{opacity:.4;cursor:default}
+.airxh-bar #airxMic.live{background:#C0392B;color:#fff;animation:airxpulse 1.2s infinite}
+.airxh-bar svg{width:22px;height:22px}
+@keyframes airxpulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}70%{box-shadow:0 0 0 12px rgba(192,57,43,0)}100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}}
+#airxMsg{text-align:center;color:var(--gold);font-size:13.5px;margin-top:12px;min-height:18px;font-weight:600}
+.airxh-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center}
+.airxh-push{display:inline-block;text-align:center;color:var(--teal-d);font-size:13.5px;font-weight:700;margin:18px auto 0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px 20px;cursor:pointer;box-shadow:0 4px 14px -10px rgba(20,58,64,.4);transition:background .15s,transform .12s}
+.airxh-push:active{transform:scale(.97);background:#e7f1f1}
+#airxHome .airxh-inner{text-align:center}
+#airxHome .airxh-bar{text-align:left}
+/* AI Rx bar styled as the top engine card on the launcher */
+.airx-card{align-items:flex-start!important;cursor:default!important}
+.airx-card .eng-ic{margin-top:2px}
+.airxc-body{flex:1;min-width:0}
+.airxc-name{font-weight:800;color:var(--ink);font-size:15px;line-height:1.2}
+.airxc-name b{font-family:system-ui,sans-serif;font-weight:700;font-size:9px;letter-spacing:2px;color:var(--gold);vertical-align:super}
+.airxc-bar{display:flex;align-items:flex-end;gap:6px;margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:5px 5px 5px 14px}
+.airxc-bar:focus-within{border-color:var(--teal)}
+.airxc-bar textarea{flex:1;border:0;outline:0;resize:none;background:transparent;font:inherit;font-size:15px;line-height:1.4;padding:6px 0;max-height:110px;min-height:20px;color:var(--ink)}
+.airxc-bar textarea::placeholder{color:#9AA6A4}
+.airxc-bar button{flex:none;width:36px;height:36px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#e7f1f1;color:var(--teal-d)}
+.airxc-bar #airxLGo{background:var(--teal-d);color:#fff}
+.airxc-bar #airxLGo:disabled{opacity:.4;cursor:default}
+.airxc-bar #airxLMic.live{background:#C0392B;color:#fff;animation:airxpulse 1.2s infinite}
+.airxc-bar svg{width:18px;height:18px}
+#airxLMsg{color:var(--gold);font-size:12px;font-weight:600}
+#airxLMsg:empty{display:none}
+#airxLMsg:not(:empty){margin-top:6px}
+.airxh-chip{font-size:13px;color:var(--teal-d);background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 13px;cursor:pointer;transition:background .15s}
+.airxh-chip:active{background:#e7f1f1}
+#airxRep{margin-top:16px}
 </style>
 </head>
 <body>
 
-<div class="shell">
+<div id="airxHome">
+  <div class="airxh-inner">
+    <div class="airxh-brand">ROE <span>AI&nbsp;RX</span></div>
+    <div class="airxh-sub" id="airxGreet">Let's see what you've got — <b>Talk</b> or <b>Click</b></div>
+    <div class="airxh-bar">
+      <textarea id="airxQ" rows="1" placeholder="'Talk' me through the case…" autocomplete="off"></textarea>
+      <button type="button" id="airxMic" title="Tap to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+      <button type="button" id="airxGo" title="Write up Rx" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div id="airxMsg"></div>
+    <div class="airxh-eg">Try: <span class="airxh-chip">Zirconia crown #8, A2</span><span class="airxh-chip">Lower partial 19,20, finish, B1</span></div>
+    <button type="button" id="airxPush" class="airxh-push"><b>Click</b> me through the case</button>
+    <div id="airxRep"></div>
+
+    <div class="estim-wrap">
+      <div class="estim-divider"><span>or</span></div>
+      <div class="airxh-brand estim-brand">AI <span>CASE&nbsp;COST&nbsp;ESTIMATOR</span></div>
+      <div class="airxh-sub estim-sub">Ask a price — "How much is a denture?"</div>
+      <div class="airxh-bar estim-bar">
+        <textarea id="estQ" rows="1" placeholder="How much is…" autocomplete="off"></textarea>
+        <button type="button" id="estMic" title="Tap to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+        <button type="button" id="estGo" title="Estimate" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div id="estMsg"></div>
+      <div class="airxh-eg">Try: <span class="esth-chip">How much is a night guard?</span><span class="esth-chip">Cost of a CHROME guide?</span></div>
+      <div id="estPanel"></div>
+    </div>
+  </div>
+</div>
+
+<div class="shell" id="airxShell" style="display:none">
 <div class="shell-rail">
 <div class="topbar">
-  <div class="rail-brand"><span class="rail-logo">ROE</span><span class="rail-sub">Ai Rx</span></div>
+  <div class="rail-brand" id="railHome" style="cursor:pointer" title="Back to AI Rx home"><span class="rail-logo">ROE</span><span class="rail-sub">Ai Rx</span></div>
   <div class="steps" id="steps"></div>
   <div class="curstep"><h1 id="curName">Pick the restoration</h1><span class="of" id="curOf">1 / 9</span><button type="button" id="cartChip" class="cart-chip" style="display:none" aria-label="Order total"></button><button type="button" id="exitRx" class="exit-rx" aria-label="Exit this Rx">&#10005;</button></div>
   <div class="progress"><i id="progFill" style="width:11%"></i></div>
@@ -620,6 +715,7 @@ svg{width:100%;height:auto;display:block}
 </div>
 
 <div class="shell-main">
+<div id="airxTranscript"></div>
 <div id="stage"></div>
 </div>
 </div>
@@ -727,7 +823,7 @@ function buildCaseLineItem(){
   return { id:_cartSeq++, engine:curEngine, title:title, total:total, lines:lines, notes:collectCaseNotes(), pending:(total===0 && curEngine!=='guides') };
 }
 // Capture current case into ORDER exactly once (guarded against double-add).
-function captureToCart(){ if(_caseCaptured) return null; var it=buildCaseLineItem(); ORDER.push(it); _caseCaptured=true; return it; }
+function captureToCart(){ if(_caseCaptured) return null; var it=buildCaseLineItem(); ORDER.push(it); _caseCaptured=true; if(typeof airxQueueAdvance==='function' && AIRX_QUEUE.length){ airxQueueAdvance(); } return it; }
 // ---- Cart panel (itemized view + remove) ----
 function openCartPanel(){
   var ov=document.getElementById('cartPanel'); if(!ov) return;
@@ -1597,7 +1693,7 @@ function renderRecordsEmail(stage){
 }
 var OPTIONAL_STEPS={'Dial in Shade':1,'Add-ons':1,'Buy a Splint':1}; // never block these
 // Implant dataset (Brand → Line → Platform) ported from rx.html / Implants_USA spreadsheet.
-var IMPLANTS_ALL={"ACE Surgical":{"Infinity / Internal Hex":{"sizes":["3.3","3.7","4.2","4.7","5.7"]}},"Adin":{"Touareg / Touareg-S":{"sizes":["3.0","3.5","3.75","4.2","5.0","6.0"]},"Swell":{"sizes":["3.5","3.75","4.2","5.0","6.0"]},"CloseFit":{"sizes":["3.3","3.75","4.2","5.0"]},"One / Narrow":{"sizes":["3.0","3.3","3.75"]}},"Bicon":{"Bicon SHORT Implants":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0"],"notes":["MUA not available"]},"Bicon Max 2.5 / 3.0 connection implants":{"sizes":["2.5 connection","3.0 connection"],"notes":["MUA not available"]}},"BioHorizons":{"Tapered Internal":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Plus":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Pro":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered 3.0":{"sizes":["3.0"]},"Internal":{"sizes":["3.5","4.0","5.0","6.0"]},"External":{"sizes":["3.5","4.0","5.0","6.0"]}},"BlueSkyBio":{"Bio | Max | Narrow / Internal Hex lines":{"sizes":["3.3","3.7","4.0","4.6","5.0","5.5"]}},"CAMLOG":{"CAMLOG Screw-Line":{"sizes":["3.3","3.8","4.3","5.0","6.0"],"notes":["MUA not available"]},"CONELOG Progressive-Line":{"sizes":["3.3","3.8","4.3","5.0"],"notes":["MUA not available"]}},"Dentium":{"Implantium":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"SuperLine":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"NR Line / SlimLine":{"sizes":["2.5","3.1"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"Bright / other regional lines":{"sizes":["3.5","4.0","4.5","5.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]}},"Dentsply Sirona":{"Astra Tech Implant System EV":{"sizes":["3.0","3.6","4.2","4.8","5.4"]},"Astra Tech OsseoSpeed TX":{"sizes":["3.0","3.5","4.0","4.5","5.0"],"notes":["MUA not available"]},"DS PrimeTaper EV":{"sizes":["3.6","4.2","4.8"]},"DS OmniTaper EV":{"sizes":["3.4","3.8","4.5","5.5"]},"Ankylos C/X":{"sizes":["A 3.5","B 4.5","C 5.5","D 7.0"],"notes":["MUA not available"]},"XiVE":{"sizes":["3.0","3.4","3.8","4.5","5.5"],"notes":["MUA not available"]},"Frialit-2":{"sizes":["3.4","3.8","4.5","5.5","6.5"],"notes":["MUA not available"]}},"Ditron Dental USA":{"MPI Molecular Precision Implant":{"sizes":["3.3","3.5","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"ULT Ultimate Precision Implant":{"sizes":["3.75","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"OPI One-Piece Implant":{"sizes":["3.0","3.3"],"notes":["MUA not available","Must be 3rd-party parts"]},"Tissue Level 1":{"sizes":["3.75","4.2","5.0"],"notes":["MUA not available","Must be 3rd-party parts"]}},"Glidewell":{"Hahn Tapered Implant":{"sizes":["3.0","3.5","4.3","5.0","7.0"]},"Inclusive Tapered Implant":{"sizes":["3.2","3.7","4.2","4.7","5.7"]},"Inclusive Tapered Implant System":{"sizes":["3.0","3.5","4.5"]}},"Hiossen / Osstem":{"ETIII SA / ETIII NH":{"sizes":["3.2","3.5","4.0","4.5","5.0","6.0","7.0"]},"ETIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]}},"Implant Direct":{"Legacy / Legacy1 / Legacy2 / Legacy3":{"sizes":["3.2","3.7","4.2","4.7","5.7","7.0"]},"InterActive":{"sizes":["3.2","3.7","4.3","5.0"]},"RePlant":{"sizes":["3.2","3.7","4.7","5.7"]},"SwishPlant / SwishPlus":{"sizes":["3.3","4.1","4.8"]},"GoDirect":{"sizes":["3.7","4.7","5.7"]},"ScrewPlant / ScrewPlus":{"sizes":["3.2","3.7","4.7","5.7"]}},"Intra-Lock":{"Blossom / Gold&Blue / Internal Connection":{"sizes":["3.3","3.75","4.0","4.75","5.0","6.0"],"notes":["MUA not available"]}},"Keystone Dental":{"Genesis":{"sizes":["3.5","3.8","4.5","5.5"]},"Genesis Active":{"sizes":["3.2","3.7","4.2","5.2"]},"PrimaConnex Tapered":{"sizes":["3.5","4.1","5.0"]},"Prima Plus Conical":{"sizes":["3.5","4.0","4.5","5.0"]},"Molaris":{"sizes":["5.0","6.0"]}},"MegaGen":{"AnyRidge":{"sizes":["3.3","3.5","4.0","4.5","5.0","5.5","6.0","6.5","7.0","8.0"]},"AnyOne":{"sizes":["3.5","4.0","4.5","5.0","5.5","6.0","7.0"]},"BlueDiamond":{"sizes":["3.5","4.0","4.5","5.0"]},"EZPlus / Rescue / M-series legacy":{"sizes":["3.3","3.5","4.0","4.5","5.0","6.0"]}},"MIS Implants":{"SEVEN":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"C1":{"sizes":["3.3","3.75","4.2","5.0"]},"V3":{"sizes":["3.3","3.9","4.3","5.0"]},"M4":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"B+":{"sizes":["3.3","3.75","4.2","5.0","6.0"]}},"Neodent":{"Grand Morse Helix GM":{"sizes":["2.9","3.5","3.75","4.0","4.3","5.0","6.0"]},"Grand Morse Drive GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Titamax GM / Titamax EX GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Alvim CM / Drive CM / Helix CM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Facility / Narrow GM":{"sizes":["2.9"]},"Zi Ceramic Implant":{"sizes":["3.75","4.3"],"notes":["MUA not available"]},"Zygoma-S GM":{"sizes":["4.0","4.3"]}},"Neoss":{"ProActive / NeoLoc":{"sizes":["3.25","3.5","4.0","4.5","5.0","5.5"],"notes":["MUA not available"]}},"Nobel Biocare":{"NobelActive TiUltra":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelActive Internal / NobelActive":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelParallel Conical Connection":{"sizes":["3.75","4.3","5.0"]},"NobelReplace Conical Connection":{"sizes":["3.5","4.3","5.0","6.0"]},"NobelReplace Tapered / Select Tapered":{"sizes":["3.5","4.3","5.0","6.0"]},"Brånemark System Mk III / Mk IV":{"sizes":["3.3","3.75","4.0","5.0","6.0"]},"NobelSpeedy Groovy / NobelSpeedy Replace":{"sizes":["3.3","4.0","4.3","5.0"]},"NobelPearl Ceramic Implant":{"sizes":["3.75","4.2","5.0"]},"NobelZygoma / Zygoma TiUltra":{"sizes":["4.0","4.2"]}},"Noris Medical":{"Tuff / Tuff Pro":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"Cortical / PteryFit":{"sizes":["3.3","3.75","4.2","5.0"]},"Zygomatic":{"sizes":["4.2","4.5"]}},"NucleOSS":{"T6 / T5":{"sizes":["3.3","3.7","4.1","4.8","5.5"]}},"OCO Biomedical":{"Engage":{"sizes":["3.0","3.25","4.0","5.0","6.0"]},"ERI / Mini / One-piece variants":{"sizes":["2.8","3.0","3.25","4.0"]}},"Osstem":{"TSIII":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0","7.0"]},"TSIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]},"SS / US / MS legacy lines":{"sizes":["3.0","3.5","4.0","4.5","5.0"]}},"Paltop / Keystone":{"Paltop Advanced / Dynamic":{"sizes":["3.25","3.75","4.2","5.0","6.0"],"notes":["MUA not available"]}},"Preat / LOCATOR Implant":{"Legacy overdenture implants":{"sizes":["2.4","2.9","3.3"]}},"Shatkin F.I.R.S.T.":{"Mini Dental Implants":{"sizes":["1.8","2.1","2.4","2.9"]}},"Southern Implants":{"External Hex / Internal Hex / Tri-Nex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"Co-Axis":{"sizes":["3.5","4.0","5.0","6.0"]},"INVERTA":{"sizes":["3.5","4.0","4.5","5.0"]}},"Straumann":{"Tissue Level Standard / Standard Plus":{"sizes":["NNC 3.5","RN 4.8","WN 6.5"]},"Bone Level":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"Bone Level Tapered BLT":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"BLX":{"sizes":["RB 3.5","RB 3.75","RB 4.0","RB 4.5","WB 5.0","WB 5.5","WB 6.5"]},"TLX":{"sizes":["NT 3.75","RT 4.5","WT 5.5","WT 6.5"]},"PURE Ceramic Implant":{"sizes":["3.3","4.1"]},"SP / TE / SLA legacy tissue-level variants":{"sizes":["3.3","4.1","4.8"],"notes":["MUA not available"]}},"Sweden & Martina":{"Prama":{"sizes":["3.3","3.8","4.25","5.0"],"notes":["MUA not available"]},"Outlink2 / Shelta":{"sizes":["3.3","3.8","4.25","5.0","6.0"],"notes":["MUA not available"]}},"ZimVie":{"TSX":{"sizes":["3.7","4.1","4.7","6.0"]},"Trabecular Metal Dental Implant":{"sizes":["3.7","4.1","4.7","6.0"]},"Eztetic":{"sizes":["3.1"],"notes":["MUA not available"]},"Encode Emergence 3-in-1 Healing Abutment System":{"sizes":[]}},"ZimVie / 3i":{"OSSEOTITE Certain":{"sizes":["3.25","4.0","5.0","6.0"]},"OSSEOTITE External Hex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"T3 / T3 PRO":{"sizes":["3.25","4.0","5.0","6.0"]}},"ZimVie / Zimmer Biomet":{"Tapered Screw-Vent TSV":{"sizes":["3.7","4.1","4.7","6.0"]}},"Zuga Medical":{"Zuga Dental Implant System / Bone Level":{"sizes":["3.5","4.3","5.0"],"notes":["MUA not available"]}},"Little Implant Co. / OsteoReady":{"The Marc Nevins":{"sizes":["3.5 internal hex; implant diameters 3.85","4.2","5.0","6.0"],"notes":["MUA not available"]},"The Pamela Ray":{"sizes":["3.5 internal hex; implant diameter 3.85"],"notes":["MUA not available"]},"Performance":{"sizes":["3.5 internal hex;"],"notes":["MUA not available"]}},"Paragon / Core-Vent":{"Core-Vent":{"sizes":["3.5","4.5"],"notes":["MUA not available"]}},"Paragon / Centerpulse / Zimmer":{"Screw-Vent / Tapered Screw-Vent":{"sizes":["3.5","4.5","5.7"]}},"Nobel Biocare / Steri-Oss":{"Nobel Replace External Hex / Steri-Oss Replace":{"sizes":["3.5","4.3","5.0","6.0"]}},"Steri-Oss":{"Hex-Loc":{"sizes":["3.25 / 3.3"]}},"Sulzer Calcitek":{"Omniloc":{"sizes":["3.25","4.0"],"notes":["MUA not available"]}},"Calcitek / Zimmer legacy":{"Integral":{"sizes":["3.25","4.0"]}},"Paragon Implant Mfg.":{"GEN5 / GEN5+":{"sizes":["3.5","4.5"]}}};
+var IMPLANTS_ALL={"ACE Surgical":{"Infinity / Internal Hex":{"sizes":["3.3","3.7","4.2","4.7","5.7"]}},"Adin":{"Touareg / Touareg-S":{"sizes":["3.0","3.5","3.75","4.2","5.0","6.0"]},"Swell":{"sizes":["3.5","3.75","4.2","5.0","6.0"]},"CloseFit":{"sizes":["3.3","3.75","4.2","5.0"]},"One / Narrow":{"sizes":["3.0","3.3","3.75"]}},"Bicon":{"Bicon SHORT Implants":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0"],"notes":["MUA not available"]},"Bicon Max 2.5 / 3.0 connection implants":{"sizes":["2.5 connection","3.0 connection"],"notes":["MUA not available"]}},"BioHorizons":{"Tapered Internal":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Plus":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered Pro":{"sizes":["3.0","3.4","3.8","4.6","5.8"]},"Tapered 3.0":{"sizes":["3.0"]},"Internal":{"sizes":["3.5","4.0","5.0","6.0"]},"External":{"sizes":["3.5","4.0","5.0","6.0"]}},"BlueSkyBio":{"Bio | Max | Narrow / Internal Hex lines":{"sizes":["3.3","3.7","4.0","4.6","5.0","5.5"]}},"CAMLOG":{"CAMLOG Screw-Line":{"sizes":["3.3","3.8","4.3","5.0","6.0"],"notes":["MUA not available"]},"CONELOG Progressive-Line":{"sizes":["3.3","3.8","4.3","5.0"],"notes":["MUA not available"]}},"Dentium":{"Implantium":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"SuperLine":{"sizes":["3.4","3.8","4.3","4.8","5.3","6.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"NR Line / SlimLine":{"sizes":["2.5","3.1"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]},"Bright / other regional lines":{"sizes":["3.5","4.0","4.5","5.0"],"notes":["MUA not available","Must be 3rd-party parts","NO ANGLED"]}},"Dentsply Sirona":{"Astra Tech Implant System EV":{"sizes":["3.0","3.6","4.2","4.8","5.4"]},"Astra Tech OsseoSpeed TX":{"sizes":["3.0","3.5","4.0","4.5","5.0"],"notes":["MUA not available"]},"DS PrimeTaper EV":{"sizes":["3.6","4.2","4.8"]},"DS OmniTaper EV":{"sizes":["3.4","3.8","4.5","5.5"]},"Ankylos C/X":{"sizes":["A 3.5","B 4.5","C 5.5","D 7.0"],"notes":["MUA not available"]},"XiVE":{"sizes":["3.0","3.4","3.8","4.5","5.5"],"notes":["MUA not available"]},"Frialit-2":{"sizes":["3.4","3.8","4.5","5.5","6.5"],"notes":["MUA not available"]}},"Ditron Dental USA":{"MPI Molecular Precision Implant":{"sizes":["3.3","3.5","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"ULT Ultimate Precision Implant":{"sizes":["3.75","4.2","5.0","6.0"],"notes":["MUA not available","Must be 3rd-party parts"]},"OPI One-Piece Implant":{"sizes":["3.0","3.3"],"notes":["MUA not available","Must be 3rd-party parts"]},"Tissue Level 1":{"sizes":["3.75","4.2","5.0"],"notes":["MUA not available","Must be 3rd-party parts"]}},"Glidewell":{"Hahn Tapered Implant":{"sizes":["3.0","3.5","4.3","5.0","7.0"]},"Inclusive Tapered Implant":{"sizes":["3.2","3.7","4.2","4.7","5.7"]},"Inclusive Tapered Implant System":{"sizes":["3.0","3.5","4.5"]}},"Hiossen / Osstem":{"ETIII SA / ETIII NH":{"sizes":["3.2","3.5","4.0","4.5","5.0","6.0","7.0"]},"ETIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]}},"Implant Direct":{"Legacy / Legacy1 / Legacy2 / Legacy3":{"sizes":["3.2","3.7","4.2","4.7","5.7","7.0"]},"InterActive":{"sizes":["3.2","3.7","4.3","5.0"]},"RePlant":{"sizes":["3.2","3.7","4.7","5.7"]},"SwishPlant / SwishPlus":{"sizes":["3.3","4.1","4.8"]},"GoDirect":{"sizes":["3.7","4.7","5.7"]},"ScrewPlant / ScrewPlus":{"sizes":["3.2","3.7","4.7","5.7"]}},"Intra-Lock":{"Blossom / Gold&Blue / Internal Connection":{"sizes":["3.3","3.75","4.0","4.75","5.0","6.0"],"notes":["MUA not available"]}},"Keystone Dental":{"Genesis":{"sizes":["3.5","3.8","4.5","5.5"]},"Genesis Active":{"sizes":["3.2","3.7","4.2","5.2"]},"PrimaConnex Tapered":{"sizes":["3.5","4.1","5.0"]},"Prima Plus Conical":{"sizes":["3.5","4.0","4.5","5.0"]},"Molaris":{"sizes":["5.0","6.0"]}},"MegaGen":{"AnyRidge":{"sizes":["3.3","3.5","4.0","4.5","5.0","5.5","6.0","6.5","7.0","8.0"]},"AnyOne":{"sizes":["3.5","4.0","4.5","5.0","5.5","6.0","7.0"]},"BlueDiamond":{"sizes":["3.5","4.0","4.5","5.0"]},"EZPlus / Rescue / M-series legacy":{"sizes":["3.3","3.5","4.0","4.5","5.0","6.0"]}},"MIS Implants":{"SEVEN":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"C1":{"sizes":["3.3","3.75","4.2","5.0"]},"V3":{"sizes":["3.3","3.9","4.3","5.0"]},"M4":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"B+":{"sizes":["3.3","3.75","4.2","5.0","6.0"]}},"Neodent":{"Grand Morse Helix GM":{"sizes":["2.9","3.5","3.75","4.0","4.3","5.0","6.0"]},"Grand Morse Drive GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Titamax GM / Titamax EX GM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Alvim CM / Drive CM / Helix CM":{"sizes":["3.5","3.75","4.0","4.3","5.0"]},"Facility / Narrow GM":{"sizes":["2.9"]},"Zi Ceramic Implant":{"sizes":["3.75","4.3"],"notes":["MUA not available"]},"Zygoma-S GM":{"sizes":["4.0","4.3"]}},"Neoss":{"ProActive / NeoLoc":{"sizes":["3.25","3.5","4.0","4.5","5.0","5.5"],"notes":["MUA not available"]}},"Nobel Biocare":{"NobelActive TiUltra":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelActive Internal / NobelActive":{"sizes":["3.0","3.5","4.3","5.0","5.5"]},"NobelParallel Conical Connection":{"sizes":["3.75","4.3","5.0"]},"NobelReplace Conical Connection":{"sizes":["3.5","4.3","5.0","6.0"]},"NobelReplace Tapered / Select Tapered":{"sizes":["3.5","4.3","5.0","6.0"]},"Brånemark System Mk III / Mk IV":{"sizes":["3.3","3.75","4.0","5.0","6.0"]},"NobelSpeedy Groovy / NobelSpeedy Replace":{"sizes":["3.3","4.0","4.3","5.0"]},"NobelPearl Ceramic Implant":{"sizes":["3.75","4.2","5.0"]},"NobelZygoma / Zygoma TiUltra":{"sizes":["4.0","4.2"]}},"Noris Medical":{"Tuff / Tuff Pro":{"sizes":["3.3","3.75","4.2","5.0","6.0"]},"Cortical / PteryFit":{"sizes":["3.3","3.75","4.2","5.0"]},"Zygomatic":{"sizes":["4.2","4.5"]}},"NucleOSS":{"T6 / T5":{"sizes":["3.3","3.7","4.1","4.8","5.5"]}},"OCO Biomedical":{"Engage":{"sizes":["3.0","3.25","4.0","5.0","6.0"]},"ERI / Mini / One-piece variants":{"sizes":["2.8","3.0","3.25","4.0"]}},"Osstem":{"TSIII":{"sizes":["3.0","3.5","4.0","4.5","5.0","6.0","7.0"]},"TSIV":{"sizes":["3.5","4.0","4.5","5.0","6.0"]},"SS / US / MS legacy lines":{"sizes":["3.0","3.5","4.0","4.5","5.0"]}},"Paltop / Keystone":{"Paltop Advanced / Dynamic":{"sizes":["3.25","3.75","4.2","5.0","6.0"],"notes":["MUA not available"]}},"Preat / LOCATOR Implant":{"Legacy overdenture implants":{"sizes":["2.4","2.9","3.3"]}},"Shatkin F.I.R.S.T.":{"Mini Dental Implants":{"sizes":["1.8","2.1","2.4","2.9"]}},"Southern Implants":{"External Hex / Internal Hex / Tri-Nex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"Co-Axis":{"sizes":["3.5","4.0","5.0","6.0"]},"INVERTA":{"sizes":["3.5","4.0","4.5","5.0"]}},"Straumann":{"Tissue Level Standard / Standard Plus":{"sizes":["NNC 3.5","RN 4.8","WN 6.5"]},"Bone Level":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"Bone Level Tapered BLT":{"sizes":["NC 3.3","RC 4.1","RC 4.8"]},"BLX":{"sizes":["RB 3.5","RB 3.75","RB 4.0","RB 4.5","WB 5.0","WB 5.5","WB 6.5"]},"TLX":{"sizes":["NT 3.75","RT 4.5","WT 5.5","WT 6.5"]},"PURE Ceramic Implant":{"sizes":["3.3","4.1"]},"SP / TE / SLA legacy tissue-level variants":{"sizes":["3.3","4.1","4.8"],"notes":["MUA not available"]}},"Sweden & Martina":{"Prama":{"sizes":["3.3","3.8","4.25","5.0"],"notes":["MUA not available"]},"Outlink2 / Shelta":{"sizes":["3.3","3.8","4.25","5.0","6.0"],"notes":["MUA not available"]}},"ZimVie":{"TSX":{"sizes":["3.7","4.1","4.7","6.0"]},"TSV (Tapered Screw-Vent)":{"sizes":["3.7","4.1","4.7","6.0"]},"Trabecular Metal Dental Implant":{"sizes":["3.7","4.1","4.7","6.0"]},"Eztetic":{"sizes":["3.1"],"notes":["MUA not available"]},"Encode Emergence 3-in-1 Healing Abutment System":{"sizes":[]}},"ZimVie / 3i":{"OSSEOTITE Certain":{"sizes":["3.25","4.0","5.0","6.0"]},"OSSEOTITE External Hex":{"sizes":["3.25","3.75","4.0","5.0","6.0"]},"T3 / T3 PRO":{"sizes":["3.25","4.0","5.0","6.0"]}},"ZimVie / Zimmer Biomet":{"Tapered Screw-Vent TSV":{"sizes":["3.7","4.1","4.7","6.0"]}},"Zuga Medical":{"Zuga Dental Implant System / Bone Level":{"sizes":["3.5","4.3","5.0"],"notes":["MUA not available"]}},"Little Implant Co. / OsteoReady":{"The Marc Nevins":{"sizes":["3.5 internal hex; implant diameters 3.85","4.2","5.0","6.0"],"notes":["MUA not available"]},"The Pamela Ray":{"sizes":["3.5 internal hex; implant diameter 3.85"],"notes":["MUA not available"]},"Performance":{"sizes":["3.5 internal hex;"],"notes":["MUA not available"]}},"Paragon / Core-Vent":{"Core-Vent":{"sizes":["3.5","4.5"],"notes":["MUA not available"]}},"Paragon / Centerpulse / Zimmer":{"Screw-Vent / Tapered Screw-Vent":{"sizes":["3.5","4.5","5.7"]}},"Nobel Biocare / Steri-Oss":{"Nobel Replace External Hex / Steri-Oss Replace":{"sizes":["3.5","4.3","5.0","6.0"]}},"Steri-Oss":{"Hex-Loc":{"sizes":["3.25 / 3.3"]}},"Sulzer Calcitek":{"Omniloc":{"sizes":["3.25","4.0"],"notes":["MUA not available"]}},"Calcitek / Zimmer legacy":{"Integral":{"sizes":["3.25","4.0"]}},"Paragon Implant Mfg.":{"GEN5 / GEN5+":{"sizes":["3.5","4.5"]}}};
 // Step 6 — Implant Brand (only when implants exist). Per-site cascading: Brand → Line → Platform.
 var brand={}; // tooth -> {brand:'', line:'', platform:''}
 function implantTeeth(){ return archTeeth().filter(function(n){ return sel[n] && sel[n].type==='imp'; }); }
@@ -1864,7 +1960,7 @@ function renderRemovableStage(stage){
  if(nm==='Buy a Splint'){ renderGuardStep(); return; }
  if(nm==='Review'){
    stage.innerHTML=renderReview();
-   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -2136,7 +2232,7 @@ function renderSharedEndStep(stage, nm){
 /* ===================== SURGICAL GUIDES GUIDED FLOW ===================== */
 function renderGuidesStage(stage){
  var nm=STEPS()[step];
- if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; }); return; }
+ if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); return; }
  if(nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
  if(nm==='Guide Type'){
@@ -2268,17 +2364,31 @@ function renderGdStdBrand(stage){
 // Guided Kit (type-to-search single select; verified ROE list, no per-item price)
 function renderGdStdKit(stage){
  var q=(gd._kitQuery||'').toLowerCase();
+ // Which implant brand did the doctor pick on the chart? Use it to suggest the matching kit.
+ var pickedBrand='';
+ try{ var ss=gd.stdSites||{}; for(var k in ss){ if(ss[k]&&ss[k].brand){ pickedBrand=ss[k].brand; break; } } }catch(e){}
+ var suggested=[];
+ if(pickedBrand && !q){
+   var bw=pickedBrand.toLowerCase().split(/[ \/]/).filter(function(w){return w.length>2 && w!=='implant' && w!=='dental';})[0]||'';
+   if(bw){ suggested=GUIDED_KITS.filter(function(k){ return k.toLowerCase().indexOf(bw)>=0; }); }
+ }
  var list=GUIDED_KITS.filter(function(k){ return !q || k.toLowerCase().indexOf(q)>=0; });
- var opts=list.map(function(k){ var on=gd.stdKit===k; return '<button type="button" class="rem-opt'+(on?' on':'')+'" data-kit="'+k.replace(/"/g,'')+'"><span class="zb-check'+(on?' on':'')+'"></span>'+k+'</button>'; }).join('');
+ function optHtml(k){ var on=gd.stdKit===k; return '<button type="button" class="rem-opt'+(on?' on':'')+'" data-kit="'+k.replace(/"/g,'')+'"><span class="zb-check'+(on?' on':'')+'"></span>'+k+'</button>'; }
+ var suggHtml='';
+ if(suggested.length){
+   suggHtml='<div style="margin-bottom:10px"><div class="rem-sub-lbl" style="color:var(--teal-d);font-weight:800">\u2713 Suggested for '+pickedBrand+'</div>'+
+     suggested.map(optHtml).join('')+
+     '<div style="border-bottom:1px solid var(--line);margin:10px 0 8px"></div><div class="rem-sub-lbl" style="color:var(--muted)">Or choose any kit</div></div>';
+ }
+ var opts=list.map(optHtml).join('');
  var isOther = (gd.stdKit||'').indexOf('Other')>=0;
  var notesUI='<div id="kitNotesWrap" style="margin-top:8px'+(isOther?'':';display:none')+'"><div class="rem-sub-lbl">Kit details (notes)</div><textarea id="kitNotes" rows="3" placeholder="Enter the kit / system details\u2026" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;resize:vertical">'+(gd.stdKitNotes||'').replace(/</g,'&lt;')+'</textarea></div>';
  stage.innerHTML='<p class="hint">Guided Kit <span style="color:var(--muted)">(required)</span></p><div style="padding:6px 16px">'+
    '<input id="kitSearch" type="text" placeholder="Type to search kits\u2026" value="'+(gd._kitQuery||'').replace(/"/g,'&quot;')+'" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:14px;margin-bottom:8px">'+
-   '<div id="kitList" style="max-height:46vh;overflow-y:auto">'+opts+(list.length?'':'<div class="rem-note">No kit matches \u2014 pick \u201COther\u201D and add a note.</div>')+'</div>'+notesUI+'</div>';
+   '<div id="kitList" style="max-height:46vh;overflow-y:auto">'+suggHtml+opts+(list.length?'':'<div class="rem-note">No kit matches \u2014 pick \u201COther\u201D and add a note.</div>')+'</div>'+notesUI+'</div>';
  var si=stage.querySelector('#kitSearch'); if(si){ si.oninput=function(){ gd._kitQuery=si.value; renderGdStdKit(stage); var s2=stage.querySelector('#kitSearch'); if(s2){ s2.focus(); s2.setSelectionRange(s2.value.length,s2.value.length); } }; }
  [].forEach.call(stage.querySelectorAll('.rem-opt[data-kit]'),function(b){ b.onclick=function(){
     gd.stdKit=b.getAttribute('data-kit');
-    // update selection in place (no full re-render -> no scroll jump)
     [].forEach.call(stage.querySelectorAll('.rem-opt[data-kit]'),function(x){ var on=x.getAttribute('data-kit')===gd.stdKit; x.classList.toggle('on',on); var c=x.querySelector('.zb-check'); if(c) c.classList.toggle('on',on); });
     var wrap=document.getElementById('kitNotesWrap'); if(wrap) wrap.style.display=(gd.stdKit.indexOf('Other')>=0)?'':'none';
     refreshBar();
@@ -2805,7 +2915,7 @@ function renderGdDenture(stage){
 
 function renderFullArchStage(stage){
  var nm=STEPS()[step];
- if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; }); return; }
+ if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); return; }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
  if(nm==='Arch'){
@@ -3499,7 +3609,7 @@ function renderOrthoStage(stage){
  var nm=STEPS()[step];
  if(nm==='Review'){
    stage.innerHTML=renderReview();
-   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -3694,7 +3804,7 @@ function renderAlignStage(stage){
   var nm=STEPS()[step];
   if(nm==='Review'){
     stage.innerHTML=renderReview();
-    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
     return;
   }
   if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -3835,7 +3945,7 @@ function renderSplintStage(stage){
  var nm=STEPS()[step];
  if(nm==='Review'){
    stage.innerHTML=renderReview();
-   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; refreshAll(); } }; });
+   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
@@ -4042,6 +4152,22 @@ function remSyncGaps(){
  if(remIsDenture()) return;
  Object.keys(rem.toothState).forEach(function(n){ var s=rem.toothState[n]; if(s==='missing'||s==='extract') rem.extractTeeth[n]=true; });
 }
+// When a tooth is marked Missing on a partial, the teeth immediately mesial/distal
+// auto-become Abutment (blue) — unless the user already gave them a state. Still toggleable.
+function remAutoAbutments(n){
+ if(remIsDenture()) return;
+ // arch ordering so "adjacent" follows the actual dental arch, not raw number
+ var upper=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+ var lower=[32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17];
+ var seq = (n>=1&&n<=16) ? upper : lower;
+ var idx = seq.indexOf(n);
+ if(idx<0) return;
+ [idx-1, idx+1].forEach(function(j){
+   if(j<0 || j>=seq.length) return;
+   var t=seq[j];
+   if(!rem.toothState[t]) rem.toothState[t]='abutment';   // only fill present teeth; never override a choice
+ });
+}
 function bindRemTeeth(){
  [].forEach.call(document.querySelectorAll('.tooth[data-rn]'),function(g){
    g.addEventListener('click',function(){
@@ -4053,6 +4179,7 @@ function bindRemTeeth(){
        var cur=rem.toothState[n]||'present';
        var nxt=order[(order.indexOf(cur)+1)%order.length];
        if(nxt==='present') delete rem.toothState[n]; else rem.toothState[n]=nxt;
+       if(nxt==='missing') remAutoAbutments(n);   // auto-blue the neighbors as abutments
        remSyncGaps();
      }
      renderStage(); refreshBar();
@@ -4130,8 +4257,21 @@ function renderLauncher(){
    '</button>';
  }).join('');
  stage.innerHTML='<div style="padding:14px 16px">'+
+   '<button type="button" id="airxBackTop" style="display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--teal-d);border-radius:20px;padding:8px 14px 8px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>AI Rx Home</button>'+
    '<div class="launch-title">Let\u2019s write up your patient</div>'+
    '<div class="launch-sub">Pick what you\u2019re sending us \u2014 we\u2019ll walk it through together.</div>'+
+   '<div class="eng-card airx-card" id="airxCard">'+
+     '<span class="eng-ic">\u2728</span>'+
+     '<div class="airxc-body">'+
+       '<div class="airxc-name">ROE <b>AI&nbsp;RX</b></div>'+
+       '<div class="airxc-bar">'+
+         '<textarea id="airxLQ" rows="1" placeholder="Type the case\u2026 e.g. Zirconia crown #8, A2" autocomplete="off"></textarea>'+
+         '<button type="button" id="airxLMic" title="Hold to talk" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>'+
+         '<button type="button" id="airxLGo" title="Write up Rx" aria-label="Submit" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>'+
+       '</div>'+
+       '<div id="airxLMsg"></div>'+
+     '</div>'+
+   '</div>'+
    cards+
    '<button type="button" class="eng-card" data-soon="1" style="opacity:.7">'+
      '<span class="eng-ic">\u{1F527}</span>'+
@@ -4151,6 +4291,9 @@ function renderLauncher(){
  '</div>';
  var ai=document.getElementById('addInfoCard'); if(ai) ai.onclick=function(){ renderInfoPage(); };
  var dc=document.getElementById('decipherCard'); if(dc) dc.onclick=function(){ triageReset(); renderTriagePage(); };
+ // AI Rx bar card (top of launcher) — bind its own input/mic/submit
+ airxInit({q:'airxLQ',go:'airxLGo',mic:'airxLMic',msg:'airxLMsg',rep:null});
+ var abt=document.getElementById('airxBackTop'); if(abt) abt.onclick=function(){ if(typeof airxGoHome==='function') airxGoHome(); };
  [].forEach.call(stage.querySelectorAll('.eng-card[data-soon]'),function(b){ if(b.getAttribute('data-addinfo')) return; b.onclick=function(){
    stage.innerHTML='<div class="laterwrap"><div class="big">\u{1F6A7}</div><b style="color:var(--ink);font-size:16px">Removable Repairs</b>'+
      '<p style="margin-top:8px;line-height:1.5"><b>Coming soon.</b> Relines, repairs, clasp additions and tooth replacements will live here.</p>'+
@@ -4172,6 +4315,812 @@ function renderLauncher(){
    };
  });
 }
+
+/* ===================== AI Rx — search-bar intake (launcher option 1) =====================
+   Free text / voice -> Claude parses to canonical case -> drives the REAL Fixed workflow:
+   startCase('fixed'), set curArch + sel/mat/shade, then auto-advance through the engine's
+   own steps (gated by its own stepOK()) to the first genuinely-missing step, or Review. */
+var AIRX_ENDPOINT='/.netlify/functions/claude'; // PRODUCTION — key stays server-side in the Netlify function
+var AIRX_MODEL='claude-sonnet-4-6';
+function airxInit(ids){
+  ids=ids||{q:'airxQ',go:'airxGo',mic:'airxMic',msg:'airxMsg',rep:'airxRep'};
+  var q=document.getElementById(ids.q), go=document.getElementById(ids.go),
+      mic=document.getElementById(ids.mic), msg=document.getElementById(ids.msg);
+  if(!q) return;
+  function syncBtn(){ q.style.height='auto'; q.style.height=Math.min(q.scrollHeight,140)+'px'; var on=!!q.value.trim(); go.disabled=!on; go.style.opacity=on?'1':'.4'; }
+  if(!ids.estimator){
+    q.oninput=syncBtn; q.addEventListener('change',syncBtn); q.addEventListener('keyup',syncBtn); q.addEventListener('paste',function(){ setTimeout(syncBtn,0); });
+    syncBtn();
+    q.onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); airxSubmit(ids); } };
+    go.onclick=function(){ airxSubmit(ids); };
+  }
+  // voice — LIVE streaming speech-to-text via Deepgram, like Claude's mic.
+  // Tap to start -> opens a WebSocket straight to Deepgram (authed by a 30-60s token minted
+  // server-side) -> mic audio streams up, transcript streams back in REAL TIME as you talk.
+  // Tap again to stop. No browser Web Speech API, so the repeat/stack bug cannot occur.
+  var dgSocket=null, dgRec=null, dgStream=null, recording=false, dgSession=0;
+  var startText='', committedFinal='';   // committedFinal = finalized words this session
+  function setMicIdle(){ recording=false; mic.classList.remove('live'); mic.style.background='#e7f1f1'; mic.style.color='var(--teal-d)'; }
+  function setMicLive(){ recording=true; mic.classList.add('live'); mic.style.background='#C0392B'; mic.style.color='#fff'; }
+  function joinSep(a,b){ a=a||''; b=b||''; if(!a) return b; if(!b) return a; return a + (/\s$/.test(a)?'':' ') + b; }
+  function pickMime(){
+    var prefs=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/ogg','audio/mp4'];
+    if(window.MediaRecorder && MediaRecorder.isTypeSupported){ for(var i=0;i<prefs.length;i++){ if(MediaRecorder.isTypeSupported(prefs[i])) return prefs[i]; } }
+    return '';
+  }
+  function cleanupStream(){ if(dgStream){ try{ dgStream.getTracks().forEach(function(t){t.stop();}); }catch(e){} dgStream=null; } }
+
+  function startStreaming(){
+    if(recording) return;
+    dgSession++;                     // new session id; stale closes from prior sessions are ignored
+    startText=(q.value||'').trim(); committedFinal='';
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder || !window.WebSocket){
+      if(msg) msg.textContent='Live mic not supported here \u2014 type instead.'; return;
+    }
+    if(msg) msg.textContent='Starting\u2026';
+    // 1) get a short-lived token from our Netlify function (read as text first so an empty/HTML
+    //    response — e.g. function not deployed, 404 — gives a clear message instead of a JSON crash)
+    fetch('/.netlify/functions/transcribe',{method:'POST'})
+      .then(function(r){ return r.text().then(function(tx){ return {status:r.status, ok:r.ok, tx:tx}; }); })
+      .then(function(o){
+        if(!o.ok){ if(msg) msg.textContent='Mic auth failed ('+o.status+'). '+(o.tx?o.tx.slice(0,120):'no response \u2014 is the transcribe function deployed?'); return; }
+        var j; try{ j=JSON.parse(o.tx); }catch(e){ if(msg) msg.textContent='Mic auth: bad response from server (not JSON). Check the transcribe function & DEEPGRAM_API_KEY.'; return; }
+        if(!j || !j.access_token){ if(msg) msg.textContent='Mic auth: no token returned. '+((j&&j.error)||''); return; }
+        openMicAndSocket(j.access_token);
+      })
+      .catch(function(err){ if(msg) msg.textContent='Mic start failed: '+(err&&err.message?err.message:err); });
+  }
+
+  function openMicAndSocket(token){
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      dgStream=stream;
+      var mime=pickMime();
+      // Deepgram live params: medical model for dental vocab, smart_format/numerals, interim results for live feel.
+      var url='wss://api.deepgram.com/v1/listen?model=nova-3-medical&smart_format=true&punctuate=true&numerals=true&interim_results=true&language=en';
+      // Browser WebSocket can't set Authorization header -> use the token subprotocol form.
+      // Browser WebSocket can't set headers. A JWT from /auth/grant uses the BEARER scheme,
+      // passed as the Sec-WebSocket-Protocol subprotocol: ['bearer', <jwt>]. (A raw API key
+      // would use ['token', <key>] — different scheme; using the wrong one connects but returns nothing.)
+      dgSocket=new WebSocket(url, ['bearer', token]);
+      dgSocket.onopen=function(){
+        setMicLive(); if(msg) msg.textContent='Listening\u2026 tap mic to stop';
+        try{ dgRec = mime ? new MediaRecorder(dgStream,{mimeType:mime}) : new MediaRecorder(dgStream); }
+        catch(e){ dgRec=new MediaRecorder(dgStream); }
+        dgRec.ondataavailable=function(ev){ if(ev.data && ev.data.size>0 && dgSocket && dgSocket.readyState===1) dgSocket.send(ev.data); };
+        dgRec.start(250);   // send a chunk every 250ms for low-latency live transcript
+      };
+      dgSocket.onmessage=function(ev){
+        var d; try{ d=JSON.parse(ev.data); }catch(e){ return; }
+        // Deepgram sends a Metadata/Error type too — surface anything that isn't a transcript.
+        if(d.type==='Error' || d.error){ if(msg) msg.textContent='Deepgram: '+(d.description||d.error||d.message||'error'); return; }
+        if(!d.channel || !d.channel.alternatives || !d.channel.alternatives[0]) return;
+        var t=(d.channel.alternatives[0].transcript||'').trim();
+        if(!t) return;
+        if(d.is_final){
+          committedFinal = joinSep(committedFinal, t);
+          q.value = joinSep(startText, committedFinal);
+        } else {
+          q.value = joinSep(startText, joinSep(committedFinal, t));
+        }
+        syncBtn();
+      };
+      var mySession=dgSession;
+      dgSocket.onerror=function(ev){ if(msg) msg.textContent='Mic connection error (socket). Check key is Member-level.'; };
+      dgSocket.onclose=function(ev){ if(msg && ev && ev.code && ev.code!==1000 && mySession===dgSession){ msg.textContent='Mic closed (code '+ev.code+(ev.reason?': '+ev.reason:'')+')'; } finishStreaming(mySession); };
+    }).catch(function(err){
+      if(msg) msg.textContent = (err && (err.name==='NotAllowedError'||err.name==='SecurityError'))
+        ? 'Microphone blocked \u2014 allow access and try again.' : 'Mic error: '+(err&&err.message?err.message:err);
+    });
+  }
+
+  function stopStreaming(){
+    if(!recording) return;
+    recording=false;                 // flip immediately so the next tap is treated as a fresh start
+    setMicIdle();
+    if(msg) msg.textContent='Finishing\u2026';
+    // Stop recorder + RELEASE THE MIC NOW (don't wait for socket close — that was the 12s delay).
+    try{ if(dgRec && dgRec.state!=='inactive') dgRec.stop(); }catch(e){}
+    cleanupStream();                 // stop getUserMedia tracks right away -> mic is free for next tap
+    // Tell Deepgram we're done so it flushes the final transcript, then close the socket.
+    try{ if(dgSocket && dgSocket.readyState===1){ dgSocket.send(JSON.stringify({type:'CloseStream'})); } }catch(e){}
+    setTimeout(function(){ try{ if(dgSocket) dgSocket.close(); }catch(e){} }, 300);
+  }
+
+  function finishStreaming(mySession){
+    // Ignore a late close from a previous session (user already tapped to start a new one).
+    if(typeof mySession==='number' && mySession!==dgSession) return;
+    if(recording) return;   // a new session is live; don't tear it down
+    cleanupStream();
+    q.value = joinSep(startText, committedFinal).trim(); syncBtn();
+    setMicIdle(); if(msg) msg.textContent='';
+    dgSocket=null; dgRec=null;
+  }
+
+  mic.onclick=function(){ if(recording) stopStreaming(); else startStreaming(); };
+}
+function airxPrompt(text){
+  return [
+"You are the ROE Dental Laboratory AI Rx intake engine. Read a clinician's free-text or spoken case and split it into ONE OR MORE individual lab cases. A single request often contains multiple appliances/restorations (e.g. \"upper denture and a lower partial\" = 2 cases). Return ONLY JSON (no markdown).",
+"","CLINICIAN INPUT:",'\"\"\"'+text+'\"\"\"',"",
+"OUTPUT: { \"cases\":[ <case>, <case>, ... ], \"interpretation\":\"one short overall note\" }",
+"Put SEPARATE physical appliances/arches as SEPARATE cases. An upper-and-lower denture pair is TWO cases (one per arch) unless clearly one appliance spanning 'both'. A simple single-appliance request returns cases with exactly one element.",
+"",
+"ROUTE each case to an engine:",
+"STEP 1 \u2014 ROUTE. Choose engine:",
+'- \"fixed\": crowns, bridges, veneers, inlays/onlays, implant crowns (single-tooth fixed restorations).',
+'- \"removable\": full dentures, partial dentures (cast metal frame), flexible/thermoplastic partials, all-acrylic partials/flippers, unilateral (Nesbit), Essix retainers, Snap-On Smile.',
+'- \"splint\": night guards, bite/occlusal splints, bruxism or TMJ appliances, sports mouthguards, bleaching/whitening trays, and sleep-apnea appliances (Herbst, EMA, TAP, etc.).',
+'- \"guide\": surgical GUIDES for implant placement (single or full-arch), guided surgery, CHROME GuidedSMILE guide, All-on-X GUIDE, zygomatic/pterygoid guided cases. (The surgical guide is the drilling template, NOT the final teeth.)',
+'- \"fullarch\": the full-arch PROSTHESIS / final restoration on implants \u2014 All-on-X final teeth, fixed zirconia hybrid bridge, G-CAM, implant overdenture, Bespoke full-arch. (This is the actual restoration, NOT a guide.) If the doctor says \"all on x\" or \"full arch\" about the TEETH/bridge/restoration, use fullarch; if about the surgical GUIDE, use guide.',
+'- If it is clearly none of these (clear aligners/ortho appliance), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
+"",
+"STEP 2 \u2014 EXTRACT. Output shape depends on engine.",
+"",
+"IF engine = \"fixed\":",
+'{ \"engine\":\"fixed\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"units\":[{\"tooth\":8,\"resto\":\"Crown\",\"material\":\"TLZ\",\"retention\":\"\",\"implantBrand\":\"\",\"implantLine\":\"\",\"implantPlatform\":\"\"}], \"shadeSystem\":\"VITA Classical A1-D4\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
+"  - arch: teeth 1-16 upper, 17-32 lower; both => \"both\".",
+'  - resto: \"Crown\" | \"Bridge\" | \"Veneer\" | \"Implant Crown\". Unspecified crown => \"Crown\". If the doctor mentions an implant, screw-retained/cement-retained, an implant brand, or a platform size, set resto=\"Implant Crown\".',
+'  - material KEY: \"TLZ\"(default zirconia/monolithic/unspecified), \"zRc\"(economy zirconia), \"emaxMono\"(e.max/lithium disilicate), \"emaxLay\"(e.max layered), \"PFZ\". Never invent. (Material is ignored for implant crowns.)',
+'  - IMPLANT FIELDS (only when resto=\"Implant Crown\"): retention = \"Screw-Retained\" | \"Cement-Retained\" | \"Screwmentable\" (\"screw retained\"/\"screw-retained\" => Screw-Retained; \"cement\" => Cement-Retained; \"screwmentable\"/\"screw-mentable\" => Screwmentable). implantBrand = the implant manufacturer/system as spoken (e.g. \"Zimmer TSV\", \"Nobel Active\", \"Straumann BLX\", \"BioHorizons Tapered\"). implantLine = the product line if distinguishable (e.g. \"Tapered Screw-Vent TSV\"). implantPlatform = the platform/diameter number if stated (e.g. \"4.5\", \"RC 4.1\"). OMIT any not stated.',
+'  - shade: if given set shade + matching shadeSystem (default \"VITA Classical A1-D4\"; BL shades use \"IPS e.max / Bleach BL\"). If none stated, OMIT both.',
+"",
+"IF engine = \"removable\":",
+'{ \"engine\":\"removable\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"appliance\":\"denture\", \"dentureKind\":\"new|immediate\", \"dentureType\":\"Traditional Handcrafted Premium\", \"dentureStage\":\"Set-Up and Finish\", \"teeth\":[19,20], \"ret\":\"Finish\", \"clasp\":\"Esthetic clasps (anterior)\", \"gingiva\":\"Original\", \"shadeSystem\":\"VITA Classical (A1\\u2013D4)\", \"shade\":\"B1\", \"interpretation\":\"short note\" }',
+'  - appliance KEY: \"denture\"(full denture) | \"partial\"(cast metal frame) | \"flexible\"(flexible/thermoplastic) | \"acrylic\"(flipper/all-acrylic) | \"unilateral\"(Nesbit) | \"essix\"(clear retainer) | \"snapon\"(Snap-On Smile).',
+'  - If appliance=\"denture\": dentureKind \"new\" (no teeth present) or \"immediate\" (teeth to be extracted). dentureType one of: \"Traditional Handcrafted Premium\",\"Traditional Handcrafted Value\",\"IMPACT Premium\",\"IMPACT Value\",\"Ivotion Premium\",\"Stabiliteeth Only\" (default \"Traditional Handcrafted Premium\"). For immediate dentures, list extraction teeth in \"teeth\".',
+'  - dentureStage (FULL DENTURES) \u2014 map the doctor\u2019s EXACT words; do NOT add steps they didn\u2019t say. \"finish\"/\"finished\"/\"just finish\" => \"Finish in Ivocap\" (finish only). \"set up and finish\"/\"setup and finish\" => \"Set-Up and Finish\". \"set up\"/\"set-up only\" => \"Set-Up Only\". \"bite block\" => \"Bite Block Only\". \"custom tray\"/\"tray\" => \"Custom Tray\". \"reset\" => \"Reset and Return\"; \"reset and finish\" => \"Reset + Finish\". OMIT if no stage stated.',
+'  - gingiva (denture/flexible/acrylic tissue shade) \u2014 ONE of: \"Light Pink\",\"Original\",\"Dark Pink\". \"pink\"/\"regular pink\"/\"standard pink\" => \"Original\". \"light pink\" => \"Light Pink\". \"dark pink\" => \"Dark Pink\". OMIT if not stated.',
+'  - If appliance is partial/flexible/acrylic/unilateral: put the teeth being replaced (missing) in \"teeth\".',
+'  - ret (what the lab returns) \u2014 match the doctor\u2019s words to ONE of: \"Bite Block Only\",\"Set-Up\",\"Set-Up + Finish\",\"Reset\",\"Reset + Finish\",\"Frame only\",\"Frame + Bite Block\",\"Frame + Set-Up\",\"Frame + Set-Up + Finish\",\"Frame + Set-Up + Flexible Finish (Hybrid)\",\"Finish\". \"finish\"/\"finished\"/\"completed\" => \"Finish\". OMIT if not stated.',
+'  - clasp \u2014 if partial/acrylic/unilateral, match to ONE of: \"Standard cast metal clasps\",\"Cast metal + flexible esthetic clasps\",\"Esthetic clasps (anterior)\". \"esthetic clasp(s)\" => \"Esthetic clasps (anterior)\"; \"flexible esthetic\" => \"Cast metal + flexible esthetic clasps\". If flexible appliance, clasp is \"Flexible (tissue-tone) clasps\" or \"Wire clasps\". OMIT if not stated.',
+'  - shade: if given, set shade + shadeSystem (default \"VITA Classical (A1\\u2013D4)\"). If none, OMIT. NOTE: shade only matters when ret includes a set-up/finish/reset \u2014 still extract it if stated.',
+"  - Only include fields actually stated or clearly implied; OMIT anything unknown so the engine asks.",
+"",
+"IF engine = \"fullarch\" (full-arch implant prosthesis: All-on-X final restoration, hybrid, zirconia bridge, overdenture \u2014 NOT a surgical guide):",
+'{ \"engine\":\"fullarch\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower|both\", \"family\":\"zirconia\", \"finalRestoration\":\"\", \"sites\":[4,6,8,9,11,13], \"implantCount\":6, \"stage\":\"\", \"screwBrand\":\"\", \"fpDesign\":\"FP1\", \"interpretation\":\"short note\" }',
+'  - family KEY: \"zirconia\"(TLZ-IB / NobelProcera monolithic zirconia \u2014 the DEFAULT for a fixed full-arch bridge), \"gcam\"(G-CAM Graphenano), \"removable\"(overdenture / LOCATOR / bar / Stabili-Teeth), \"bespoke\"(premium Bespoke design). \"all on x\"/\"all-on-4\"/\"hybrid\"/\"fixed bridge\" with zirconia => zirconia. Never invent.',
+'  - finalRestoration (optional, fixed): mention \"Ti-bar/titanium\", \"coping-free\", \"NobelProcera\", \"G-CAM\". Removable: \"LOCATOR overdenture\", \"bar overdenture\", \"Stabili-Teeth hybrid\".',
+'  - sites: list implant tooth numbers if stated (1-16 upper, 17-32 lower). OR give implantCount (e.g. 4, 5, 6) if only a number is said.',
+'  - stage: \"final\"|\"try-in\"/\"prototype\"|\"iJig\"|\"bite block\"|\"set-up\"|\"finish\". OMIT if not stated.',
+'  - screwBrand: e.g. \"Vortex 1.6\", \"BioHorizons\", \"DESS\", \"Dan Rosen\", \"Nobel temp\". OMIT if not stated.',
+'  - fpDesign: \"FP1\"|\"FP2\"|\"FP3\" if the prosthetic design type is stated. OMIT otherwise.',
+"",
+"IF engine = \"splint\" (night guards, bite splints, bruxism/TMJ appliances, sports mouthguards, sleep appliances):",
+'{ \"engine\":\"splint\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower\", \"prod\":\"clearguard\", \"opt\":\"hard\", \"hardVariant\":\"stone\", \"ffColor\":\"Black\", \"fabricator\":\"roe|client\", \"interpretation\":\"short note\" }',
+'  - prod KEY (pick the closest): \"clearguard\"(CLEARguard, general bruxism/TMJ night guard, the DEFAULT for a plain \"night guard\"/\"bite splint\"/\"occlusal guard\"), \"minicomfort\"(miniComfort, soft, lower only), \"comforthardsoft\"(Comfort Hard/Soft hybrid), \"comforthard\"(Comfort Hard), \"astron\"(Astron, severe bruxism hard), \"tmjspecial\"(TMJ Appliance, upper only), \"digitaldesign\"(design/STL file only, no appliance), \"forcefield\"(ForceField sports mouthguard), \"vac01\"(soft vacuum nightguard), \"vac03\"(athletic mouthguard), \"tanner\"(Tanner, lower only), \"gelb\"(Gelb, lower only), \"lvi\"(LVI orthotic, lower only), \"bleachtray\"(bleaching/whitening tray), \"dorsal\",\"ema\",\"herbst\",\"tap3\",\"dreamtap\"(sleep apnea appliances). \"hard night guard\" => clearguard with opt \"hard\". \"soft night guard\" => vac01. Never invent a key.',
+'  - opt (ONLY for clearguard): \"hard\" | \"memory\"(hard + memory liner) | \"semisoft\". (ONLY for herbst): \"std\" | \"hanks\" | \"snap\". OMIT otherwise.',
+'  - hardVariant (ONLY when opt=hard on clearguard): \"stone\"(hard, stone models \u2014 default) | \"digstone\"(digital hard, stone) | \"digios\"(digital hard, IOS scan). OMIT unless a hard clearguard.',
+'  - ffColor (ONLY for forcefield): one of Green, Red, White, Purple, Black. OMIT otherwise.',
+'  - fabricator: \"roe\"(ROE makes it \u2014 default) or \"client\"(design & send file, client prints in-office). OMIT if not stated.',
+'  - arch: \"upper\" or \"lower\". If product is lower-only (minicomfort/tanner/gelb/lvi) force lower; if upper-only (tmjspecial) force upper. Derive from \"upper\"/\"lower\"/\"maxillary\"/\"mandibular\" words.',
+"",
+"IF engine = \"guide\" (surgical guides for implant placement, full-arch guided surgery, zygomatic/pterygoid cases):",
+'{ \"engine\":\"guide\", \"caseLabel\":\"short label\", \"guideFlow\":\"standard\", \"arch\":\"upper|lower|both\", \"sites\":[{\"tooth\":5,\"mode\":\"implant\"},{\"tooth\":12,\"mode\":\"implant\"}], \"guideSupport\":\"tooth|tissue|bone\", \"guidedTemp\":true, \"implantBrand\":\"\", \"implantLine\":\"\", \"implantPlatform\":\"\", \"interpretation\":\"short note\" }',
+'  - guideFlow KEY (pick closest): \"standard\"(tooth/tissue/bone-supported single guide \u2014 the DEFAULT for a plain \"surgical guide\" or \"tooth-supported guide\"), \"bonechannel\"(bone-supported WITH bone reduction), \"chrome\"(CHROME GuidedSMILE full-arch fixed package / All-on-X guided), \"combi\"(CombiGuide, stackable metal or LITE plastic), \"roezygo\"(zygomatic implants, per-side planning), \"ezgoma\"(EZGoma zygomatic express). \"all on x\"/\"full arch guide\"/\"guided full arch\" => chrome. \"zygo\"/\"zygomatic\" => roezygo. Never invent.',
+'  - sites: list every implant/anchorage site as {tooth, mode}. mode KEY: \"implant\"(default, regular implant), \"zygo\"(zygomatic), \"ptery\"(pterygoid), \"trans\"(transnasal), \"tpal\"(trans-palatal), \"nasal\"(nasalus). Lower-arch sites are implant-only. Derive arch from tooth numbers (1-16 upper, 17-32 lower).',
+'  - guideSupport (standard/bonechannel): \"tooth\"(\"tooth-supported\"/\"tooth supported\") | \"tissue\"(\"tissue-supported\") | \"bone\"(\"bone-supported\"). OMIT if not stated.',
+'  - guidedTemp: true if the doctor asks to ADD a GuidedTEMP / guided temp / guided provisional / temporary. OMIT (or false) otherwise.',
+'  - guidedKit: the guided drill/surgical kit named (e.g. \"BioHorizons 4000\", \"Nobel Guided\", \"Straumann locking keys\"). Capture the brand + any number/model the doctor says. OMIT if not named.',
+'  - implantBrand / implantLine / implantPlatform: the implant system named for the guide (e.g. \"BioHorizons\", \"Nobel\", \"Straumann\") and size if stated. OMIT if not named.',
+"",
+"IF engine = \"other\":",
+'{ \"engine\":\"other\", \"caseLabel\":\"short label\", \"otherKind\":\"fullarch|guide|aligner|ortho|splint|unknown\", \"arch\":\"upper|lower|both\", \"interpretation\":\"what it is\" }',
+"  - otherKind routes the user to the right department screen even though auto-fill isn\u2019t built for it yet.",
+"",
+"GENERAL: derive arch from tooth numbers when present. Never invent values not implied by the input. Wrap every case inside the cases[] array."
+  ].join("\n");
+}
+function airxSubmit(ids){
+  ids=ids||{q:'airxQ',go:'airxGo',rep:'airxRep',msg:'airxMsg'};
+  var q=document.getElementById(ids.q), go=document.getElementById(ids.go), rep=document.getElementById(ids.rep), msg=document.getElementById(ids.msg);
+  var text=(q.value||'').trim(); if(!text) return; if(go){go.disabled=true; go.style.opacity='.4';}
+  window.AIRX_LAST_INPUT=text;   // remember what was said/typed for the transcript box
+  var spin='<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;padding:10px 2px"><span style="width:16px;height:16px;border:2.5px solid var(--line);border-top-color:var(--teal-d);border-radius:50%;display:inline-block;animation:airxspin .7s linear infinite"></span>Reading the case and writing up the Rx\u2026</div>';
+  if(rep) rep.innerHTML=spin; else if(msg) msg.textContent='Reading the case\u2026';
+  fetch(AIRX_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:AIRX_MODEL,max_tokens:1000,messages:[{role:'user',content:airxPrompt(text)}]})})
+  .then(function(r){ if(!r.ok) throw new Error('Backend '+r.status); return r.json(); })
+  .then(function(data){
+    var raw=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
+    raw=raw.replace(/```json|```/g,'').trim();
+    var parsed=JSON.parse(raw);
+    // New shape: {cases:[...]}. Back-compat: a bare single case object.
+    var cases = (parsed && Array.isArray(parsed.cases)) ? parsed.cases
+              : (parsed && parsed.engine) ? [parsed] : [];
+    if(parsed && parsed.interpretation && cases.length && !cases[0]._overall) cases[0]._overall=parsed.interpretation;
+    airxRunQueue(cases, parsed && parsed.interpretation);
+  })
+  .catch(function(err){ var m='<b>Couldn\u2019t reach the parser.</b><br>'+err.message; if(rep) rep.innerHTML='<div style="background:#FBE9E7;color:#B0341F;padding:12px 14px;border-radius:11px;font-size:14px">'+m+'</div>'; else if(msg) msg.textContent='Couldn\u2019t reach the parser.'; if(go){go.disabled=false; go.style.opacity='1';} });
+}
+// Map a parsed resto -> the engine's sel{} entry shape.
+function airxSelEntry(resto){
+  if(resto==='Implant Crown') return {type:'imp', val:'Crown'};
+  if(resto==='Veneer') return {type:'cb', val:'Veneer'};
+  if(resto==='Bridge') return {type:'cb', val:'Bridge'};
+  return {type:'cb', val:'Crown'};
+}
+// Fuzzy-match a spoken implant brand to a key in IMPLANTS_ALL (e.g. "Zimmer TSV" -> "ZimVie / Zimmer Biomet").
+function airxNorm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+// ===== Voice shade normalizer =====
+// Doctors say a shade ("A2","1M1","B4","110","BL1") but voice transcription mangles it:
+// "aye two","a 2","hay one","bee four","before","sea too","be el one". Map all that back to
+// the canonical code. Returns the matched code (e.g. "A2") or '' if nothing recognizable.
+var SHADE_ALL_CODES=(function(){ var s={}; try{ SHADE_SYS.forEach(function(g){ g.shades.forEach(function(c){ s[c.toUpperCase()]=c; }); }); }catch(e){} return s; })();
+function airxNormShade(raw){
+  if(!raw) return '';
+  var t=String(raw).toLowerCase().trim();
+  // strip lead-ins: "shade", "the shade is", "shade it", "shade of"
+  t=t.replace(/\b(the\s+)?shade(\s+(is|it|of))?\b/g,' ').trim();
+  // homophones for the LETTER portion
+  var letterMap=[
+    [/\b(aye|eh|hay|hey|ay|a)\b/g,'A'],
+    [/\b(bee|be|b)\b/g,'B'],
+    [/\b(sea|see|cee|c)\b/g,'C'],
+    [/\b(dee|de|d)\b/g,'D'],
+    [/\b(bl|b\.?l\.?|bee el|be el|bleach|bleached)\b/g,'BL'],
+    [/\b(em|m)\b/g,'M'],
+    [/\b(el|l)\b/g,'L'],
+    [/\b(are|arr|r)\b/g,'R'],
+    [/\b(oh|o|zero)\b/g,'0']
+  ];
+  // number words
+  var numMap=[[/\bone\b/g,'1'],[/\btwo\b|\btoo\b|\bto\b/g,'2'],[/\bthree\b|\btree\b/g,'3'],[/\bfour\b|\bfor\b|\bfore\b/g,'4'],[/\bfive\b/g,'5'],[/\bsix\b/g,'6'],[/\bseven\b/g,'7'],[/\beight\b|\bate\b/g,'8'],[/\bnine\b/g,'9'],[/\bzero\b/g,'0'],[/\bpoint\b|\bdot\b/g,'.']];
+  // common whole-word slips ("before"->B4, "be four"->B4, "say two"->C2)
+  var whole=[
+    [/\bbefore\b/g,'B4'],[/\ba too\b|\baye too\b|\bay two\b/g,'A2'],[/\bsea too\b|\bsee too\b|\bsee two\b/g,'C2'],
+    [/\bbee won\b|\bbee one\b/g,'B1'],[/\bay won\b|\baye one\b|\bhay one\b/g,'A1']
+  ];
+  whole.forEach(function(p){ t=t.replace(p[0],' '+p[1]+' '); });
+  numMap.forEach(function(p){ t=t.replace(p[0],p[1]); });
+  letterMap.forEach(function(p){ t=t.replace(p[0],p[1]); });
+  // collapse: pull out a candidate like "A 2"/"1 M 1"/"B L 1"/"110"
+  var compact=t.toUpperCase().replace(/[^A-Z0-9.]/g,'');
+  // direct hit?
+  if(SHADE_ALL_CODES[compact]) return SHADE_ALL_CODES[compact];
+  // try canonicalizing decimals like A3.5
+  if(SHADE_ALL_CODES[compact.replace(/(\d)(\d)$/,'$1.$2')]) return SHADE_ALL_CODES[compact.replace(/(\d)(\d)$/,'$1.$2')];
+  // scan for any known code as a substring (longest first)
+  var codes=Object.keys(SHADE_ALL_CODES).sort(function(a,b){return b.length-a.length;});
+  for(var i=0;i<codes.length;i++){ if(compact.indexOf(codes[i])>=0) return SHADE_ALL_CODES[codes[i]]; }
+  return '';
+}
+function airxMatchImplantBrand(q){
+  if(!q) return '';
+  var keys=Object.keys(IMPLANTS_ALL), nq=airxNorm(q);
+  // exact / contains on the brand key
+  for(var i=0;i<keys.length;i++){ if(airxNorm(keys[i])===nq) return keys[i]; }
+  for(var j=0;j<keys.length;j++){ var nk=airxNorm(keys[j]); if(nk.indexOf(nq)>=0 || nq.indexOf(nk)>=0) return keys[j]; }
+  // token overlap (handles "zimmer" -> "ZimVie / Zimmer Biomet")
+  var qt=nq.split(' ').filter(Boolean), best='', bestScore=0;
+  keys.forEach(function(k){ var kt=airxNorm(k).split(' '); var sc=qt.filter(function(t){return kt.indexOf(t)>=0;}).length; if(sc>bestScore){bestScore=sc;best=k;} });
+  // also try matching against the line names (e.g. user says "TSV" which is in the line, not brand)
+  if(bestScore===0){
+    keys.forEach(function(k){ Object.keys(IMPLANTS_ALL[k]).forEach(function(ln){ var lt=airxNorm(ln).split(' '); var sc=qt.filter(function(t){return lt.indexOf(t)>=0;}).length; if(sc>bestScore){bestScore=sc;best=k;} }); });
+  }
+  return bestScore>0?best:'';
+}
+function airxMatchImplantLine(brandName, q){
+  var b=IMPLANTS_ALL[brandName]; if(!b||!q) return '';
+  var lines=Object.keys(b), nq=airxNorm(q);
+  for(var i=0;i<lines.length;i++){ if(airxNorm(lines[i])===nq) return lines[i]; }
+  for(var j=0;j<lines.length;j++){ var nl=airxNorm(lines[j]); if(nl.indexOf(nq)>=0 || nq.indexOf(nl)>=0) return lines[j]; }
+  var qt=nq.split(' ').filter(Boolean), best='', bestScore=0;
+  lines.forEach(function(l){ var lt=airxNorm(l).split(' '); var sc=qt.filter(function(t){return lt.indexOf(t)>=0;}).length; if(sc>bestScore){bestScore=sc;best=l;} });
+  // if only one line, default to it
+  if(!best && lines.length===1) return lines[0];
+  return bestScore>0?best:'';
+}
+function airxMatchPlatform(brandName, lineName, q){
+  var sizes=implantPlatforms(brandName,lineName); if(!sizes||!sizes.length||!q) return '';
+  var nq=airxNorm(q);
+  for(var i=0;i<sizes.length;i++){ if(airxNorm(sizes[i])===nq) return sizes[i]; }
+  // numeric match: "4.5" matches "RC 4.5" or "4.5"
+  var num=(String(q).match(/[0-9]+(\.[0-9]+)?/)||[])[0];
+  if(num){ for(var j=0;j<sizes.length;j++){ if(String(sizes[j]).indexOf(num)>=0) return sizes[j]; } }
+  return '';
+}
+// ===================== AI Rx multi-case QUEUE =====================
+// A single request may contain several cases. We apply them one at a time:
+// case 1 -> user finishes/commits -> auto-start case 2 (pre-filled), etc.
+var AIRX_QUEUE=[];        // pending cases (after the current one)
+var AIRX_QUEUE_TOTAL=0;   // total cases in this request
+var AIRX_QUEUE_IDX=0;     // 1-based index of the case currently being worked
+
+function airxRunQueue(cases, overall){
+  cases = (cases||[]).filter(function(c){ return c && c.engine; });
+  if(!cases.length){ airxNotice(overall||'I couldn\u2019t make out a case there. Try naming the restoration and a tooth (e.g. \u201czirconia crown #8 A2\u201d).'); return; }
+  AIRX_QUEUE_TOTAL = cases.length;
+  AIRX_QUEUE_IDX = 1;
+  AIRX_QUEUE = cases.slice(1);   // everything after the first waits
+  window.AIRX_OVERALL = overall || '';
+  // Show the whole plan up front when there's more than one case.
+  if(AIRX_QUEUE_TOTAL>1){ airxShowPlan(cases); }
+  airxApply(cases[0]);           // start case 1
+}
+// When the current AI case is committed to the cart, auto-start the next queued case.
+function airxQueueAdvance(){
+  if(!AIRX_QUEUE.length){ AIRX_QUEUE_TOTAL=0; AIRX_QUEUE_IDX=0; return false; }
+  var next=AIRX_QUEUE.shift();
+  AIRX_QUEUE_IDX++;
+  // Fresh case state, then apply the next one.
+  setTimeout(function(){ airxApply(next); }, 60);
+  return true;
+}
+function airxShowPlan(cases){
+  var host=document.getElementById('airxTranscript'); if(!host) return;
+  var rows=cases.map(function(c,i){
+    var label=c.caseLabel || (c.engine==='removable'?(c.appliance||'removable'):(c.engine==='other'?(c.otherKind||'other'):'fixed case'));
+    var arch=c.arch?(' \u00B7 '+c.arch):'';
+    return '<div style="padding:3px 0"><b>'+(i+1)+'.</b> '+airxEsc(label)+airxEsc(arch)+'</div>';
+  }).join('');
+  var said=window.AIRX_LAST_INPUT||'';
+  host.innerHTML='<div style="margin:10px 16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13.5px;line-height:1.5">'+
+    '<div style="background:#f3f8f7;padding:8px 12px;border-bottom:1px solid var(--line);font-weight:800;color:var(--teal-d);font-size:11px;letter-spacing:1px;text-transform:uppercase">\u2728 AI Rx \u2014 I heard '+cases.length+' cases</div>'+
+    '<div style="padding:10px 12px">'+
+      (said?'<div style="color:var(--muted);font-size:12px;margin-bottom:6px">\u201C'+airxEsc(said)+'\u201D</div>':'')+
+      rows+
+      '<div style="margin-top:8px;color:var(--gold);font-weight:700">Doing #1 now \u2014 finish it and I\u2019ll tee up the next.</div>'+
+    '</div></div>';
+}
+
+function airxApply(c){
+  var go=document.getElementById('airxGo')||document.getElementById('airxLGo'),
+      rep=document.getElementById('airxRep');
+  if(go){ go.disabled=false; go.style.opacity='1'; }
+  // Normalize a spoken/mangled shade ("aye two"->A2, "before"->B4) to a canonical code,
+  // so every engine receives a clean value. Keep the original if we can't recognize it.
+  if(c && c.shade){ var ns=airxNormShade(c.shade); if(ns) c.shade=ns; }
+  if(c && Array.isArray(c.cases)){ c.cases.forEach(function(cc){ if(cc&&cc.shade){ var n=airxNormShade(cc.shade); if(n) cc.shade=n; } }); }
+  var eng=c && c.engine;
+  if(eng==='fullarch' || (eng==='other' && c && c.otherKind==='fullarch')){ airxApplyFullArch(c); return; }
+  if(eng==='splint' || (eng==='other' && c && c.otherKind==='splint')){ airxApplySplint(c); return; }
+  if(eng==='guide' || (eng==='other' && c && c.otherKind==='guide')){ airxApplyGuide(c); return; }
+  if(eng==='other'){ airxApplyOther(c); return; }
+  if(eng==='removable'){ airxApplyRemovable(c); return; }
+  // default + fixed (also covers a malformed/empty parse: Fixed handler shows its own notice)
+  airxApplyFixed(c);
+}
+// ===== Surgical Guides AI mapper =====
+// Routes to the right flow, sets arch, and places implant/anchorage sites on the chart.
+// Flow-specific detail (CHROME package, Combi type, Zygo per-side, Standard support) is left
+// for the on-screen steps for now — the mapper gets the doctor to the right flow, pre-charted.
+var GD_FLOW_KEYS={ standard:'standard', bonechannel:'bonechannel', bone:'bonechannel', chrome:'chrome',
+  guidedsmile:'chrome', combi:'combi', combiguide:'combi', roezygo:'roezygo', zygo:'roezygo',
+  zygomatic:'roezygo', ezgoma:'ezgoma', ez:'ezgoma' };
+var GD_MODE_KEYS={ implant:'implant', zygo:'zygo', zygomatic:'zygo', ptery:'ptery', pterygoid:'ptery',
+  trans:'trans', transnasal:'trans', tpal:'tpal', transpalatal:'tpal', 'trans-palatal':'tpal',
+  nasal:'nasal', nasalus:'nasal' };
+function airxApplyGuide(c){
+  startCase('guides');
+  airxEnterEngine();
+  var applied=[], skipped=[];
+  // 1) Flow
+  var flowKey = c.guideFlow ? (GD_FLOW_KEYS[String(c.guideFlow).toLowerCase().replace(/[^a-z]/g,'')]||'') : '';
+  if(c.guideFlow && !flowKey){ skipped.push('guide type "'+c.guideFlow+'"'); }
+  if(flowKey){
+    gd.flow=flowKey;
+    // arch defaults per flow (mirrors the UI flow-pick logic)
+    if(flowKey==='roezygo'||flowKey==='ezgoma') gd.arch='upper';
+    else gd.arch='both';
+    if(flowKey==='bonechannel'){ gd.stdSupport='Bone-Supported'; gd.stdBoneReduction='Yes'; }
+    applied.push(gdFlowName());
+  }
+  // 2) Arch override if explicitly stated (standard/combi can be single-arch by site)
+  if(c.arch==='upper'||c.arch==='lower'){ gd.arch=c.arch; }
+  // 3) Sites: array of {tooth, mode}. mode defaults to implant.
+  if(Array.isArray(c.sites)){
+    c.sites.forEach(function(s){
+      var n=parseInt(s.tooth,10); if(!n||n<1||n>32) { skipped.push('site '+s.tooth); return; }
+      var arch = (n>=1&&n<=16)?'upper':'lower';
+      var mode = s.mode ? (GD_MODE_KEYS[String(s.mode).toLowerCase().replace(/[^a-z]/g,'')]||'implant') : 'implant';
+      // lower arch supports implant only (mirrors chart rule)
+      if(arch==='lower' && mode!=='implant') mode='implant';
+      gd.sites[arch]=gd.sites[arch]||{};
+      gd.sites[arch][n]=mode;
+      applied.push('#'+n+' '+(GD_MODES[mode]?GD_MODES[mode].label:mode));
+    });
+  }
+  // Standard support type if stated
+  if(c.guideSupport && gdIsStd()){
+    var SUP={tooth:'Tooth-Supported',toothsupported:'Tooth-Supported',tissue:'Tissue-Supported',tissuesupported:'Tissue-Supported',bone:'Bone-Supported',bonesupported:'Bone-Supported'};
+    var sk=String(c.guideSupport).toLowerCase().replace(/[^a-z]/g,'');
+    if(SUP[sk]){ gd.stdSupport=SUP[sk]; applied.push(SUP[sk]); }
+  }
+  // GuidedTEMP add-on (tooth-supported standard guides)
+  if(c.guidedTemp){ gd.stdGuidedTemp='Yes'; applied.push('GuidedTEMP'); }
+  // Implant brand on a guide. The STANDARD flow stores brand/line PER SITE in gd.stdSites[n];
+  // CHROME/Combi/Zygo use gd.implantBrand/Line/Size. Write to the correct place for the flow.
+  if(c.implantBrand){
+    var bName=airxMatchImplantBrand(c.implantBrand);
+    if(bName){
+      var lName = c.implantLine ? airxMatchImplantLine(bName, c.implantLine) : '';
+      // if only one line exists for the brand, default to it so the step can complete
+      if(!lName){ var lk=Object.keys(IMPLANTS_ALL[bName]||{}); if(lk.length===1) lName=lk[0]; }
+      var pSize = (c.implantPlatform && lName) ? airxMatchPlatform(bName,lName,c.implantPlatform) : '';
+      if(gdIsStd()){
+        // apply to every charted site
+        gd.stdSites=gd.stdSites||{};
+        var anySite=false;
+        gdArches().forEach(function(ar){ Object.keys(gd.sites[ar]||{}).forEach(function(n){
+          n=+n; gd.stdSites[n]=gd.stdSites[n]||{}; gd.stdSites[n].brand=bName; if(lName) gd.stdSites[n].line=lName; if(pSize) gd.stdSites[n].size=pSize; anySite=true;
+        }); });
+        if(!anySite){ /* no sites yet — stash for when chart is filled */ }
+      } else {
+        gd.implantBrand=bName; if(lName) gd.implantLine=lName; if(pSize) gd.implantSize=pSize;
+      }
+      applied.push(bName+(lName?' '+lName:'')+(pSize?' '+pSize:''));
+    } else { skipped.push('implant brand "'+c.implantBrand+'"'); }
+  }
+  // Guided drill kit (Standard flow: gd.stdKit). Match the doctor's spoken kit to a GUIDED_KITS option.
+  if(c.guidedKit && gdIsStd()){
+    var kitList=(typeof GUIDED_KITS!=='undefined') ? GUIDED_KITS : [];
+    // combine brand + kit words so "BioHorizon 4000" can find "BioHorizons - Pro Surgical System - PRO4000"
+    var kraw=((c.implantBrand?c.implantBrand+' ':'')+c.guidedKit).toLowerCase();
+    var ktoks=kraw.match(/[a-z]+|[0-9]+/g)||[];
+    var best='', bestScore=0;
+    kitList.forEach(function(k){
+      var nk=k.toLowerCase();
+      var sc=ktoks.filter(function(t){ return t.length>1 && nk.indexOf(t)>=0; }).length;
+      // strong boost if a number token (e.g. 4000) appears in the kit name
+      ktoks.forEach(function(t){ if(/^[0-9]+$/.test(t) && nk.indexOf(t)>=0) sc+=2; });
+      if(sc>bestScore){ bestScore=sc; best=k; }
+    });
+    if(best && bestScore>=2){ gd.stdKit=best; applied.push('Kit: '+best); }
+    else { gd.stdKit='Other \u2014 enter information into Notes'; gd.stdKitNotes=String(c.guidedKit); applied.push('Kit: '+c.guidedKit+' (noted)'); }
+  }
+  renderSteps(); refreshBar();
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+  airxSpeakHandoff();
+}
+// ===== Full Arch AI mapper =====
+// Handles the common spine: family/material, arch(es), implant count/sites, final restoration,
+// stage, screw brand, FP design. The deep Bespoke aesthetic sub-flow is left for the on-screen
+// steps (it's a visual design decision tree) — the mapper routes there pre-filled.
+function airxApplyFullArch(c){
+  startCase('fullarch');
+  airxEnterEngine();
+  var applied=[], skipped=[];
+  // Arch(es)
+  if(c.arch==='both'||c.doubleArch){ fa.doubleArch=true; curArch='upper'; applied.push('dual arch'); }
+  else if(c.arch==='lower'){ curArch='lower'; applied.push('lower'); }
+  else { curArch='upper'; applied.push('upper'); }
+  // Family + group
+  var FAM={ zirconia:'zirconia', zirconium:'zirconia', tlz:'zirconia', 'tlz-ib':'zirconia', nobelprocera:'zirconia',
+            gcam:'gcam', 'g-cam':'gcam', graphenano:'gcam', graphene:'gcam',
+            removable:'removable', overdenture:'removable', locator:'removable', bar:'removable', hybrid:'removable',
+            bespoke:'bespoke' };
+  var fk = c.family ? FAM[String(c.family).toLowerCase().replace(/[^a-z]/g,'')] : '';
+  if(c.family && !fk){ skipped.push('family "'+c.family+'"'); }
+  if(fk){
+    fa.family=fk;
+    fa.group = (fk==='removable') ? 'removable' : (fk==='bespoke' ? 'fixed' : 'fixed');
+    if(fk==='bespoke'){ fa.bespokeMode=true; }
+    applied.push((FA_FAMILIES.find(function(f){return f.id===fk;})||{}).name||fk);
+  }
+  // Final restoration (match by name keywords against the family's finals)
+  if(c.finalRestoration && fk && fk!=='bespoke'){
+    var finals = (fa.group==='removable') ? FA_REM_FINALS : FA_FIXED_FINALS;
+    var fq=String(c.finalRestoration).toLowerCase();
+    var idx=-1;
+    finals.forEach(function(f,i){ var nm=f.name.toLowerCase();
+      if(idx<0){ if(/ti.?bar|titanium|substructure/.test(fq) && /ti (bar|sub)|substructure/.test(nm)) idx=i;
+        else if(/coping.?free|photogram/.test(fq) && /coping-free/.test(nm)) idx=i;
+        else if(/nobel/.test(fq) && /nobel/.test(nm)) idx=i;
+        else if(/locator/.test(fq) && /locator/.test(nm)) idx=i;
+        else if(/\bbar\b/.test(fq) && /bar overdenture/.test(nm)) idx=i;
+        else if(/stabili|fixed detach|hybrid/.test(fq) && /stabili/.test(nm)) idx=i;
+        else if(/g.?cam/.test(fq) && /g-cam/.test(nm)) idx=i; }
+    });
+    if(idx>=0){ fa.finalIdx=idx; applied.push(finals[idx].name); }
+  }
+  // Implant sites/count (upper)
+  if(Array.isArray(c.sites)){
+    c.sites.forEach(function(t){ var n=parseInt(t,10); if(n>=1&&n<=16) fa.implants[n]=true; else if(n>=17&&n<=32) fa.implantsLower[n]=true; });
+    var nu=Object.keys(fa.implants).length, nl=Object.keys(fa.implantsLower).length;
+    if(nu) applied.push(nu+' upper implants'); if(nl) applied.push(nl+' lower implants');
+  } else if(c.implantCount){
+    // place N implants at typical positions if only a count is given
+    var pos=[4,6,8,9,11,13,3,14,2,15]; var k=Math.min(parseInt(c.implantCount,10)||0,10);
+    for(var i=0;i<k;i++){ fa.implants[pos[i]]=true; }
+    if(k) applied.push(k+' implants');
+  }
+  // Stage
+  if(c.stage){
+    var stages=faStagesForCurrent(); var sq=String(c.stage).toLowerCase();
+    var hit=stages.find(function(s){ var l=s.label.toLowerCase();
+      return (/final/.test(sq)&&/final/.test(l)) || (/try.?in|prototype/.test(sq)&&/try-in|prototype/.test(l)) ||
+             (/ijig|jig/.test(sq)&&/jig/.test(l)) || (/bite block/.test(sq)&&/bite block/.test(l)) ||
+             (/set.?up/.test(sq)&&/set-up/.test(l)) || (/finish/.test(sq)&&/finish/.test(l)); });
+    if(hit){ fa.stage=hit.key; applied.push(hit.label); }
+  }
+  // Screw brand
+  if(c.screwBrand){
+    var sq2=String(c.screwBrand).toLowerCase().replace(/[^a-z0-9]/g,'');
+    var sb=FA_SCREW_BRANDS.find(function(b){ var nb=b.toLowerCase().replace(/[^a-z0-9]/g,''); return nb.indexOf(sq2)>=0||sq2.indexOf(nb.slice(0,6))>=0; });
+    if(sb){ fa.screw=sb; applied.push(sb); }
+  }
+  // FP design category
+  if(c.fpDesign){ var fp=String(c.fpDesign).toUpperCase().match(/FP[123]/); if(fp){ fa.designCat=fp[0]; applied.push(fp[0]); } }
+  renderSteps(); refreshBar();
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+  airxSpeakHandoff();
+}
+// Maps a parsed splint case onto spl.* + arch, validating against SPL_CATALOG so we never
+// write a product the engine doesn't have. Lands on Review if complete, else the first gap.
+function airxApplySplint(c){
+  startCase('splints');
+  airxEnterEngine();
+  var applied=[], skipped=[];
+  // Arch
+  var a=(c.arch==='lower')?'lower':(c.arch==='upper'?'upper':'');
+  // Product (validate against catalog). c.prod is a catalog key.
+  var prod = c.prod ? splFindProd(c.prod) : null;
+  if(c.prod && !prod){ skipped.push('product "'+c.prod+'"'); }
+  if(prod){
+    // honor upper/lower-only constraints
+    if(prod.lowerOnly) a='lower';
+    if(prod.upperOnly) a='upper';
+    spl.group = (function(){ for(var g in SPL_CATALOG){ if(SPL_CATALOG[g].some(function(p){return p.key===prod.key;})) return g; } return 'guards'; })();
+    spl.prod = prod.key;
+    applied.push(prod.name);
+    // sub-option (for products with options: clearguard, herbst)
+    if(c.opt && prod.options){
+      var oo=prod.options.find(function(x){return x.k===c.opt;});
+      if(oo){ spl.opt=oo.k; applied.push(oo.label); } else { skipped.push('option "'+c.opt+'"'); }
+    } else if(prod.options){ spl.opt=prod.options[0].k; }
+    // hard variant (for clearguard hard, or any hardVariants option)
+    if(c.hardVariant){ var hv=SPL_HARD_VARIANTS.find(function(h){return h.k===c.hardVariant;}); if(hv){ spl.hardVariant=hv.k; applied.push(hv.label); } }
+    // ForceField color
+    if(c.ffColor && prod.key==='forcefield'){ var col=SPL_FF_COLORS.find(function(x){return x.toLowerCase()===String(c.ffColor).toLowerCase();}); if(col){ spl.ffColor=col; applied.push(col); } }
+  }
+  if(!a && prod){ a = prod.lowerOnly?'lower':(prod.upperOnly?'upper':''); }
+  if(a){ curArch=a; applied.unshift(a==='lower'?'Lower':'Upper'); }
+  // Fabricator
+  if(c.fabricator==='client'||c.fabricator==='roe'){ spl.fabricator=c.fabricator; applied.push(c.fabricator==='client'?'client-fabricated':'ROE-fabricated'); }
+  renderSteps(); refreshBar();
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+  airxSpeakHandoff();
+}
+// 'other' engine: not auto-fillable yet. Open the matching department screen blank
+// (so a multi-case request still routes the user to the right place) with a note.
+function airxApplyOther(c){
+  var kind=(c&&c.otherKind)||'unknown';
+  var map={fullarch:'fullarch', guide:'guides', aligner:'aligners', ortho:'ortho', splint:'splints'};
+  var engId=map[kind];
+  var label=(c&&c.caseLabel)||kind;
+  if(engId && typeof startCase==='function'){
+    startCase(engId);
+    if(c && (c.arch==='upper'||c.arch==='lower'||c.arch==='both')) curArch=c.arch;
+    airxEnterEngine();
+    refreshAll();
+    airxToast(c, [], ['auto-fill not built for '+kind+' yet \u2014 enter details on screen'], STEPS()[step]);
+  } else {
+    airxNotice('This case ('+airxEsc(label)+') isn\u2019t available in the bar yet \u2014 use the Easy Click cards below.'+(AIRX_QUEUE.length?(' Then I\u2019ll continue with the next case.'):''));
+  }
+}
+// Show a notice on whichever surface is visible (home rep box, or launcher card msg).
+function airxNotice(text){
+  var rep=document.getElementById('airxRep');
+  var lmsg=document.getElementById('airxLMsg');
+  var html='<div style="background:#FBF1DC;color:var(--gold);padding:12px 14px;border-radius:11px;font-size:14px">'+airxEsc(text)+'</div>';
+  if(rep && (document.getElementById('airxHome')||{}).style && document.getElementById('airxHome').style.display!=='none'){ rep.innerHTML=html; }
+  else if(lmsg){ lmsg.textContent=text; }
+  else if(rep){ rep.innerHTML=html; }
+}
+function airxApplyFixed(c){
+  if(!c.units || !c.units.length){
+    airxNotice('I couldn\u2019t tell which tooth this is for. Add a tooth number (e.g. \u201c#8\u201d) and try again. '+(c.interpretation||''));
+    return;
+  }
+  // 1) Start a fresh Fixed case (clears sel/mat/shade and resets steps).
+  startCase('fixed');
+  airxEnterEngine();
+  // 2) Arch
+  curArch = (c.arch==='upper'||c.arch==='lower'||c.arch==='both') ? c.arch : 'upper';
+  // 3) Units -> sel/mat
+  var VALID_MAT={TLZ:1,zRc:1,emaxMono:1,emaxLay:1,PFZ:1};
+  var applied=[], skipped=[];
+  c.units.forEach(function(u){
+    var n=parseInt(u.tooth,10);
+    var onArch = (curArch==='both') ? (n>=1&&n<=32) : (curArch==='upper' ? (n>=1&&n<=16) : (n>=17&&n<=32));
+    if(!onArch){ skipped.push('tooth '+u.tooth+' not on '+curArch+' arch'); return; }
+    var isImplant = (u.resto==='Implant Crown') || !!u.retention || !!u.implantBrand;
+    if(isImplant){
+      // retention type drives the chart color/tag (Screw-Retained=orchid SR, Cement-Retained=periwinkle CR, Screwmentable=gold)
+      var RET={ 'screw':'Screw-Retained','screwretained':'Screw-Retained','screw-retained':'Screw-Retained',
+                'cement':'Cement-Retained','cementretained':'Cement-Retained','cement-retained':'Cement-Retained',
+                'screwmentable':'Screwmentable','screwment':'Screwmentable' };
+      var rkey=(u.retention||'').toLowerCase().replace(/[^a-z]/g,'');
+      var retVal = RET[rkey] || (u.retention && /screw/i.test(u.retention) && /cement|ment/i.test(u.retention) ? 'Screwmentable'
+                   : u.retention && /cement/i.test(u.retention) ? 'Cement-Retained'
+                   : u.retention && /screw/i.test(u.retention) ? 'Screw-Retained' : '');
+      sel[n] = { type:'imp', val: retVal || 'Crown' };
+      applied.push('#'+n+' implant'+(retVal?' ('+retVal+')':''));
+      // brand / line / platform -> brand[n], validated against IMPLANTS_ALL
+      if(u.implantBrand){
+        var bName = airxMatchImplantBrand(u.implantBrand);
+        if(bName){
+          brand[n] = brand[n] || {brand:'',line:'',platform:''};
+          brand[n].brand = bName;
+          var lName = u.implantLine ? airxMatchImplantLine(bName, u.implantLine) : '';
+          if(lName){ brand[n].line=lName;
+            if(u.implantPlatform){ var pl=airxMatchPlatform(bName,lName,u.implantPlatform); if(pl){ brand[n].platform=pl; } else skipped.push('platform "'+u.implantPlatform+'" not listed for '+bName+' '+lName); }
+          } else if(u.implantLine){ skipped.push('implant line "'+u.implantLine+'" not found for '+bName); }
+          applied.push(bName+(lName?' '+lName:'')+(brand[n].platform?' '+brand[n].platform:''));
+        } else { skipped.push('implant brand "'+u.implantBrand+'"'); }
+      }
+    } else {
+      sel[n]=airxSelEntry(u.resto);
+      var m = VALID_MAT[u.material] ? u.material : 'TLZ';
+      mat[n]=m;
+      applied.push('#'+n+' '+(u.resto||'Crown')+' ('+m+')');
+    }
+  });
+  // 4) Shade
+  if(c.shade){
+    if(c.shadeSystem){ var sysObj=SHADE_SYS.find(function(s){return s.sys===c.shadeSystem;}); if(sysObj) shade.sys=c.shadeSystem; }
+    var cur=SHADE_SYS.find(function(s){return s.sys===shade.sys;})||SHADE_SYS[0];
+    if(cur.shades.indexOf(c.shade)>=0){ shade.code=c.shade; applied.push('shade '+c.shade); }
+    else skipped.push('shade \u201c'+c.shade+'\u201d not in '+cur.sys);
+  }
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+}
+// ===== Removable mapper =====
+function airxApplyRemovable(c){
+  var VALID_APPL={denture:1,partial:1,flexible:1,acrylic:1,unilateral:1,essix:1,snapon:1};
+  if(!VALID_APPL[c.appliance]){
+    airxNotice('I couldn\u2019t tell which removable appliance this is. Try e.g. \u201cupper full denture\u201d or \u201clower cast partial #19,20\u201d. '+(c.interpretation||''));
+    return;
+  }
+  startCase('removable');
+  airxEnterEngine();
+  curArch = (c.arch==='upper'||c.arch==='lower'||c.arch==='both') ? c.arch : 'upper';
+  var applied=[], skipped=[];
+  rem.appliance=c.appliance; applied.push(c.appliance);
+  if(c.appliance==='denture'){
+    rem.dentureKind = (c.dentureKind==='immediate') ? 'immediate' : (c.dentureKind==='new' ? 'new' : '');
+    if(rem.dentureKind) applied.push(rem.dentureKind+' denture');
+    var DT=['Traditional Handcrafted Premium','Traditional Handcrafted Value','IMPACT Premium','IMPACT Value','Ivotion Premium','Stabiliteeth Only'];
+    if(c.dentureType && DT.indexOf(c.dentureType)>=0){ rem.dentureType=c.dentureType; applied.push(c.dentureType); }
+    if(c.dentureStage){ rem.dentureStage=c.dentureStage; applied.push('stage: '+c.dentureStage); }
+  }
+  // Gingiva (tissue shade) for denture/flexible/acrylic
+  if(c.gingiva){
+    var GING=['Light Pink','Original','Dark Pink'];
+    if(GING.indexOf(c.gingiva)>=0){ rem.gingiva=c.gingiva; applied.push('gingiva: '+c.gingiva); }
+    else { skipped.push('gingiva "'+c.gingiva+'"'); }
+  }
+  // Teeth: extractions (immediate denture) or teeth-to-replace (partials)
+  if(Array.isArray(c.teeth)){
+    c.teeth.forEach(function(t){
+      var n=parseInt(t,10);
+      var onArch = (curArch==='both') ? (n>=1&&n<=32) : (curArch==='upper' ? (n>=1&&n<=16) : (n>=17&&n<=32));
+      if(!onArch){ skipped.push('tooth '+t+' not on '+curArch+' arch'); return; }
+      if(c.appliance==='denture' && rem.dentureKind==='immediate'){ rem.extractTeeth[n]=true; rem.toothState[n]='extract'; }
+      else { rem.toothState[n]='missing'; rem.extractTeeth[n]=true; }
+    });
+    if(c.appliance!=='denture'){ Object.keys(rem.toothState).slice().forEach(function(n){ if(rem.toothState[n]==='missing') remAutoAbutments(parseInt(n,10)); }); }
+    if(c.teeth.length) applied.push('teeth #'+c.teeth.join(', #'));
+  }
+  // Return (what the lab returns) — validate against the real list for this appliance
+  if(c.ret){
+    var retList = (c.appliance==='flexible') ? REM_RETURNS_FLEX : REM_RETURNS;
+    if(retList.indexOf(c.ret)>=0){ rem.ret=c.ret; applied.push('return: '+c.ret); }
+    else skipped.push('return \u201c'+c.ret+'\u201d not offered for this appliance');
+  }
+  // Clasp — validate against the real list for this appliance
+  if(c.clasp){
+    var claspList = (c.appliance==='flexible')
+      ? ['Flexible (tissue-tone) clasps','Wire clasps']
+      : ['Standard cast metal clasps','Cast metal + flexible esthetic clasps','Esthetic clasps (anterior)'];
+    if(claspList.indexOf(c.clasp)>=0){ rem.clasp=c.clasp; applied.push('clasp: '+c.clasp); }
+    else skipped.push('clasp \u201c'+c.clasp+'\u201d not offered for this appliance');
+  }
+  // Shade
+  if(c.shade){
+    if(c.shadeSystem && REM_SHADE_SYS.indexOf(c.shadeSystem)>=0) rem.shadeSys=c.shadeSystem;
+    rem.shadeCode=c.shade; applied.push('shade '+c.shade);
+  }
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+}
+// Walk step from 0 upward while the engine's own stepOK() passes; stop at first failure or Review.
+function airxAutoAdvance(){
+  var steps=STEPS();
+  var reviewIdx=steps.indexOf('Review');
+  step=0; maxStep=0;
+  // advance while current step validates AND we haven't reached Review
+  var guard=0;
+  while(guard++<steps.length+2){
+    var nm=STEPS()[step];
+    if(nm==='Review'||nm==='Opposing Arch'||nm==='Finish') break;
+    if(stepOK()){
+      if(step < STEPS().length-1){ step++; maxStep=Math.max(maxStep,step); }
+      else break;
+    } else break; // first missing thing — stop here
+  }
+  return STEPS()[step];
+}
+function airxToast(c, applied, skipped, landed){
+  var host=document.getElementById('airxTranscript'); if(!host) return;
+  var complete = (landed==='Review');
+  var said = window.AIRX_LAST_INPUT || '';
+  // Build a plain-language readout of what the parser understood.
+  var understood = airxUnderstood(c);
+  var statusTxt = complete
+    ? '\u2713 All set \u2014 review and send.'
+    : '\u279C Next: '+airxEsc(landed)+' \u2014 finish what\u2019s left below.';
+  var statusColor = complete ? '#1E6E5C' : 'var(--gold)';
+  var chips = applied && applied.length ? '<div style="margin-top:6px;font-size:12px;color:var(--muted)">Filled: '+applied.map(airxEsc).join(' \u00B7 ')+'</div>' : '';
+  var skip = skipped && skipped.length ? '<div style="margin-top:4px;font-size:12px;color:#B0341F">Needs a look: '+skipped.map(airxEsc).join('; ')+'</div>' : '';
+  var box=''+
+    '<div id="airxToast" style="margin:10px 16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13.5px;line-height:1.5">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;background:#f3f8f7;padding:8px 12px;border-bottom:1px solid var(--line)">'+
+        '<span style="font-weight:800;color:var(--teal-d);font-size:11px;letter-spacing:1px;text-transform:uppercase">\u2728 AI Rx \u2014 what I heard</span>'+
+        '<button type="button" id="airxToastX" aria-label="Dismiss" style="border:0;background:none;color:var(--muted);font-size:18px;line-height:1;cursor:pointer">\u00D7</button>'+
+      '</div>'+
+      '<div style="padding:10px 12px">'+
+        (said ? '<div style="color:var(--ink)"><span style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px">You said</span><br>\u201C'+airxEsc(said)+'\u201D</div>' : '')+
+        chips+skip+
+        '<div style="margin-top:8px;font-weight:700;color:'+statusColor+'">'+statusTxt+'</div>'+
+      '</div>'+
+    '</div>';
+  host.innerHTML=box;
+  var x=document.getElementById('airxToastX'); if(x) x.onclick=function(){ host.innerHTML=''; };
+  airxSpeakHandoff();
+}
+// Speak ONE random handoff line when the AI hands the proposed Rx back to the user.
+var AIRX_HANDOFF=[
+  'Here you go cutie, please fill in the missing items',
+  'Take it from here, give me the gaps',
+  'Okay, tell me the rest',
+  'You are just a few clicks away',
+  'That was easy, take it home'
+];
+function airxSpeakHandoff(){
+  try{
+    if(!('speechSynthesis' in window)) return;
+    var line=AIRX_HANDOFF[Math.floor(Math.random()*AIRX_HANDOFF.length)];
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(line);
+    u.rate=1.0; u.pitch=1.05;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+// Plain-language summary of the parsed case.
+function airxUnderstood(c){
+  if(!c) return '';
+  var bits=[];
+  if(c.caseLabel) bits.push('<b>'+airxEsc(c.caseLabel)+'</b>');
+  if(c.engine==='removable'){
+    if(c.appliance) bits.push(airxEsc(c.appliance)+(c.dentureKind?(' ('+airxEsc(c.dentureKind)+')'):''));
+    if(c.arch) bits.push(airxEsc(c.arch)+' arch');
+    if(c.dentureType) bits.push(airxEsc(c.dentureType));
+    if(c.dentureStage) bits.push(airxEsc(c.dentureStage));
+    if(c.ret) bits.push('return: '+airxEsc(c.ret));
+    if(c.clasp) bits.push(airxEsc(c.clasp));
+    if(Array.isArray(c.teeth)&&c.teeth.length) bits.push('teeth #'+c.teeth.join(', #'));
+    if(c.shade) bits.push('shade '+airxEsc(c.shade));
+  } else {
+    if(c.arch) bits.push(airxEsc(c.arch)+' arch');
+    if(Array.isArray(c.units)) c.units.forEach(function(u){ bits.push('#'+airxEsc(String(u.tooth))+' '+airxEsc(u.resto||'Crown')+(u.material?(' / '+airxEsc(u.material)):'')); });
+    if(c.shade) bits.push('shade '+airxEsc(c.shade));
+  }
+  var line = bits.join(' \u00B7 ');
+  if(c.interpretation) line += '<div style="margin-top:4px;color:var(--muted);font-style:italic;font-size:12.5px">'+airxEsc(c.interpretation)+'</div>';
+  return line;
+}
+function airxEsc(s){ return String(s==null?'':s).replace(/[&<>\"]/g,function(m){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]);}); }
+
 // ===== Add requested information page (patient name, case ID, files, notes) =====
 var caseInfo={ pt:'', caseId:'', notes:'', files:[] };
 function renderInfoPage(){
@@ -4469,6 +5418,116 @@ function startCase(engine){
  refreshAll();
 }
 
+// ===================== In-session DRAFTS =====================
+// Saved drafts live in memory for this session only (cleared when the app/tab closes).
+// A draft snapshots the full case state so reopening restores every step for editing.
+var AIRX_DRAFTS=[];   // [{id, label, engine, ts, snap}]
+function _clone(o){ try{ return JSON.parse(JSON.stringify(o)); }catch(e){ return o; } }
+function draftSnapshot(){
+  return {
+    curEngine:curEngine, curArch:curArch, step:step, maxStep:maxStep, oppChoice:oppChoice,
+    caseStarted:caseStarted,
+    sel:_clone(sel), mat:_clone(mat), alloy:(typeof alloy!=='undefined'?_clone(alloy):{}),
+    brand:_clone(brand), shade:_clone(shade),
+    rem:_clone(rem), spl:_clone(spl), gd:_clone(gd),
+    fa:(typeof fa!=='undefined'?_clone(fa):null),
+    ortho:(typeof ortho!=='undefined'?_clone(ortho):null),
+    align:(typeof align!=='undefined'?_clone(align):null),
+    recEmail:(typeof recEmail!=='undefined'?recEmail:''),
+    savedImages:(typeof savedImages!=='undefined'?_clone(savedImages):[])
+  };
+}
+function _restoreInto(target, src){ if(!target||!src) return; for(var k in target){ delete target[k]; } for(var k2 in src){ target[k2]=src[k2]; } }
+function draftRestore(snap){
+  caseStarted=true; curEngine=snap.curEngine; curArch=snap.curArch;
+  _restoreInto(sel,snap.sel); _restoreInto(mat,snap.mat);
+  if(typeof alloy!=='undefined') _restoreInto(alloy,snap.alloy||{});
+  _restoreInto(brand,snap.brand||{}); 
+  if(snap.shade){ for(var sk in shade) delete shade[sk]; for(var sk2 in snap.shade) shade[sk2]=snap.shade[sk2]; }
+  _restoreInto(rem,snap.rem); _restoreInto(spl,snap.spl); _restoreInto(gd,snap.gd);
+  if(typeof fa!=='undefined' && snap.fa) _restoreInto(fa,snap.fa);
+  if(typeof ortho!=='undefined' && snap.ortho) _restoreInto(ortho,snap.ortho);
+  if(typeof align!=='undefined' && snap.align) _restoreInto(align,snap.align);
+  if(typeof recEmail!=='undefined') recEmail=snap.recEmail||'';
+  if(typeof savedImages!=='undefined'){ savedImages.length=0; (snap.savedImages||[]).forEach(function(x){ savedImages.push(x); }); }
+  // Land on Review (every row tappable to edit), not wherever the draft was saved from
+  // (saving happens on Finish, which is a dead-end screen and feels "not editable").
+  var steps = (typeof STEPS==='function') ? STEPS() : [];
+  var rIdx = steps.indexOf('Review');
+  step = (rIdx>=0) ? rIdx : (snap.step||0);
+  maxStep = Math.max(snap.maxStep||0, step, rIdx>=0?rIdx:0);
+  _caseCaptured=false; _userPickedStep=true;
+  airxEnterEngine();
+  refreshAll();
+}
+function draftLabel(){
+  // A short human label from the current case state.
+  try{
+    if(curEngine==='fixed'){ var ts=Object.keys(sel); if(ts.length) return (curArch||'')+' '+(sel[ts[0]]&&sel[ts[0]].type==='imp'?'implant':'fixed')+' #'+ts.join(','); return 'Fixed case'; }
+    if(curEngine==='removable'){ return (curArch||'')+' '+(rem.appliance||'removable'); }
+    if(curEngine==='splints'){ return 'Splint '+(spl.prod||''); }
+    if(curEngine==='guides'){ return 'Guide '+(gd.flow||''); }
+    return curEngine+' case';
+  }catch(e){ return 'Case'; }
+}
+function saveDraft(){
+  var d={ id:'d'+Date.now(), label:draftLabel(), engine:curEngine, ts:Date.now(), snap:draftSnapshot() };
+  AIRX_DRAFTS.unshift(d);
+  renderDraftButton();
+  return d;
+}
+function deleteDraft(id){ AIRX_DRAFTS=AIRX_DRAFTS.filter(function(d){return d.id!==id;}); renderDraftPanel(); renderDraftButton(); }
+function openDraft(id){
+  var d=AIRX_DRAFTS.find(function(x){return x.id===id;}); if(!d) return;
+  // remove from list (it's being reopened to edit; re-save makes a fresh draft)
+  AIRX_DRAFTS=AIRX_DRAFTS.filter(function(x){return x.id!==id;});
+  closeDraftPanel();
+  draftRestore(d.snap);
+  renderDraftButton();
+}
+function fmtDraftTime(ts){ try{ var d=new Date(ts); var h=d.getHours(), m=('0'+d.getMinutes()).slice(-2); var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+m+' '+ap; }catch(e){ return ''; } }
+function renderDraftButton(){
+  var host=document.getElementById('airxShell')||document.body;
+  var btn=document.getElementById('draftTopBtn');
+  if(!AIRX_DRAFTS.length){ if(btn) btn.style.display='none'; return; }
+  if(!btn){
+    btn=document.createElement('button'); btn.id='draftTopBtn'; btn.type='button';
+    btn.style.cssText='position:fixed;top:8px;right:10px;z-index:55;background:var(--teal-d);color:#fff;border:none;border-radius:18px;padding:7px 13px;font:800 12px/1 Arial;box-shadow:0 4px 12px rgba(0,0,0,.18);cursor:pointer';
+    btn.onclick=openDraftPanel;
+    document.body.appendChild(btn);
+  }
+  btn.style.display='block';
+  btn.innerHTML='\u{1F4C1} Drafts ('+AIRX_DRAFTS.length+')';
+}
+function openDraftPanel(){
+  closeDraftPanel();
+  var ov=document.createElement('div'); ov.id='draftOverlay';
+  ov.style.cssText='position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.35);display:flex;align-items:flex-start;justify-content:center;padding:54px 14px';
+  ov.onclick=function(e){ if(e.target===ov) closeDraftPanel(); };
+  var box=document.createElement('div');
+  box.style.cssText='background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:80vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.3)';
+  box.innerHTML='<div style="padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center"><b style="color:var(--teal-d);font-size:16px">Saved Drafts</b><button id="draftClose" style="border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer">\u00D7</button></div><div id="draftList" style="padding:8px 12px 14px"></div>';
+  ov.appendChild(box); document.body.appendChild(ov);
+  document.getElementById('draftClose').onclick=closeDraftPanel;
+  renderDraftPanel();
+}
+function renderDraftPanel(){
+  var list=document.getElementById('draftList'); if(!list) return;
+  if(!AIRX_DRAFTS.length){ list.innerHTML='<div style="color:var(--muted);padding:18px;text-align:center">No drafts saved.</div>'; return; }
+  list.innerHTML=AIRX_DRAFTS.map(function(d){
+    return '<div style="border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+      '<div style="min-width:0"><div style="font-weight:800;color:var(--ink);text-transform:capitalize">'+airxEsc(d.label)+'</div>'+
+      '<div style="color:var(--muted);font-size:12px">'+airxEsc(d.engine)+' \u00B7 saved '+fmtDraftTime(d.ts)+'</div></div>'+
+      '<div style="display:flex;gap:7px;flex-shrink:0">'+
+        '<button data-edit="'+d.id+'" style="background:var(--teal-d);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-weight:800;font-size:13px;cursor:pointer">Edit</button>'+
+        '<button data-del="'+d.id+'" style="background:#fff;color:#9C0006;border:1px solid #f1c9cc;border-radius:9px;padding:8px 11px;font-weight:700;font-size:13px;cursor:pointer">Delete</button>'+
+      '</div></div>';
+  }).join('');
+  [].forEach.call(list.querySelectorAll('[data-edit]'),function(b){ b.onclick=function(){ openDraft(b.getAttribute('data-edit')); }; });
+  [].forEach.call(list.querySelectorAll('[data-del]'),function(b){ b.onclick=function(){ deleteDraft(b.getAttribute('data-del')); }; });
+}
+function closeDraftPanel(){ var ov=document.getElementById('draftOverlay'); if(ov) ov.remove(); }
+
 function renderStage(){
  var stage=document.getElementById('stage');
  if(!caseStarted){ renderLauncher(); return; }
@@ -4567,7 +5626,7 @@ function renderStage(){
  } else if(STEPS()[step]==='Review'){
   stage.innerHTML=renderReview();
   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){
-   b.onclick=function(){ var nm=b.getAttribute('data-step'); var idx=STEPS().indexOf(nm); if(idx>=0){ step=idx; refreshAll(); } };
+   b.onclick=function(){ var nm=b.getAttribute('data-step'); var idx=STEPS().indexOf(nm); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } };
   });
  } else if(STEPS()[step]==='Bespoke'){
   renderBespokeStep();
@@ -4625,7 +5684,7 @@ function bindRxReady(){
    }, 900);
  };
  var d=document.getElementById('rxDraft');
- if(d) d.onclick=function(){ rxState.draftSaved=true; this.textContent='\u2713 Draft saved'; this.classList.add('on'); };
+ if(d) d.onclick=function(){ saveDraft(); rxState.draftSaved=true; this.textContent='\u2713 Draft saved'; this.classList.add('on'); };
  var am=document.getElementById('rxAddMore');
  if(am) am.onclick=function(){ addAnotherProduct(); };
  var a=document.getElementById('rxAttn');
@@ -5201,8 +6260,12 @@ function initDialCanvas(teeth){
    var maxW=Math.min((cv.parentElement.clientWidth||400),440);
    // Single-tooth close-up uses a large image to draw on (not a tiny thumbnail).
    if(hasPhoto){ maxW=Math.min((cv.parentElement.clientWidth||400),360); }
-   cv.width=maxW; cv.height=Math.round(img.height*(maxW/img.width));
-   cv.style.margin=hasPhoto?'0 auto':''; cv.style.display=hasPhoto?'block':'';
+   var w=maxW, h=Math.round(img.height*(maxW/img.width));
+   // Cap height so the tooth never takes the whole screen — leave room to scroll.
+   var maxH=Math.round((window.innerHeight||700)*0.42);
+   if(h>maxH){ var k=maxH/h; h=maxH; w=Math.round(w*k); }
+   cv.width=w; cv.height=h;
+   cv.style.margin='0 auto'; cv.style.display='block';
    redrawDial(cv,img);
  };
  if(hasPhoto){ img.src=TOOTH_IMG[view]; if(note) note.textContent='Painting tooth #'+view+'.'; }
@@ -5571,21 +6634,40 @@ function renderSteps(){
  if(!caseStarted){ s.innerHTML=''; s.style.display='none'; return; }
  s.style.display='';
  s.innerHTML='';
+ // Pinned "Back to Review" pill at the FRONT of the rail — only when the user has gone
+ // back from a reachable Review. Lives in the rail so it never covers the form.
+ var reviewIdx0=STEPS().indexOf('Review');
+ if(reviewIdx0>=0 && maxStep>=reviewIdx0 && step<reviewIdx0){
+   s.innerHTML+='<button class="pill pill-review" data-review="1"><span class="pill-main"><span class="pn">\u21A9</span>Review</span></button>';
+ }
  STEPS().forEach(function(nm,i){
-  // A step is "reached" if it's at or before the furthest point the user has gotten to.
-  var reached = i<=maxStep;
-  var cls='pill'+(i===step?' cur':(reached?' done':''));
+  // "done" if the user has walked at/past it OR its data is already satisfied
+  // (so AI-prefilled steps show a checkmark immediately).
+  var dataDone = (i!==step) && stepOKAt(i) && nm!=='Review' && nm!=='Opposing Arch' && nm!=='Finish';
+  var reached = (i<=maxStep) || dataDone;
+  var done = reached && i!==step;
+  var cls='pill'+(i===step?' cur':(done?' done':''));
   var label = (nm==='Opposing Arch') ? 'Order Another?' : nm;
-  // show the choice for any reached step (so jumping back from Review keeps all summaries visible)
   var choice = reached ? stepChoiceText(nm) : '';
   var choiceHtml = choice ? '<span class="pill-choice">'+choice+'</span>' : '';
-  s.innerHTML+='<button class="'+cls+'" data-i="'+i+'"><span class="pill-main"><span class="pn">'+((i!==step&&reached)?'\u2713':(i+1))+'</span>'+label+'</span>'+choiceHtml+'</button>';
+  s.innerHTML+='<button class="'+cls+'" data-i="'+i+'"><span class="pill-main"><span class="pn">'+(done?'\u2713':(i+1))+'</span>'+label+'</span>'+choiceHtml+'</button>';
  });
- [].forEach.call(s.querySelectorAll('.pill'),function(b){ b.onclick=function(){ var t=+b.getAttribute('data-i'); if(t<=maxStep){ step=t; refreshAll(); } else if(t===maxStep+1 && stepOK()){ step=t; refreshAll(); } }; });
+ [].forEach.call(s.querySelectorAll('.pill'),function(b){ b.onclick=function(){ var t=+b.getAttribute('data-i'); if(t<=maxStep || stepOKAt(t)){ step=t; maxStep=Math.max(maxStep,t); _userPickedStep=true; refreshAll(); } else if(t===maxStep+1 && stepOK()){ step=t; _userPickedStep=true; refreshAll(); } }; });
+ var rvp=s.querySelector('.pill-review'); if(rvp){ rvp.onclick=function(){ var ri=STEPS().indexOf('Review'); if(ri>=0){ step=ri; _userPickedStep=true; refreshAll(); } }; }
  // scroll current into view
  var cur=s.querySelector('.pill.cur'); if(cur)cur.scrollIntoView({inline:'center',block:'nearest'});
 }
-function stepOK(){
+function stepOK(){ return stepOKAt(step); }
+// Same validation as stepOK, but for an arbitrary step index (lets the rail
+// show a checkmark for any step whose data is already satisfied — including
+// steps the AI pre-filled — not just steps the user has walked past).
+function stepOKAt(idx){
+ var save=step; step=idx;
+ var r;
+ try{ r=_stepOKCurrent(); } finally { step=save; }
+ return r;
+}
+function _stepOKCurrent(){
  var nm=STEPS()[step];
  if(curEngine==='removable') return remStepOK(nm);
  if(curEngine==='splints') return splStepOK(nm);
@@ -5600,10 +6682,12 @@ function stepOK(){
    return rk.every(function(n){ var s=sel[n]; return !(s.type==='imp' && subOptionsFor(s.val)) || !!s.sub; });
  }
  if(nm==='Material'){
-   var teeth=Object.keys(sel);
+   // Implant crowns don't take a chairside material here — only C&B teeth need mat[].
+   var teeth=Object.keys(sel).filter(function(n){ return !(sel[n] && sel[n].type==='imp'); });
+   if(teeth.length===0) return true;   // implant-only case: nothing to material
    var allSet=teeth.every(function(n){return !!mat[n];});
    var alloyOk=teeth.every(function(n){ return !materialNeedsAlloy(mat[n]) || !!alloy[n]; });
-   return teeth.length>0 && allSet && alloyOk && Object.keys(emaxOver()).length===0;
+   return allSet && alloyOk && Object.keys(emaxOver()).length===0;
  }
  if(nm==='Bespoke') return !anyBespokeTooth() || (!!bespoke.material && !!bespoke.vita);
  if(nm==='Shade') return !!shade.code && (!stumpNeeded() || !!stump.code);
@@ -5656,13 +6740,9 @@ function refreshAll(){
    var st=document.getElementById('stage'); if(st && st.scrollTop) st.scrollTop=0;
    if(window.scrollTo) window.scrollTo(0,0);
  }catch(e){}
- // "Back to Review" appears only when the user has gone backward AND Review is reachable.
- var reviewIdx=STEPS().indexOf('Review');
+ // "Back to Review" now lives in the rail (pill-review) so it never covers content.
  var btn=document.getElementById('toReview');
- if(btn){
-  var show = reviewIdx>=0 && maxStep>=reviewIdx && step<reviewIdx;
-  btn.style.display = show?'block':'none';
- }
+ if(btn){ btn.style.display='none'; }
  if(typeof autoAsk==='function') autoAsk();
 }
 
@@ -5675,13 +6755,27 @@ var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || nu
 var voiceSupported = !!SpeechRec;
 var _rec=null, _listening=false;
 var _lastAskedStep=-1;          // which step index we've already auto-asked
-var voiceOn=true;               // proactive guidance on by default
+var voiceOn=false;              // in-engine voice guidance OFF for now (was obnoxious/out-of-sync)
+var _autoSkipping=false;
+var _userPickedStep=false;       // true when the user explicitly taps a Review row to edit a step
 function autoAsk(){
  if(!caseStarted) return;
+ var nm=STEPS()[step];
+ var terminal=(nm==='Review'||nm==='Opposing Arch'||nm==='Finish');
+ // If the user EXPLICITLY tapped a step to edit, honor it — do not auto-skip away from it.
+ if(_userPickedStep){ _userPickedStep=false; }
+ else if(!_autoSkipping && !terminal && !OPTIONAL_STEPS[nm] && stepOK() && step<STEPS().length-1){
+   // Auto-advance past already-satisfied steps (e.g. AI pre-filled) so we never re-ask them.
+   _autoSkipping=true;
+   step++; maxStep=Math.max(maxStep,step);
+   _autoSkipping=false;
+   refreshAll();   // continue from the next step
+   return;
+ }
  if(!voiceOn || !voiceSupported) return;
- if(step===_lastAskedStep) return;   // don't re-ask on in-step re-renders
+ if(terminal) return;                 // never audible Review / Opposing / Finish
+ if(step===_lastAskedStep) return;    // don't re-ask on in-step re-renders
  _lastAskedStep=step;
- // small delay so the step UI paints first
  setTimeout(function(){ if(step===_lastAskedStep && !_listening) micTap(); }, 350);
 }
 
@@ -6181,6 +7275,7 @@ document.getElementById('micBtn').onclick=micTap;
    recEmail=''; recRequested=false;
    if(typeof archDone==='object'){ archDone.upper=false; archDone.lower=false; }
    refreshAll();
+   airxGoHome();   // start-over lands on the standalone ROE AI Rx home
  };
 })();
 
@@ -6217,10 +7312,443 @@ document.getElementById('next').onclick=function(){
    if(note) note.textContent='Save your shade map first \u2014 tap the flashing Save button.';
    return;
  }
- if(!stepOK())return; if(step<STEPS().length-1){step++;refreshAll();}
+ if(!stepOK()){
+   // Don't silently do nothing — tell the doctor exactly what's still needed (never feels "locked").
+   var miss=stepNeedsMsg(STEPS()[step]);
+   var nb=document.getElementById('next');
+   if(nb){ nb.classList.remove('blink'); void nb.offsetWidth; }
+   airxFlashNeed(miss||'One more choice is needed on this step before continuing.');
+   return;
+ }
+ if(step<STEPS().length-1){step++;refreshAll();}
 };
+// Short human message describing what a given step still needs.
+function stepNeedsMsg(nm){
+  if(nm==='Standard Restoration'){
+    if(gd.stdSupport==='Tooth-Supported'){
+      var need=[]; if(!gd.stdRestoType) need.push('a Restoration type'); if(!gd.stdRestoRet) need.push('a Retention');
+      if(need.length) return 'Pick '+need.join(' and ')+' to continue.';
+    } else if(!gd.stdRestoArch){ return 'Pick the final restoration to continue.'; }
+  }
+  if(nm==='Arch') return 'Pick an arch (or tap a tooth) to continue.';
+  if(nm==='Restoration') return 'Tap at least one tooth and choose Crown & Bridge or Implant.';
+  if(nm==='Material') return 'Give each non-implant tooth a material.';
+  if(nm==='Shade') return 'Pick a shade to continue.';
+  if(nm==='Implant Brand'||nm==='Std Brand'||nm==='Zygo Brand'||nm==='CR Brand') return 'Pick the implant brand (and line) to continue.';
+  if(nm==='Guide Type') return 'Pick which surgical guide to continue.';
+  if(nm==='Implant Chart') return 'Mark at least one implant site on the chart.';
+  if(nm==='Standard Support') return 'Pick the guide support (tooth / tissue / bone).';
+  return 'One more choice is needed on this step before continuing.';
+}
+// Flash a clear "what's needed" note near the Next button.
+function airxFlashNeed(msg){
+  var bar=document.querySelector('.botbar')||document.body;
+  var n=document.getElementById('needNote');
+  if(!n){ n=document.createElement('div'); n.id='needNote';
+    n.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:96px;z-index:60;background:#9C0006;color:#fff;font:700 13px/1.35 Arial;padding:9px 16px;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.2);max-width:88%;text-align:center';
+    document.body.appendChild(n);
+  }
+  n.textContent=msg; n.style.display='block';
+  clearTimeout(window._needT); window._needT=setTimeout(function(){ if(n) n.style.display='none'; },3200);
+}
 
 refreshAll();
+
+/* ===== AI Rx home overlay boot (local Google-style front) ===== */
+airxInit({q:'airxQ',go:'airxGo',mic:'airxMic',msg:'airxMsg',rep:'airxRep'});
+
+/* ===== AI Case Cost Estimator boot ===== */
+(function estBoot(){
+  var q=document.getElementById('estQ'), go=document.getElementById('estGo'),
+      mic=document.getElementById('estMic'), msg=document.getElementById('estMsg'),
+      panel=document.getElementById('estPanel');
+  if(!q) return;
+  function sync(){ if(go){ var on=(q.value||'').trim().length>0; go.disabled=!on; go.style.opacity=on?'1':'.4'; } }
+  q.addEventListener('input',function(){ q.style.height='auto'; q.style.height=Math.min(q.scrollHeight,120)+'px'; sync(); });
+  q.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); estSubmit(); } });
+  if(go) go.onclick=estSubmit;
+  // example chips
+  [].forEach.call(document.querySelectorAll('.esth-chip'),function(c){ c.onclick=function(){ q.value=c.textContent; sync(); estSubmit(); }; });
+
+  function estSubmit(){
+    var text=(q.value||'').trim(); if(!text) return;
+    var hits=estFind(text);
+    if(!hits.length){ panel.innerHTML='<div style="padding:14px;color:var(--muted);text-align:center">No match found. Try naming the product \u2014 e.g. "denture", "night guard", "CHROME guide", "zirconia crown".</div>'; return; }
+    // If a lot of options, group them by sub-type and let the user drill down first.
+    if(hits.length>5){
+      var groups=estSubGroup(hits);
+      var keys=Object.keys(groups);
+      if(keys.length>1){ estRenderGroups(groups); return; }
+    }
+    estRenderOptions(hits.slice(0,10));
+  }
+
+  // Derive a sub-category label from a product name (SLM, Thermoplastic, Acetal, etc.)
+  function estSubType(f){
+    var p=f.p.toLowerCase();
+    if(/clearguard/.test(p)) return 'CLEARguard';
+    if(/minicomfort/.test(p)) return 'miniComfort';
+    if(/forcefield/.test(p)) return 'ForceField (sports)';
+    if(/essix/.test(p)) return 'Essix retainer';
+    if(/hawley/.test(p)) return 'Hawley retainer';
+    if(/bleaching|opalescent/.test(p)) return 'Bleaching tray';
+    if(/spring aligner/.test(p)) return 'Spring aligner';
+    if(/slm/.test(p)) return 'SLM (cast metal)';
+    if(/thermoplastic|flexible/.test(p)) return 'Thermoplastic / Flexible';
+    if(/acetal/.test(p)) return 'Acetal';
+    if(/all acrylic|acrylic partial/.test(p)) return 'All-Acrylic';
+    if(/flipper/.test(p)) return 'Flipper';
+    if(/unilateral|nesbit/.test(p)) return 'Unilateral / Nesbit';
+    if(/snap-on/.test(p)) return 'Snap-On Smile';
+    if(/e\.max/.test(p)) return 'e.max';
+    if(/zirconia|tlz|zrc/.test(p)) return 'Zirconia';
+    if(/pfz/.test(p)) return 'PFZ';
+    if(/pfm/.test(p)) return 'PFM';
+    if(/full cast|cast metal/.test(p)) return 'Full Cast';
+    if(/premium/.test(p)) return 'Premium';
+    if(/value/.test(p)) return 'Value';
+    if(/impact/.test(p)) return 'IMPACT Digital';
+    if(/ivotion/.test(p)) return 'Ivotion';
+    if(/tooth-supported|tissue-supported|bone-supported|guidedtemp/.test(p)) return 'Standard guide';
+    if(/chrome/.test(p)) return 'CHROME';
+    if(/combi/.test(p)) return 'CombiGuide';
+    if(/ezgoma|zygo/.test(p)) return 'Zygomatic';
+    return f.c;  // fall back to the fee-schedule category
+  }
+  function estSubGroup(hits){
+    var g={};
+    hits.forEach(function(f){ var k=estSubType(f); (g[k]=g[k]||[]).push(f); });
+    return g;
+  }
+  function estRenderGroups(groups){
+    var keys=Object.keys(groups);
+    var rows=keys.map(function(k,i){
+      var items=groups[k];
+      var prices=items.map(function(f){return f.pr;}).filter(function(n){return n>0;});
+      var lo=prices.length?Math.min.apply(null,prices):0, hi=prices.length?Math.max.apply(null,prices):0;
+      var range = !prices.length ? 'Call for quote' : (lo===hi ? estMoney(lo) : estMoney(lo)+'\u2013'+estMoney(hi));
+      return '<button type="button" class="est-grp" data-k="'+i+'" style="width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+        '<span><span style="font-weight:700;color:var(--ink);display:block">'+airxEsc(k)+'</span>'+
+        '<span style="color:var(--muted);font-size:12px">'+items.length+' option'+(items.length>1?'s':'')+'</span></span>'+
+        '<span style="font-weight:700;color:var(--teal-d);white-space:nowrap;font-size:13px">'+range+' \u203A</span></button>';
+    }).join('');
+    panel.innerHTML='<div style="margin-top:14px;text-align:left">'+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:8px">What kind? Pick a type:</div>'+rows+'</div>';
+    [].forEach.call(panel.querySelectorAll('.est-grp'),function(b){ b.onclick=function(){ estRenderOptions(groups[keys[+b.getAttribute('data-k')]], keys[+b.getAttribute('data-k')]); }; });
+  }
+
+  function estRenderOptions(hits, groupLabel){
+    var rows=hits.map(function(f,i){
+      return '<button type="button" class="est-opt" data-i="'+i+'" style="width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+        '<span style="min-width:0"><span style="font-weight:700;color:var(--ink);display:block">'+airxEsc(f.p)+'</span>'+
+        '<span style="color:var(--muted);font-size:12px">'+airxEsc(f.c)+(f.n?' \u00B7 '+airxEsc(f.n):'')+'</span></span>'+
+        '<span style="font-weight:800;color:var(--teal-d);white-space:nowrap">'+estMoney(f.pr)+'</span></button>';
+    }).join('');
+    panel.innerHTML='<div style="margin-top:14px;text-align:left">'+
+      (groupLabel?'<button id="estBackGrp" style="background:none;border:none;color:var(--teal-d);font-weight:700;cursor:pointer;padding:0 0 8px">\u2039 back to types</button>':'')+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:8px">'+(groupLabel?airxEsc(groupLabel)+' \u2014 which one?':'Which one?')+'</div>'+rows+'</div>';
+    [].forEach.call(panel.querySelectorAll('.est-opt'),function(b){ b.onclick=function(){ estPick(hits[+b.getAttribute('data-i')]); }; });
+    var bk=document.getElementById('estBackGrp'); if(bk) bk.onclick=function(){ estSubmit(); };
+  }
+
+  function estPick(f){
+    EST_CART.push({product:f.p, price:f.pr, category:f.c});
+    q.value=''; sync();
+    estRenderCart();
+  }
+
+  function estRenderCart(){
+    var total=EST_CART.reduce(function(s,x){return s+x.price;},0);
+    var items=EST_CART.map(function(x,i){
+      return '<div style="display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">'+
+        '<span style="min-width:0"><span style="font-weight:600">'+airxEsc(x.product)+'</span></span>'+
+        '<span style="white-space:nowrap;font-weight:700">'+estMoney(x.price)+' <button data-rm="'+i+'" style="border:none;background:none;color:#9C0006;cursor:pointer;font-size:15px">\u00D7</button></span></div>';
+    }).join('');
+    panel.innerHTML='<div style="margin-top:14px;text-align:left;border:1px solid var(--teal);border-radius:14px;overflow:hidden">'+
+      '<div style="background:#e3f3ec;padding:9px 14px;font-weight:800;color:var(--teal-d)">Your Estimate</div>'+
+      '<div style="padding:8px 14px">'+items+
+        '<div style="display:flex;justify-content:space-between;padding:10px 0 4px;font-weight:900;font-size:17px;color:var(--teal-d)"><span>Estimated Total</span><span>'+estMoney(total)+'</span></div>'+
+      '</div>'+
+      '<div style="padding:0 14px 14px">'+
+        '<div style="font-weight:700;margin:6px 0 8px">Would you like another product added to this estimate?</div>'+
+        '<div style="display:flex;gap:8px">'+
+          '<button id="estAddYes" style="flex:1;background:var(--teal-d);color:#fff;border:none;border-radius:10px;padding:11px;font-weight:800;cursor:pointer">Yes \u2014 add another</button>'+
+          '<button id="estAddNo" style="flex:1;background:#fff;color:var(--teal-d);border:1.5px solid var(--teal);border-radius:10px;padding:11px;font-weight:800;cursor:pointer">No \u2014 send it</button>'+
+        '</div>'+
+      '</div></div>';
+    [].forEach.call(panel.querySelectorAll('[data-rm]'),function(b){ b.onclick=function(){ EST_CART.splice(+b.getAttribute('data-rm'),1); if(EST_CART.length) estRenderCart(); else panel.innerHTML=''; }; });
+    document.getElementById('estAddYes').onclick=function(){ panel.innerHTML='<div style="margin-top:12px;color:var(--teal-d);font-weight:700;text-align:center">Tap the mic and ask about the next product \u2014 or type it above.</div>'; q.focus(); };
+    document.getElementById('estAddNo').onclick=estSendForm;
+  }
+
+  function estSendForm(){
+    var total=EST_CART.reduce(function(s,x){return s+x.price;},0);
+    panel.innerHTML='<div style="margin-top:14px;text-align:left;border:1px solid var(--line);border-radius:14px;padding:14px">'+
+      '<div style="font-weight:800;color:var(--teal-d);margin-bottom:4px">Where should we send your estimate?</div>'+
+      '<div style="color:var(--muted);font-size:13px;margin-bottom:10px">Total: '+estMoney(total)+' \u00B7 '+EST_CART.length+' item'+(EST_CART.length>1?'s':'')+'</div>'+
+      '<input id="estDest" type="text" inputmode="email" placeholder="Cell number or email address" style="width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px;margin-bottom:10px">'+
+      '<button id="estSend" style="width:100%;background:var(--teal-d);color:#fff;border:none;border-radius:10px;padding:12px;font-weight:800;cursor:pointer">Send my ROE estimate</button>'+
+      '<div id="estSent" style="margin-top:10px"></div></div>';
+    document.getElementById('estSend').onclick=function(){
+      var dest=(document.getElementById('estDest').value||'').trim();
+      if(!dest){ document.getElementById('estSent').innerHTML='<span style="color:#9C0006">Please enter a cell or email.</span>'; return; }
+      estDeliver(dest, total);
+    };
+  }
+
+  function estDeliver(dest, total){
+    var isEmail=/@/.test(dest);
+    var when=new Date().toLocaleString('en-US');
+    var lines=EST_CART.map(function(x){ return x.product+' — '+estMoney(x.price); }).join('\n');
+    var body='ROE Dental Laboratory — AI Cost Estimate\n'+
+      '────────────────────────\n'+lines+'\n────────────────────────\n'+
+      'ESTIMATED TOTAL: '+estMoney(total)+'\n\n'+
+      'Date: '+when+'\n\n'+
+      'This is an ESTIMATE ONLY and is subject to pricing changes. Tax and shipping are not included. '+
+      'Final pricing is confirmed at the time your case is received. Prices per the ROE 2026 Fee Schedule.\n\n'+
+      'ROE Dental Laboratory · 7165 E Pleasant Valley Rd, Independence, OH 44131 · (216) 663-2233 · 100% manufactured in USA';
+    var subject='Your ROE Dental Lab AI Estimate';
+    if(isEmail){
+      var href='mailto:'+encodeURIComponent(dest)+'?bcc='+encodeURIComponent('marketing@roedentallab.com')+
+        '&subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+      try{ window.location.href=href; }catch(e){}
+    } else {
+      var sms='sms:'+dest+'?&body='+encodeURIComponent('ROE AI Estimate — Total '+estMoney(total)+'. '+EST_CART.length+' item(s). Estimate only, subject to change. Full details emailed on request. ROE Dental Lab (216) 663-2233.');
+      try{ window.location.href=sms; }catch(e){}
+    }
+    document.getElementById('estSent').innerHTML='<div style="color:var(--green);font-weight:800;padding:8px 0">\u2713 Estimate ready for '+airxEsc(dest)+(isEmail?' (BCC marketing@roedentallab.com)':'')+'. Your messaging app should open.</div>'+
+      '<button id="estNew" style="margin-top:6px;background:#fff;border:1.5px solid var(--teal);color:var(--teal-d);border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer">Start a new estimate</button>';
+    document.getElementById('estNew').onclick=function(){ EST_CART.length=0; panel.innerHTML=''; q.value=''; sync(); };
+  }
+
+  // Reuse the streaming Deepgram mic for the estimator bar.
+  if(typeof airxInit==='function'){ try{ airxInit({q:'estQ',go:'estGo',mic:'estMic',msg:'estMsg',rep:'estPanel',estimator:true}); }catch(e){} }
+  sync();
+})();
+// Reveal the live Easy Rx launcher/engine (ROE Ai Rx sits in its own rail).
+function airxEnterEngine(){
+  var home=document.getElementById('airxHome'); if(home) home.style.display='none';
+  var shell=document.getElementById('airxShell'); if(shell) shell.style.display='';
+  // Push a history entry so the phone's BACK gesture / swipe-left navigates inside the app
+  // (back one step, or to Review) instead of leaving the page.
+  try{ if(!window._airxInEngine){ history.pushState({airx:'engine'},'',location.href); window._airxInEngine=true; } }catch(e){}
+}
+// Phone back / left-swipe handler: stay in the app and move sensibly.
+window.addEventListener('popstate', function(){
+  if(!window._airxInEngine) return;            // on home — let normal back happen
+  // Re-arm a history entry so the NEXT back is also caught (until we deliberately leave).
+  try{ history.pushState({airx:'engine'},'',location.href); }catch(e){}
+  if(!caseStarted){ airxGoHome(); return; }     // no case yet — back leaves to home
+  var steps = (typeof STEPS==='function') ? STEPS() : [];
+  var nm = steps[step] || '';
+  // If we're at the very first real step, back goes HOME (don't trap the user).
+  if(step<=0){ airxGoHome(); return; }
+  // Otherwise step back exactly ONE step — never force-jump to Review on an unfilled case
+  // (that was writing up phantom cases). Going back one is predictable and safe.
+  step = Math.max(0, step-1);
+  _userPickedStep=true;                         // honor the manual move; don't auto-skip
+  refreshAll();
+});
+// Return to the standalone ROE AI Rx home (the true home base).
+function airxGoHome(){
+  window._airxInEngine=false;
+  var shell=document.getElementById('airxShell'); if(shell) shell.style.display='none';
+  var home=document.getElementById('airxHome'); if(home) home.style.display='';
+  var tr=document.getElementById('airxTranscript'); if(tr) tr.innerHTML='';
+  var hq=document.getElementById('airxQ'); if(hq){ hq.value=''; hq.dispatchEvent(new Event('input')); }
+  var rep=document.getElementById('airxRep'); if(rep) rep.innerHTML='';
+  try{ var sm=document.querySelector('.shell-main'); if(sm) sm.scrollTop=0; if(window.scrollTo) window.scrollTo(0,0); }catch(e){}
+  airxShowGreeting();
+}
+// Rotating greeting library (shown fresh each time the home appears).
+
+// ===================== AI CASE COST ESTIMATOR =====================
+var ROE_FEES=[{c:"Implant Packages",p:"TLZ-SR (screw-retained TLZ crown) \u2014 Model-free (IOS)",pr:299,t:"4 days",n:"OEM parts not included"},{c:"Implant Packages",p:"TLZ-SR (screw-retained TLZ crown) \u2014 Standard (Models)",pr:319,t:"5 days",n:"OEM parts not included"},{c:"Implant Packages",p:"TLZ-SR Special \u2014 Model-free (IOS)",pr:259,t:"4 days",n:"OEM parts not included"},{c:"Implant Packages",p:"TLZ-SR Special \u2014 Standard (Models)",pr:279,t:"5 days",n:"OEM parts not included"},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic TLZ \u2014 Model-free (IOS)",pr:411,t:"7 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic TLZ \u2014 Standard (Models)",pr:497,t:"8 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic zRc \u2014 Model-free (IOS)",pr:382,t:"7 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ monolithic zRc \u2014 Standard (Models)",pr:468,t:"8 days",n:""},{c:"Implant Packages",p:"Ti or Zi abutment w/ PFZ layered restoration",pr:579,t:"11 days",n:""},{c:"Implant Packages",p:"Ti abutment w/ PFM High Noble White",pr:549,t:"11 days",n:"+alloy (Au 51.5% Pd 38.5% In 8.5%)"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 Full-service, with sleeves (1 implant)",pr:315,t:"8 days",n:"each add'l implant +43"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 each add'l implant",pr:43,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 GuidedTEMP (1 implant + parts)",pr:395,t:"11 days",n:"each add'l implant +99"},{c:"Surgical Guides",p:"Tooth-Supported \u2014 GuidedTEMP each add'l implant",pr:99,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"Full-Arch \u2014 Tissue-supported (4 sites)",pr:358,t:"8 days",n:"each add'l site +43"},{c:"Surgical Guides",p:"Full-Arch \u2014 Tissue-supported each add'l site",pr:43,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"Full-Arch \u2014 Bone-supported with bone reduction (4 sites)",pr:668,t:"11 days",n:"each add'l site +43"},{c:"Surgical Guides",p:"Full-Arch \u2014 Bone-supported without bone reduction (4 sites)",pr:578,t:"10 days",n:"each add'l site +43"},{c:"Surgical Guides",p:"Full-Arch \u2014 Bone-supported each add'l site",pr:43,t:"0 days",n:"add-on"},{c:"Surgical Guides",p:"CombiGuide (unlimited sites)",pr:1420,t:"13 days",n:""},{c:"Surgical Guides",p:"CHROME GuidedSMILE \u2014 Surgical only (unlimited sites)",pr:2800,t:"18 days",n:""},{c:"Surgical Guides",p:"CHROME GuidedSMILE \u2014 Complete (prepaid package)",pr:6199,t:"18 days",n:"includes all restorative steps & discounts"},{c:"Crown & Bridge",p:"TLZ zirconia with MiYO \u2014 Model-free (IOS)",pr:122,t:"3 days",n:""},{c:"Crown & Bridge",p:"zRc zirconia \u2014 Model-free (IOS)",pr:93,t:"3 days",n:""},{c:"Crown & Bridge",p:"IPS e.max monolithic \u2014 Model-free (IOS)",pr:134,t:"3 days",n:""},{c:"Crown & Bridge",p:"TLZ zirconia with MiYO \u2014 Printed Models",pr:142,t:"5 days",n:""},{c:"Crown & Bridge",p:"zRc zirconia \u2014 Printed Models",pr:113,t:"5 days",n:""},{c:"Crown & Bridge",p:"IPS e.max monolithic \u2014 Printed Models",pr:154,t:"5 days",n:""},{c:"Crown & Bridge",p:"Bespoke C&B zirconia",pr:204,t:"7 days",n:"Bespoke Premium Collection"},{c:"Crown & Bridge",p:"Bespoke C&B IPS e.max",pr:210,t:"7 days",n:"Bespoke Premium Collection"},{c:"Crown & Bridge",p:"IPS e.max layered",pr:224,t:"7 days",n:""},{c:"Crown & Bridge",p:"PFZ posterior",pr:218,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFZ anterior",pr:224,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFZ bridge units",pr:245,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFM Base/NP White",pr:205,t:"9 days",n:""},{c:"Crown & Bridge",p:"PFM High Noble White",pr:194,t:"9 days",n:"+alloy"},{c:"Crown & Bridge",p:"PFM Noble White",pr:194,t:"9 days",n:"+alloy"},{c:"Crown & Bridge",p:"Full Cast Metal Crown or Inlay/Onlay \u2014 Base/NP White",pr:167,t:"5 days",n:""},{c:"Crown & Bridge",p:"Full Cast \u2014 High Noble Yellow",pr:156,t:"5 days",n:"+alloy"},{c:"Crown & Bridge",p:"Full Cast \u2014 Noble Yellow",pr:156,t:"5 days",n:"+alloy"},{c:"Crown & Bridge",p:"Digital BluePrint wax-up (w/o matrix)",pr:22,t:"3 days",n:""},{c:"Crown & Bridge",p:"Conventional wax-up (w/o matrix)",pr:39,t:"3 days",n:""},{c:"Crown & Bridge",p:"Dual Laminate Matrix",pr:70,t:"1 day",n:""},{c:"Crown & Bridge",p:"Putty Matrix",pr:27,t:"1 day",n:""},{c:"Crown & Bridge",p:"SureTemps provisionals",pr:42,t:"3 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Final only with copings",pr:2870,t:"11 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Final only coping-free (photogrammetry)",pr:2420,t:"9 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Digital photogrammetry/office print",pr:2847,t:"call",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Digital workflow (5 implants)",pr:4235,t:"call",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"TLZ-IB zirconia \u2014 Analog workflow (5 implants, 1 reset)",pr:4309,t:"call",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"TLZ-IB with Ti-bar \u2014 Final only",pr:3695,t:"12 days",n:""},{c:"Fixed Full-Arch",p:"TLZ-IB with Ti-bar \u2014 Digital workflow (5 implants)",pr:5060,t:"12 days",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"TLZ-IB with Ti-bar \u2014 Analog workflow (5 implants, 1 reset)",pr:5134,t:"call",n:"each add'l implant +136"},{c:"Fixed Full-Arch",p:"NobelProcera zirconia \u2014 Final only (coping-free, 12 teeth)",pr:2888,t:"12 days",n:""},{c:"Fixed Full-Arch",p:"G-CAM Nanoceramic \u2014 Final only (coping-free)",pr:750,t:"10 days",n:""},{c:"Fixed Full-Arch",p:"G-CAM Nanoceramic \u2014 Final only with Ti-bar",pr:1575,t:"10 days",n:""},{c:"Fixed Full-Arch",p:"Fixed traditional hybrid (unlimited implants)",pr:3540,t:"call",n:""},{c:"Fixed Full-Arch",p:"each add'l implant (full-arch workflows)",pr:136,t:"-",n:"add-on"},{c:"Removable Full-Arch",p:"Bar overdenture (5 implants, 1 reset)",pr:3899,t:"9 days",n:""},{c:"Removable Full-Arch",p:"Ivotion LOCATOR Overdenture \u2014 2 abutments",pr:585,t:"9 days",n:"from IOS denture cap scan"},{c:"Removable Full-Arch",p:"Ivotion LOCATOR Overdenture \u2014 4 abutments",pr:675,t:"9 days",n:"from IOS denture cap scan"},{c:"Grammetry",p:"Design Services \u2014 1-hour express",pr:335,t:"1 hour",n:""},{c:"Grammetry",p:"Design Services \u2014 24-hour express",pr:287,t:"1 day",n:""},{c:"Grammetry",p:"Design Services \u2014 48-hour",pr:236,t:"2 days",n:""},{c:"Grammetry",p:"Grammetry Prepaid (5 implants)",pr:2872,t:"10 days",n:"includes 1-hr design, redesign & zirconia coping-free final"},{c:"Complete Dentures",p:"Full Denture Premium (w/ teeth, bite block, ID, reset)",pr:529,t:"8 days",n:""},{c:"Complete Dentures",p:"Full Denture Value",pr:340,t:"8 days",n:""},{c:"Complete Dentures",p:"Full Denture \u2014 Finish only",pr:113,t:"3 days",n:""},{c:"Complete Dentures",p:"Hypoallergenic upgrade",pr:23,t:"-",n:"add-on"},{c:"Complete Dentures",p:"IMPACT Digital Denture Premium (w/o bite block/mount)",pr:359,t:"3 days",n:""},{c:"Complete Dentures",p:"IMPACT Digital Denture Value",pr:259,t:"3 days",n:""},{c:"Complete Dentures",p:"Duplicate or back-up denture",pr:158,t:"1 day",n:""},{c:"Complete Dentures",p:"Reverse Reset (finish)",pr:71,t:"4 days",n:""},{c:"Complete Dentures",p:"Ivotion Digital Denture",pr:409,t:"5 days",n:""},{c:"Complete Dentures",p:"Ivotion Digital Denture w/ printed try-in",pr:490,t:"5 days",n:""},{c:"Partial Dentures",p:"Acetal Partial Denture complete",pr:439,t:"12 days",n:"teeth & model fees not included"},{c:"Partial Dentures",p:"Acetal frame only",pr:204,t:"4 days",n:""},{c:"Partial Dentures",p:"All acrylic partial (>4 teeth, w/ mount)",pr:155,t:"5 days",n:""},{c:"Partial Dentures",p:"SLM Partial Denture complete - CoCr",pr:444,t:"12 days",n:""},{c:"Partial Dentures",p:"SLM Partial Denture complete - Titanium",pr:489,t:"13 days",n:""},{c:"Partial Dentures",p:"SLM frame only - CoCr",pr:209,t:"4 days",n:""},{c:"Partial Dentures",p:"SLM frame only - Titanium",pr:254,t:"5 days",n:""},{c:"Partial Dentures",p:"Thermoplastic \u2014 Set & finish complete",pr:301,t:"8 days",n:""},{c:"Partial Dentures",p:"Thermoplastic \u2014 Hybrid (w/ metal substructure)",pr:408,t:"12 days",n:""},{c:"Partial Dentures",p:"Unilateral / flipper (metal-free)",pr:235,t:"4 days",n:""},{c:"Partial Dentures",p:"Thermoplastic \u2014 Finish only",pr:101,t:"3 days",n:""},{c:"Partial Dentures",p:"Flexible pre-fab clasp (pink/clear)",pr:45,t:"1 day",n:"each add'l +33"},{c:"Partial Dentures",p:"Flipper (acrylic, w/ mount) \u2014 1 tooth",pr:128,t:"3 days",n:""},{c:"Partial Dentures",p:"Flipper (acrylic, w/ mount) \u2014 2 teeth",pr:136,t:"3 days",n:""},{c:"Partial Dentures",p:"Flipper (acrylic, w/ mount) \u2014 3 teeth",pr:141,t:"3 days",n:""},{c:"Partial Dentures",p:"Setup only (w/ mount)",pr:98,t:"3 days",n:""},{c:"Partial Dentures",p:"Snap-On Smile (w/ mount) \u2014 1-5 teeth",pr:397,t:"16 days",n:""},{c:"Partial Dentures",p:"Snap-On Smile (w/ mount) \u2014 6+ teeth",pr:620,t:"16 days",n:""},{c:"Splints & Guards",p:"CLEARguard Hard w/ memory liner (w/ mount)",pr:154,t:"4 days",n:""},{c:"Splints & Guards",p:"CLEARguard Hard splint (w/ mount)",pr:111,t:"3 days",n:""},{c:"Splints & Guards",p:"CLEARguard Semi-soft splint (w/ mount)",pr:102,t:"3 days",n:""},{c:"Splints & Guards",p:"CLEARguard Hard Model-free splint",pr:69,t:"3 days",n:""},{c:"Splints & Guards",p:"CLEARguard Semi-soft Model-free splint",pr:69,t:"3 days",n:""},{c:"Splints & Guards",p:"miniComfort Guard - Qty 2",pr:107,t:"3 days",n:""},{c:"Splints & Guards",p:"Articulation",pr:21,t:"1 day",n:"add-on"},{c:"Splints & Guards",p:"ForceField athletic mouthguard",pr:61,t:"3 days",n:"red, white, green, purple, or black"},{c:"Splints & Guards",p:"Essix retainer",pr:51,t:"2 days",n:""},{c:"Splints & Guards",p:"Hawley (w/ ball clasps)",pr:83,t:"7 days",n:""},{c:"Splints & Guards",p:"Opalescent bleaching tray",pr:57,t:"3 days",n:""},{c:"Splints & Guards",p:"Poured model",pr:21,t:"1 day",n:""},{c:"Splints & Guards",p:"Printed digital model",pr:25,t:"1 day",n:""},{c:"Splints & Guards",p:"Spring aligner - 1 tooth",pr:132,t:"7 days",n:"each add'l tooth +8"},{c:"Sleep Appliances",p:"Dorsal",pr:499,t:"16 days",n:""},{c:"Sleep Appliances",p:"EMA",pr:400,t:"16 days",n:""},{c:"Sleep Appliances",p:"Herbst Sleep",pr:456,t:"16 days",n:""},{c:"Sleep Appliances",p:"Herbst Snap-fit",pr:821,t:"16 days",n:""},{c:"Sleep Appliances",p:"TAP 3",pr:485,t:"16 days",n:""},{c:"Sleep Appliances",p:"dreamTAP",pr:565,t:"16 days",n:""},{c:"Aligners",p:"CLEARaline \u2014 Treatment plan (anterior/premolar)",pr:130,t:"5 days",n:""},{c:"Aligners",p:"CLEARaline \u2014 Advanced treatment plan (molar)",pr:185,t:"5 days",n:""},{c:"Aligners",p:"CLEARaline \u2014 Per aligner",pr:31,t:"0 days",n:"complete treatment manufactured 8 days"},{c:"Add-on Fees",p:"Bite block \u2014 Standard",pr:39,t:"2 days",n:"add-on"},{c:"Add-on Fees",p:"Bite block \u2014 Digital",pr:53,t:"2 days",n:"add-on"},{c:"Add-on Fees",p:"Buccal hook, ball clasp, Adams clasp (each)",pr:12,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Custom tray",pr:35,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Denture I.D.",pr:21,t:"0 days",n:"add-on"},{c:"Add-on Fees",p:"Handpack pontics 1-3",pr:36,t:"1 day",n:"each add'l +30"},{c:"Add-on Fees",p:"Metal lingual / boxing for HP",pr:13,t:"0 days",n:"add-on"},{c:"Add-on Fees",p:"Models \u2014 Boxed",pr:21,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Models \u2014 CAD",pr:25,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Models \u2014 Tissue",pr:21,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Mount on adjustable articulator",pr:34,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Soft liner (new denture)",pr:84,t:"1 day",n:"add-on"},{c:"Add-on Fees",p:"Reset for try-in",pr:41,t:"1 day",n:"add-on"},{c:"Repairs & Relines",p:"Acrylic repair 1 tooth (w/ model)",pr:107,t:"1 day",n:"each add'l tooth +32"},{c:"Repairs & Relines",p:"Cast clasp / Cast metal section (w/ model)",pr:95,t:"2 days",n:""},{c:"Repairs & Relines",p:"Flexible pre-fab clasp (pink/clear, w/ acrylic repair & model)",pr:152,t:"2 days",n:"each add'l +65"},{c:"Repairs & Relines",p:"FiberForce reinforcement (w/o repair/model)",pr:58,t:"0 days",n:""},{c:"Repairs & Relines",p:"Fracture repair (w/ model)",pr:112,t:"1 day",n:""},{c:"Repairs & Relines",p:"Laser weld (w/o clasps/acrylic repairs)",pr:46,t:"1 day",n:"additional welds +23"},{c:"Repairs & Relines",p:"Rebase (w/ model, mount, finish, denture ID)",pr:306,t:"3 days",n:""},{c:"Repairs & Relines",p:"Reline (w/ model)",pr:118,t:"1 day",n:""},{c:"Repairs & Relines",p:"Silicone gasket 1 tooth (w/ model)",pr:77,t:"1 day",n:"each add'l tooth +23"},{c:"Repairs & Relines",p:"Soft reline (w/ model)",pr:174,t:"2 days",n:""}];
+var EST_CART=[];  // [{product, price, category}]
+function estNorm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+// Match a spoken product query to fee-schedule items. Returns ranked candidates.
+function estFind(query){
+  var q=estNorm(query);
+  // strip trigger words
+  q=q.replace(/^(how much (is|for|are)?|what(s| is| does)? (the )?(cost|price) (of|for)?|can i (have|get) (an? )?(estimated? )?(cost|price) (of|for)?|estimate (for|of)?|price (of|for)?|cost (of|for)?)/g,'').trim();
+  if(!q) return [];
+  var SYN=[
+    {rx:/flipper/, must:/flipper/i},
+    {rx:/snap.?on/, must:/snap-on/i},
+    {rx:/night ?guard|occlusal guard|bite splint|\bsplint\b|bruxism|clearguard|comfort|astron|\btmj\b/, must:/CLEARguard|miniComfort|Comfort|Astron|TMJ/i},
+    // Specific materials/products — literal: return only that product, no category-wide bleed.
+    {rx:/implant crown|screw.?retained|cement.?retained|implant package/, must:/TLZ-SR|abutment|Ti or Zi/i},
+    {rx:/\bemax\b|\be\.?max\b|e max|lithium disilicate/, must:/e\.max/i},
+    {rx:/zirconia crown|\btlz\b crown|\bzirconia\b/, must:/zirconia (with MiYO|—)|TLZ zirconia|zRc zirconia/i},
+    {rx:/\bzrc\b/, must:/zRc/i},
+    {rx:/\bpfz\b|porcelain.*zirconia/, must:/PFZ/i},
+    {rx:/\bpfm\b|porcelain.*metal/, must:/PFM/i},
+    {rx:/full cast|cast metal|cast crown/, must:/Full Cast/i},
+    {rx:/bespoke/, must:/Bespoke/i},
+    {rx:/sleep|apnea|dorsal|herbst|\btap\b|\bema\b|snore|dreamtap/, cat:'Sleep Appliances'},
+    {rx:/aligner|clearaline/, cat:'Aligners'},
+    {rx:/sports|athletic|mouthguard|forcefield/, must:/ForceField|Athletic/i},
+    {rx:/essix/, must:/Essix/i},
+    {rx:/hawley/, must:/Hawley/i},
+    {rx:/bleach|whiten|opalescent/, must:/bleaching/i},
+    // Specific guide products — literal
+    {rx:/\bchrome\b|guidedsmile/, must:/CHROME/i},
+    {rx:/combiguide|\bcombi\b/, must:/CombiGuide/i},
+    {rx:/ezgoma/, must:/EZGoma/i},
+    {rx:/zygoma|\bzygo\b/, must:/Zygo/i},
+    {rx:/pterygoid|ptery/, must:/Pterygoid/i},
+    {rx:/tooth.?supported/, must:/Tooth-Supported/i},
+    {rx:/tissue.?supported/, must:/Tissue-supported/i},
+    {rx:/bone.?supported|bone channel/, must:/Bone-supported/i},
+    {rx:/guidedtemp|guided temp/, must:/GuidedTEMP/i},
+    {rx:/full.?arch|all.?on|hybrid|overdenture/, cat:/Full-Arch/},
+    {rx:/surgical guide|\bguide\b/, cat:'Surgical Guides'},
+    {rx:/complete denture|full denture|^denture|immediate denture/, cat:/Complete Dentures/},
+    {rx:/\bdenture\b/, cat:/Complete Dentures/},
+    {rx:/partial/, cat:'Partial Dentures'},
+    {rx:/crown|bridge|veneer|inlay|onlay/, cat:'Crown & Bridge'},
+    {rx:/implant/, cat:/Implant Packages/}
+  ];
+  var rule=null;
+  for(var r=0;r<SYN.length;r++){ if(SYN[r].rx.test(q)){ rule=SYN[r]; break; } }
+  var toks=q.split(' ').filter(function(t){return t.length>1;});
+  // STRICT MODE: when a category/product rule matches, results are LIMITED to that rule's
+  // products only. No cross-category bleed. Ranking within the set uses the spoken words.
+  if(rule){
+    var inSet=ROE_FEES.filter(function(f){
+      if(rule.must) return rule.must.test(f.p);
+      if(rule.cat){ var ok=(rule.cat instanceof RegExp)?rule.cat.test(f.c):(f.c===rule.cat); return ok || (rule.extra&&rule.extra.test(f.p)); }
+      return false;
+    });
+    var rankedR=inSet.map(function(f){
+      var hay=estNorm(f.p+' '+f.n);
+      var sc=10; toks.forEach(function(t){ if(hay.indexOf(t)>=0) sc+=(t.length>=4?2:1); });
+      if(rule.extra && rule.extra.test(f.p)) sc+=4;
+      // demote add-ons / sub-stages so primary products lead
+      if(/finish only|reverse reset|each add|frame only|setup only|duplicate|back-up|articulation|reset for|hypoallergenic|upgrade|model only|poured model|printed digital model|wax-up|matrix|provisional/i.test(f.p)) sc-=4;
+      if(/premium|value|complete\b|full denture|hard splint|monolithic/i.test(f.p)) sc+=2;
+      return {f:f,sc:sc};
+    }).sort(function(a,b){return b.sc-a.sc;});
+    return rankedR.map(function(x){return x.f;});
+  }
+  // NO RULE MATCHED: be literal/conservative. Require the product NAME to actually contain a
+  // spoken word (4+ chars), not just the category/notes. Avoids scattering unrelated items.
+  var scored=ROE_FEES.map(function(f){
+    var nameHay=estNorm(f.p);
+    var sc=0; toks.forEach(function(t){ if(t.length>=4 && nameHay.indexOf(t)>=0) sc+=2; });
+    return {f:f, sc:sc};
+  }).filter(function(x){return x.sc>0;}).sort(function(a,b){return b.sc-a.sc;});
+  return scored.map(function(x){return x.f;});
+}
+function estMoney(n){ return (!n||Number(n)===0) ? 'Call for quote' : '$'+Number(n).toLocaleString('en-US'); }
+window.ROE_FEES=ROE_FEES; window.estFind=estFind; window.EST_CART=EST_CART;
+// Specialty guide pricing not in the public PDF but provided/built into the engine.
+ROE_FEES.push(
+ {c:'Surgical Guides',p:'EZGoma Zygomatic Guide — one side',pr:1604.05,t:'call',n:'+$139 per 2nd zygo on the side'},
+ {c:'Surgical Guides',p:'EZGoma Zygomatic Guide — both sides',pr:2432.05,t:'call',n:'+$139 per additional zygo/side'},
+ {c:'Surgical Guides',p:'ROE Zygo Guide — chart-driven (per-side planning)',pr:0,t:'call',n:'Priced by sides/anchorage — starts from CTSKUL $150 + FDS02 $85 + per-side planning; call for exact'},
+ {c:'Surgical Guides',p:'Additional Zygo Site (per side)',pr:139,t:'0 days',n:'add-on'},
+ {c:'Surgical Guides',p:'Additional Pterygoid / Standard Site',pr:49,t:'0 days',n:'add-on'}
+);
+
+var AIRX_GREETINGS=[
+ "Oh I love your nails",
+ "Let's Rock another Rx",
+ "Let's keep Rx'ing in the USA",
+ "I was born to write this Rx",
+ "Click that mic, wait a sec, talk to me, then green arrow",
+ "Let's memorialize this together",
+ "You're live with ROE's Ai Rx",
+ "Speak clearly please, I'm sensitive",
+ "Splint, aligner, surgical guide\u2026 the world's your oyster",
+ "Let's do this captain",
+ "Stay focused, and this'll be easy",
+ "Write me up before you go go",
+ "Click and Enunciate :)",
+ "Welcome back. Let's build something exceptional.",
+ "Tell me about the case. I'll take notes.",
+ "Talk to me. What's up?",
+ "Let's turn your vision into a prescription.",
+ "Ready when you are. Describe the outcome you want.",
+ "Let's create something great today.",
+ "Tell me about the case, and I'll help with the rest.",
+ "Good to see you again.",
+ "What are we working on today?",
+ "Describe the case in your own words, and I'll guide you through it.",
+ "Tell me about your restoration.",
+ "Let's build the prescription together.",
+ "Thanks for being here \u2014 now talk to me.",
+ "Let's make this one easy.",
+ "What can I make you today?",
+ "A crown, implant case, full arch, guide, or something else?",
+ "Let's bring this case to life.",
+ "Start anywhere \u2014 I'll ask questions as needed.",
+ "What's the case?",
+ "Let's see what you've got.",
+ "Another day, another smile. How can I help?",
+ "Ready for the next masterpiece?",
+ "Tell me the story. I'll handle the paperwork.",
+ "Let's make this easy. What's the prescription?",
+ "You're the doctor. I'm just here to keep things moving.",
+ "What challenge are we solving today?",
+ "Let's make sure the lab gets exactly what you want.",
+ "The best cases start with a conversation. Talk to me.",
+ "A great restoration starts with a great prescription. Let's begin.",
+ "What are we creating today?",
+ "Your patient is counting on both of us. Let's get started.",
+ "I'm rooting for you.",
+ "Rx me \u2014 you earned it.",
+ "Brace yourself for some cool Rx'ing.",
+ "Tooth be told\u2026 talk to me.",
+ "Keep calm and talk on.",
+ "Wisdom comes one tooth at a time.",
+ "You're the crown jewel of our day.",
+ "Here's lookin' at you kid",
+ "Scroll down for our click Rx",
+ "Let's knock another Rx out of the park",
+ "21 CDT's, we'll get this right",
+ "Founded in 1931, oh my!",
+ "We're about to celebrate 100 Years",
+ "It's all up to you an me now"
+];
+function airxShowGreeting(){
+ var el=document.getElementById('airxGreet'); if(!el) return;
+ var line=AIRX_GREETINGS[Math.floor(Math.random()*AIRX_GREETINGS.length)];
+ // strip trailing punctuation then always end with the same call to action
+ var base=line.replace(/\s*[—–-]\s*Talk or Click\s*$/i,'').replace(/[\s.!…]+$/,'');
+ var safe=base.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ var full=safe+' \u2014 <b>Talk</b> or <b>Click</b>';
+ el.classList.remove('show');
+ setTimeout(function(){ el.innerHTML=full; el.classList.add('show'); }, 50);
+ airxSpeakGreeting(base);   // speak the witty part aloud (without the "Talk or Click" tag)
+}
+// Speak the greeting aloud (best-effort; silent if speech synthesis is unavailable or blocked).
+var _airxGreetSpoke=false;
+function airxSpeakGreeting(text){
+ try{
+   if(!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+   speechSynthesis.cancel();
+   // Pronunciation fixes for TTS only (display text is unchanged):
+   // "live" here means broadcasting (long-i, rhymes with "hive"), not "live"=reside.
+   var spoken=text.replace(/\blive\b/gi,'lyve');
+   var u=new SpeechSynthesisUtterance(spoken);
+   u.rate=1.0; u.pitch=1.0; u.volume=1.0;
+   speechSynthesis.speak(u);
+ }catch(e){}
+}
+(function(){
+  var chips=document.querySelectorAll('.airxh-chip'), q=document.getElementById('airxQ');
+  [].forEach.call(chips,function(c){ c.onclick=function(){ q.value=c.textContent; q.dispatchEvent(new Event('input')); q.focus(); }; });
+  var rh=document.getElementById('railHome'); if(rh) rh.onclick=airxGoHome;
+  airxShowGreeting();
+  var push=document.getElementById('airxPush');
+  if(push) push.onclick=function(){
+    caseStarted=false; curEngine='fixed';
+    var tr=document.getElementById('airxTranscript'); if(tr) tr.innerHTML='';
+    airxEnterEngine();
+    renderLauncher(); refreshBar();
+  };
+})();
 </script>
 </body>
 </html>
