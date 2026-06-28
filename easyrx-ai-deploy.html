@@ -4450,8 +4450,9 @@ function airxPrompt(text){
 '- \"fixed\": crowns, bridges, veneers, inlays/onlays, implant crowns (single-tooth fixed restorations).',
 '- \"removable\": full dentures, partial dentures (cast metal frame), flexible/thermoplastic partials, all-acrylic partials/flippers, unilateral (Nesbit), Essix retainers, Snap-On Smile.',
 '- \"splint\": night guards, bite/occlusal splints, bruxism or TMJ appliances, sports mouthguards, bleaching/whitening trays, and sleep-apnea appliances (Herbst, EMA, TAP, etc.).',
-'- \"guide\": surgical guides for implant placement (single or full-arch), guided surgery, CHROME GuidedSMILE, All-on-X guides, zygomatic/pterygoid guided cases.',
-'- If it is clearly none of these (full-arch hybrid prosthesis without a guide, clear aligners/ortho appliance), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
+'- \"guide\": surgical GUIDES for implant placement (single or full-arch), guided surgery, CHROME GuidedSMILE guide, All-on-X GUIDE, zygomatic/pterygoid guided cases. (The surgical guide is the drilling template, NOT the final teeth.)',
+'- \"fullarch\": the full-arch PROSTHESIS / final restoration on implants \u2014 All-on-X final teeth, fixed zirconia hybrid bridge, G-CAM, implant overdenture, Bespoke full-arch. (This is the actual restoration, NOT a guide.) If the doctor says \"all on x\" or \"full arch\" about the TEETH/bridge/restoration, use fullarch; if about the surgical GUIDE, use guide.',
+'- If it is clearly none of these (clear aligners/ortho appliance), set engine to \"other\" and name it in interpretation \u2014 those are not built into the bar yet.',
 "",
 "STEP 2 \u2014 EXTRACT. Output shape depends on engine.",
 "",
@@ -4474,6 +4475,15 @@ function airxPrompt(text){
 '  - clasp \u2014 if partial/acrylic/unilateral, match to ONE of: \"Standard cast metal clasps\",\"Cast metal + flexible esthetic clasps\",\"Esthetic clasps (anterior)\". \"esthetic clasp(s)\" => \"Esthetic clasps (anterior)\"; \"flexible esthetic\" => \"Cast metal + flexible esthetic clasps\". If flexible appliance, clasp is \"Flexible (tissue-tone) clasps\" or \"Wire clasps\". OMIT if not stated.',
 '  - shade: if given, set shade + shadeSystem (default \"VITA Classical (A1\\u2013D4)\"). If none, OMIT. NOTE: shade only matters when ret includes a set-up/finish/reset \u2014 still extract it if stated.',
 "  - Only include fields actually stated or clearly implied; OMIT anything unknown so the engine asks.",
+"",
+"IF engine = \"fullarch\" (full-arch implant prosthesis: All-on-X final restoration, hybrid, zirconia bridge, overdenture \u2014 NOT a surgical guide):",
+'{ \"engine\":\"fullarch\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower|both\", \"family\":\"zirconia\", \"finalRestoration\":\"\", \"sites\":[4,6,8,9,11,13], \"implantCount\":6, \"stage\":\"\", \"screwBrand\":\"\", \"fpDesign\":\"FP1\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
+'  - family KEY: \"zirconia\"(TLZ-IB / NobelProcera monolithic zirconia \u2014 the DEFAULT for a fixed full-arch bridge), \"gcam\"(G-CAM Graphenano), \"removable\"(overdenture / LOCATOR / bar / Stabili-Teeth), \"bespoke\"(premium Bespoke design). \"all on x\"/\"all-on-4\"/\"hybrid\"/\"fixed bridge\" with zirconia => zirconia. Never invent.',
+'  - finalRestoration (optional, fixed): mention \"Ti-bar/titanium\", \"coping-free\", \"NobelProcera\", \"G-CAM\". Removable: \"LOCATOR overdenture\", \"bar overdenture\", \"Stabili-Teeth hybrid\".',
+'  - sites: list implant tooth numbers if stated (1-16 upper, 17-32 lower). OR give implantCount (e.g. 4, 5, 6) if only a number is said.',
+'  - stage: \"final\"|\"try-in\"/\"prototype\"|\"iJig\"|\"bite block\"|\"set-up\"|\"finish\". OMIT if not stated.',
+'  - screwBrand: e.g. \"Vortex 1.6\", \"BioHorizons\", \"DESS\", \"Dan Rosen\", \"Nobel temp\". OMIT if not stated.',
+'  - fpDesign: \"FP1\"|\"FP2\"|\"FP3\" if the prosthetic design type is stated. OMIT otherwise.',
 "",
 "IF engine = \"splint\" (night guards, bite splints, bruxism/TMJ appliances, sports mouthguards, sleep appliances):",
 '{ \"engine\":\"splint\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower\", \"prod\":\"clearguard\", \"opt\":\"hard\", \"hardVariant\":\"stone\", \"ffColor\":\"Black\", \"fabricator\":\"roe|client\", \"interpretation\":\"short note\" }',
@@ -4508,15 +4518,29 @@ function airxSubmit(ids){
   var spin='<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;padding:10px 2px"><span style="width:16px;height:16px;border:2.5px solid var(--line);border-top-color:var(--teal-d);border-radius:50%;display:inline-block;animation:airxspin .7s linear infinite"></span>Reading the case and writing up the Rx\u2026</div>';
   if(rep) rep.innerHTML=spin; else if(msg) msg.textContent='Reading the case\u2026';
   fetch(AIRX_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:AIRX_MODEL,max_tokens:1000,messages:[{role:'user',content:airxPrompt(text)}]})})
+    body:JSON.stringify({model:AIRX_MODEL,max_tokens:2000,messages:[{role:'user',content:airxPrompt(text)}]})})
   .then(function(r){ if(!r.ok) throw new Error('Backend '+r.status); return r.json(); })
   .then(function(data){
     var raw=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
     raw=raw.replace(/```json|```/g,'').trim();
-    var parsed=JSON.parse(raw);
-    // New shape: {cases:[...]}. Back-compat: a bare single case object.
+    // Tolerant parse: strip any prose around the JSON object.
+    var parsed=null;
+    try{ parsed=JSON.parse(raw); }
+    catch(e){ var a=raw.indexOf('{'), b=raw.lastIndexOf('}'); if(a>=0&&b>a){ try{ parsed=JSON.parse(raw.slice(a,b+1)); }catch(e2){} } }
+    if(!parsed){
+      if(rep) rep.innerHTML='<div style="background:#FBE9E7;color:#B0341F;padding:12px 14px;border-radius:11px;font-size:14px"><b>I couldn\u2019t read that one.</b><br>Try saying it again, or tap \u201CClick me through the case\u201D.</div>';
+      if(go){go.disabled=false; go.style.opacity='1';} return;
+    }
+    // Accept {cases:[...]}, a bare case object, or a single object nested oddly.
     var cases = (parsed && Array.isArray(parsed.cases)) ? parsed.cases
-              : (parsed && parsed.engine) ? [parsed] : [];
+              : (parsed && parsed.engine) ? [parsed]
+              : (parsed && parsed.case && parsed.case.engine) ? [parsed.case] : [];
+    // Last resort: if there's an engine-like field anywhere, salvage it.
+    if(!cases.length && parsed){ for(var key in parsed){ if(parsed[key] && parsed[key].engine){ cases=[parsed[key]]; break; } } }
+    if(!cases.length){
+      if(rep) rep.innerHTML='<div style="background:#FFF3E0;color:#9C5700;padding:12px 14px;border-radius:11px;font-size:14px"><b>I heard you, but couldn\u2019t map it to a case.</b><br>'+(parsed.interpretation?airxEsc(parsed.interpretation)+'<br>':'')+'Try naming the appliance (crown, denture, guide, full arch, splint).</div>';
+      if(go){go.disabled=false; go.style.opacity='1';} return;
+    }
     if(parsed && parsed.interpretation && cases.length && !cases[0]._overall) cases[0]._overall=parsed.interpretation;
     airxRunQueue(cases, parsed && parsed.interpretation);
   })
@@ -4531,6 +4555,49 @@ function airxSelEntry(resto){
 }
 // Fuzzy-match a spoken implant brand to a key in IMPLANTS_ALL (e.g. "Zimmer TSV" -> "ZimVie / Zimmer Biomet").
 function airxNorm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+// ===== Voice shade normalizer =====
+// Doctors say a shade ("A2","1M1","B4","110","BL1") but voice transcription mangles it:
+// "aye two","a 2","hay one","bee four","before","sea too","be el one". Map all that back to
+// the canonical code. Returns the matched code (e.g. "A2") or '' if nothing recognizable.
+var SHADE_ALL_CODES=(function(){ var s={}; try{ SHADE_SYS.forEach(function(g){ g.shades.forEach(function(c){ s[c.toUpperCase()]=c; }); }); }catch(e){} return s; })();
+function airxNormShade(raw){
+  if(!raw) return '';
+  var t=String(raw).toLowerCase().trim();
+  // strip lead-ins: "shade", "the shade is", "shade it", "shade of"
+  t=t.replace(/\b(the\s+)?shade(\s+(is|it|of))?\b/g,' ').trim();
+  // homophones for the LETTER portion
+  var letterMap=[
+    [/\b(aye|eh|hay|hey|ay|a)\b/g,'A'],
+    [/\b(bee|be|b)\b/g,'B'],
+    [/\b(sea|see|cee|c)\b/g,'C'],
+    [/\b(dee|de|d)\b/g,'D'],
+    [/\b(bl|b\.?l\.?|bee el|be el|bleach|bleached)\b/g,'BL'],
+    [/\b(em|m)\b/g,'M'],
+    [/\b(el|l)\b/g,'L'],
+    [/\b(are|arr|r)\b/g,'R'],
+    [/\b(oh|o|zero)\b/g,'0']
+  ];
+  // number words
+  var numMap=[[/\bone\b/g,'1'],[/\btwo\b|\btoo\b|\bto\b/g,'2'],[/\bthree\b|\btree\b/g,'3'],[/\bfour\b|\bfor\b|\bfore\b/g,'4'],[/\bfive\b/g,'5'],[/\bsix\b/g,'6'],[/\bseven\b/g,'7'],[/\beight\b|\bate\b/g,'8'],[/\bnine\b/g,'9'],[/\bzero\b/g,'0'],[/\bpoint\b|\bdot\b/g,'.']];
+  // common whole-word slips ("before"->B4, "be four"->B4, "say two"->C2)
+  var whole=[
+    [/\bbefore\b/g,'B4'],[/\ba too\b|\baye too\b|\bay two\b/g,'A2'],[/\bsea too\b|\bsee too\b|\bsee two\b/g,'C2'],
+    [/\bbee won\b|\bbee one\b/g,'B1'],[/\bay won\b|\baye one\b|\bhay one\b/g,'A1']
+  ];
+  whole.forEach(function(p){ t=t.replace(p[0],' '+p[1]+' '); });
+  numMap.forEach(function(p){ t=t.replace(p[0],p[1]); });
+  letterMap.forEach(function(p){ t=t.replace(p[0],p[1]); });
+  // collapse: pull out a candidate like "A 2"/"1 M 1"/"B L 1"/"110"
+  var compact=t.toUpperCase().replace(/[^A-Z0-9.]/g,'');
+  // direct hit?
+  if(SHADE_ALL_CODES[compact]) return SHADE_ALL_CODES[compact];
+  // try canonicalizing decimals like A3.5
+  if(SHADE_ALL_CODES[compact.replace(/(\d)(\d)$/,'$1.$2')]) return SHADE_ALL_CODES[compact.replace(/(\d)(\d)$/,'$1.$2')];
+  // scan for any known code as a substring (longest first)
+  var codes=Object.keys(SHADE_ALL_CODES).sort(function(a,b){return b.length-a.length;});
+  for(var i=0;i<codes.length;i++){ if(compact.indexOf(codes[i])>=0) return SHADE_ALL_CODES[codes[i]]; }
+  return '';
+}
 function airxMatchImplantBrand(q){
   if(!q) return '';
   var keys=Object.keys(IMPLANTS_ALL), nq=airxNorm(q);
@@ -4614,7 +4681,12 @@ function airxApply(c){
   var go=document.getElementById('airxGo')||document.getElementById('airxLGo'),
       rep=document.getElementById('airxRep');
   if(go){ go.disabled=false; go.style.opacity='1'; }
+  // Normalize a spoken/mangled shade ("aye two"->A2, "before"->B4) to a canonical code,
+  // so every engine receives a clean value. Keep the original if we can't recognize it.
+  if(c && c.shade){ var ns=airxNormShade(c.shade); if(ns) c.shade=ns; }
+  if(c && Array.isArray(c.cases)){ c.cases.forEach(function(cc){ if(cc&&cc.shade){ var n=airxNormShade(cc.shade); if(n) cc.shade=n; } }); }
   var eng=c && c.engine;
+  if(eng==='fullarch' || (eng==='other' && c && c.otherKind==='fullarch')){ airxApplyFullArch(c); return; }
   if(eng==='splint' || (eng==='other' && c && c.otherKind==='splint')){ airxApplySplint(c); return; }
   if(eng==='guide' || (eng==='other' && c && c.otherKind==='guide')){ airxApplyGuide(c); return; }
   if(eng==='other'){ airxApplyOther(c); return; }
@@ -4716,7 +4788,92 @@ function airxApplyGuide(c){
   airxToast(c, applied, skipped, landed);
   airxSpeakHandoff();
 }
-// ===== Splints & Guards AI mapper =====
+// ===== Full Arch AI mapper =====
+// Handles the common spine: family/material, arch(es), implant count/sites, final restoration,
+// stage, screw brand, FP design. The deep Bespoke aesthetic sub-flow is left for the on-screen
+// steps (it's a visual design decision tree) — the mapper routes there pre-filled.
+function airxApplyFullArch(c){
+  startCase('fullarch');
+  airxEnterEngine();
+  var applied=[], skipped=[];
+  // Arch(es)
+  if(c.arch==='both'||c.doubleArch){ fa.doubleArch=true; curArch='upper'; applied.push('dual arch'); }
+  else if(c.arch==='lower'){ curArch='lower'; applied.push('lower'); }
+  else { curArch='upper'; applied.push('upper'); }
+  // Family + group
+  var FAM={ zirconia:'zirconia', zirconium:'zirconia', tlz:'zirconia', 'tlz-ib':'zirconia', nobelprocera:'zirconia',
+            gcam:'gcam', 'g-cam':'gcam', graphenano:'gcam', graphene:'gcam',
+            removable:'removable', overdenture:'removable', locator:'removable', bar:'removable', hybrid:'removable',
+            bespoke:'bespoke' };
+  var fk = c.family ? FAM[String(c.family).toLowerCase().replace(/[^a-z]/g,'')] : '';
+  if(c.family && !fk){ skipped.push('family "'+c.family+'"'); }
+  if(fk){
+    fa.family=fk;
+    fa.group = (fk==='removable') ? 'removable' : (fk==='bespoke' ? 'fixed' : 'fixed');
+    if(fk==='bespoke'){ fa.bespokeMode=true; }
+    applied.push((FA_FAMILIES.find(function(f){return f.id===fk;})||{}).name||fk);
+  }
+  // Final restoration (match by name keywords against the family's finals)
+  if(c.finalRestoration && fk && fk!=='bespoke'){
+    var finals = (fa.group==='removable') ? FA_REM_FINALS : FA_FIXED_FINALS;
+    var fq=String(c.finalRestoration).toLowerCase();
+    var idx=-1;
+    finals.forEach(function(f,i){ var nm=f.name.toLowerCase();
+      if(idx<0){ if(/ti.?bar|titanium|substructure/.test(fq) && /ti (bar|sub)|substructure/.test(nm)) idx=i;
+        else if(/coping.?free|photogram/.test(fq) && /coping-free/.test(nm)) idx=i;
+        else if(/nobel/.test(fq) && /nobel/.test(nm)) idx=i;
+        else if(/locator/.test(fq) && /locator/.test(nm)) idx=i;
+        else if(/\bbar\b/.test(fq) && /bar overdenture/.test(nm)) idx=i;
+        else if(/stabili|fixed detach|hybrid/.test(fq) && /stabili/.test(nm)) idx=i;
+        else if(/g.?cam/.test(fq) && /g-cam/.test(nm)) idx=i; }
+    });
+    if(idx>=0){ fa.finalIdx=idx; applied.push(finals[idx].name); }
+  }
+  // Implant sites/count (upper)
+  if(Array.isArray(c.sites)){
+    c.sites.forEach(function(t){ var n=parseInt(t,10); if(n>=1&&n<=16) fa.implants[n]=true; else if(n>=17&&n<=32) fa.implantsLower[n]=true; });
+    var nu=Object.keys(fa.implants).length, nl=Object.keys(fa.implantsLower).length;
+    if(nu) applied.push(nu+' upper implants'); if(nl) applied.push(nl+' lower implants');
+  } else if(c.implantCount){
+    // place N implants at typical positions if only a count is given
+    var pos=[4,6,8,9,11,13,3,14,2,15]; var k=Math.min(parseInt(c.implantCount,10)||0,10);
+    for(var i=0;i<k;i++){ fa.implants[pos[i]]=true; }
+    if(k) applied.push(k+' implants');
+  }
+  // Stage
+  if(c.stage){
+    var stages=faStagesForCurrent(); var sq=String(c.stage).toLowerCase();
+    var hit=stages.find(function(s){ var l=s.label.toLowerCase();
+      return (/final/.test(sq)&&/final/.test(l)) || (/try.?in|prototype/.test(sq)&&/try-in|prototype/.test(l)) ||
+             (/ijig|jig/.test(sq)&&/jig/.test(l)) || (/bite block/.test(sq)&&/bite block/.test(l)) ||
+             (/set.?up/.test(sq)&&/set-up/.test(l)) || (/finish/.test(sq)&&/finish/.test(l)); });
+    if(hit){ fa.stage=hit.key; applied.push(hit.label); }
+  }
+  // Screw brand
+  if(c.screwBrand){
+    var sq2=String(c.screwBrand).toLowerCase().replace(/[^a-z0-9]/g,'');
+    var sb=FA_SCREW_BRANDS.find(function(b){ var nb=b.toLowerCase().replace(/[^a-z0-9]/g,''); return nb.indexOf(sq2)>=0||sq2.indexOf(nb.slice(0,6))>=0; });
+    if(sb){ fa.screw=sb; applied.push(sb); }
+  }
+  // FP design category
+  if(c.fpDesign){ var fp=String(c.fpDesign).toUpperCase().match(/FP[123]/); if(fp){ fa.designCat=fp[0]; applied.push(fp[0]); } }
+  // Shade (already normalized centrally). VITA Classical codes go to fa.shadeCode; for Bespoke, fa.bsp.vita.
+  if(c.shade){
+    var faShades=(typeof SHADE_SYS!=='undefined' && SHADE_SYS[0]) ? SHADE_SYS[0].shades : [];
+    if(fa.bespokeMode || fa.family==='bespoke'){
+      if((FA_BSP_VITA||[]).indexOf(c.shade)>=0){ fa.bsp.vita=c.shade; applied.push('shade '+c.shade); }
+      else skipped.push('shade "'+c.shade+'"');
+    } else {
+      if(faShades.indexOf(c.shade)>=0){ fa.shadeCode=c.shade; fa.shadeSys='VITA Classical A1-D4'; applied.push('shade '+c.shade); }
+      else skipped.push('shade "'+c.shade+'" (not VITA Classical)');
+    }
+  }
+  renderSteps(); refreshBar();
+  var landed=airxAutoAdvance();
+  refreshAll();
+  airxToast(c, applied, skipped, landed);
+  airxSpeakHandoff();
+}
 // Maps a parsed splint case onto spl.* + arch, validating against SPL_CATALOG so we never
 // write a product the engine doesn't have. Lands on Review if complete, else the first gap.
 function airxApplySplint(c){
