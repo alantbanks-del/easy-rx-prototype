@@ -1288,14 +1288,14 @@ var FA_TOOTH_DESIGN=[
 ];
 
 var fa={ doubleArch:false, implants:{}, implantsLower:{}, site:{}, siteLower:{}, family:'', group:'', finalIdx:null, stage:'', records:'', screw:'',
-  labMUA:'', tdImage:'', designCat:'FP1', bite:'I',
+  labMUA:'', tdImage:'', designCat:'FP3', bite:'I',
   td:{midline:0,incMax:0,incMand:0,occMax:0,antMax:0,antMand:0, central_len:0, central_wid:0},
   shapeSource:'', shapeStyle:'', smileName:'', bespokeMode:false,
   tissueShade:'Pink', transUpper:'', transLower:'', transMode:'copy',
   occlusal:'None', occMethod:'study', occScanner:'', occNotes:'', esthSrc:'Prototype is perfect, copy', esthNotes:'',
   shadeSys:'VITA Classical (A1\u2013D4)', shadeCode:'', shadeDigital:'',
   bsp:{ material:'', vita:'', intensity:'Medium', texture:'Medium', omit:'', gingivaHue:'Medium pink', gingivaTexture:'Medium', passivity:false, notes:'' } };
-function faReset(){ fa={doubleArch:false,implants:{},implantsLower:{},site:{},siteLower:{},family:'',group:'',finalIdx:null,stage:'',records:'',labMUA:'',tdImage:'',screw:'',designCat:'FP1',bite:'I',td:{midline:0,incMax:0,incMand:0,occMax:0,antMax:0,antMand:0,central_len:0,central_wid:0},shapeSource:'',shapeStyle:'',smileName:'',bespokeMode:false,tissueShade:'Pink',transUpper:'',transLower:'',transMode:'copy',occlusal:'None',occMethod:'study',occScanner:'',occNotes:'',esthSrc:'Prototype is perfect, copy',esthNotes:'',shadeSys:'VITA Classical (A1\u2013D4)',shadeCode:'',shadeDigital:'',bsp:{material:'',vita:'',intensity:'Medium',texture:'Medium',omit:'',gingivaHue:'Medium pink',gingivaTexture:'Medium',passivity:false,notes:''}}; }
+function faReset(){ fa={doubleArch:false,implants:{},implantsLower:{},site:{},siteLower:{},family:'',group:'',finalIdx:null,stage:'',records:'',labMUA:'',tdImage:'',screw:'',designCat:'FP3',bite:'I',td:{midline:0,incMax:0,incMand:0,occMax:0,antMax:0,antMand:0,central_len:0,central_wid:0},shapeSource:'',shapeStyle:'',smileName:'',bespokeMode:false,tissueShade:'Pink',transUpper:'',transLower:'',transMode:'copy',occlusal:'None',occMethod:'study',occScanner:'',occNotes:'',esthSrc:'Prototype is perfect, copy',esthNotes:'',shadeSys:'VITA Classical (A1\u2013D4)',shadeCode:'',shadeDigital:'',bsp:{material:'',vita:'',intensity:'Medium',texture:'Medium',omit:'',gingivaHue:'Medium pink',gingivaTexture:'Medium',passivity:false,notes:''}}; }
 function faIsBespoke(){ return fa.family==='bespoke' || fa.bespokeMode; }
 function faImplantCount(){ return Object.keys(fa.implants).length; }
 function faImplantCountLower(){ return Object.keys(fa.implantsLower).length; }
@@ -4477,7 +4477,8 @@ function airxPrompt(text){
 "  - Only include fields actually stated or clearly implied; OMIT anything unknown so the engine asks.",
 "",
 "IF engine = \"fullarch\" (full-arch implant prosthesis: All-on-X final restoration, hybrid, zirconia bridge, overdenture \u2014 NOT a surgical guide):",
-'{ \"engine\":\"fullarch\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower|both\", \"family\":\"zirconia\", \"finalRestoration\":\"\", \"sites\":[4,6,8,9,11,13], \"implantCount\":6, \"stage\":\"\", \"screwBrand\":\"\", \"fpDesign\":\"FP1\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
+'{ \"engine\":\"fullarch\", \"caseLabel\":\"short label\", \"arch\":\"upper|lower|both\", \"family\":\"zirconia\", \"finalRestoration\":\"\", \"sites\":[4,6,8,9,11,13], \"implantCount\":6, \"stage\":\"\", \"screwBrand\":\"\", \"fpDesign\":\"FP3\", \"toothShape\":\"\", \"shade\":\"A2\", \"interpretation\":\"short note\" }',
+'  - toothShape (optional): Functional, Natural, Youthful, Oval, Enhanced, Hollywood (or \"Detailed\" versions). Map the spoken shape word.',
 '  - family KEY: \"zirconia\"(TLZ-IB / NobelProcera monolithic zirconia \u2014 the DEFAULT for a fixed full-arch bridge), \"gcam\"(G-CAM Graphenano), \"removable\"(overdenture / LOCATOR / bar / Stabili-Teeth), \"bespoke\"(premium Bespoke design). \"all on x\"/\"all-on-4\"/\"hybrid\"/\"fixed bridge\" with zirconia => zirconia. Never invent.',
 '  - finalRestoration (optional, fixed): mention \"Ti-bar/titanium\", \"coping-free\", \"NobelProcera\", \"G-CAM\". Removable: \"LOCATOR overdenture\", \"bar overdenture\", \"Stabili-Teeth hybrid\".',
 '  - sites: list implant tooth numbers if stated (1-16 upper, 17-32 lower). OR give implantCount (e.g. 4, 5, 6) if only a number is said.',
@@ -4857,15 +4858,24 @@ function airxApplyFullArch(c){
   }
   // FP design category
   if(c.fpDesign){ var fp=String(c.fpDesign).toUpperCase().match(/FP[123]/); if(fp){ fa.designCat=fp[0]; applied.push(fp[0]); } }
-  // Shade (already normalized centrally). VITA Classical codes go to fa.shadeCode; for Bespoke, fa.bsp.vita.
+  // Tooth shape (Bespoke/design): match against FA_BSP_SHAPES (Functional, Natural, Enhanced, Hollywood, etc.)
+  if(c.toothShape){
+    var sq=String(c.toothShape).toLowerCase();
+    var shp=(FA_BSP_SHAPES||[]).find(function(s){ return s.toLowerCase()===sq; })
+         || (FA_BSP_SHAPES||[]).find(function(s){ return s.toLowerCase().indexOf(sq)>=0 || sq.indexOf(s.toLowerCase())>=0; });
+    if(shp){ fa.shapeSource='Choose shape'; fa.shapeStyle=shp; applied.push('shape '+shp); }
+    else skipped.push('tooth shape "'+c.toothShape+'"');
+  }
+  // Shade (already normalized centrally). Find which system the code belongs to and set it there.
   if(c.shade){
-    var faShades=(typeof SHADE_SYS!=='undefined' && SHADE_SYS[0]) ? SHADE_SYS[0].shades : [];
     if(fa.bespokeMode || fa.family==='bespoke'){
       if((FA_BSP_VITA||[]).indexOf(c.shade)>=0){ fa.bsp.vita=c.shade; applied.push('shade '+c.shade); }
       else skipped.push('shade "'+c.shade+'"');
     } else {
-      if(faShades.indexOf(c.shade)>=0){ fa.shadeCode=c.shade; fa.shadeSys='VITA Classical A1-D4'; applied.push('shade '+c.shade); }
-      else skipped.push('shade "'+c.shade+'" (not VITA Classical)');
+      var sys=null;
+      try{ SHADE_SYS.forEach(function(g){ if(!sys && g.shades.indexOf(c.shade)>=0) sys=g.sys; }); }catch(e){}
+      if(sys){ fa.shadeSys=sys; fa.shadeCode=c.shade; applied.push('shade '+c.shade); }
+      else skipped.push('shade "'+c.shade+'"');
     }
   }
   renderSteps(); refreshBar();
