@@ -484,25 +484,27 @@ svg{width:100%;height:auto;display:block}
 .dec-hard{font-size:9.5px;font-weight:800;background:#156468;color:#fff;border-radius:5px;padding:1px 5px;vertical-align:middle}
 .dec-hardchk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);margin-top:8px;cursor:pointer}
 .dec-hardchk input{width:16px;height:16px}
-.tg-results{margin-top:14px}
-.tg-grouphdr{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--ink);margin:16px 0 8px;padding-bottom:5px;border-bottom:2px solid var(--ec,#8295a3)}
-.tg-grpdot{width:11px;height:11px;border-radius:50%;background:var(--ec,#8295a3);flex:0 0 auto}
-.tg-grpn{font-size:11px;font-weight:800;color:#fff;background:var(--ec,#8295a3);border-radius:10px;padding:1px 8px;margin-left:auto}
-.tg-grid{display:flex;flex-direction:column;gap:10px}
-.tg-tile{border:2px solid var(--ec,#8295a3);border-radius:13px;background:#fff;padding:11px 12px}
-.tg-tile-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
-.tg-tile-name{font-size:13.5px;font-weight:800;color:var(--ink);word-break:break-all}
-.tg-tile-eng{font-size:10px;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px;white-space:nowrap}
-.tg-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.tg-score{text-align:center}
-.tg-score-top{display:flex;flex-direction:column;align-items:center;gap:0}
-.tg-score-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
-.tg-score-n{font-size:21px;font-weight:800;line-height:1.1}
-.tg-score-bar{height:5px;border-radius:3px;background:#edf1f0;overflow:hidden;margin:3px 0}
-.tg-score-bar span{display:block;height:100%;border-radius:3px}
-.tg-score-route{font-size:9.5px;font-weight:700}
-.tg-miss{margin-top:8px;font-size:12px;font-weight:700;color:#c0392b;background:#fdf0ee;border-radius:8px;padding:5px 9px}
-.tg-expbtn{margin-top:9px;border:none;background:transparent;color:#156468;font-weight:700;font-size:12.5px;cursor:pointer;padding:2px 0}
+.tg-results{margin-top:10px}
+.tg-grouphdr{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--ink);margin:10px 0 4px;padding-bottom:3px;border-bottom:1.5px solid var(--ec,#8295a3)}
+.tg-grpdot{width:9px;height:9px;border-radius:50%;background:var(--ec,#8295a3);flex:0 0 auto}
+.tg-grpn{font-size:10px;font-weight:800;color:#fff;background:var(--ec,#8295a3);border-radius:9px;padding:1px 7px;margin-left:auto}
+.tg-grid{display:flex;flex-direction:column;gap:4px}
+.tg-tile{border:1px solid var(--line);border-left:4px solid var(--ec,#8295a3);border-radius:7px;background:#fff;padding:6px 9px}
+.tg-tile-head{display:flex;align-items:center;gap:8px;margin-bottom:0}
+.tg-tile-name{font-size:12.5px;font-weight:700;color:var(--ink);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg-tile-eng{font-size:9px;font-weight:800;color:#fff;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.tg-scores{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.tg-score{display:flex;align-items:baseline;gap:3px}
+.tg-score-top{display:flex;flex-direction:row;align-items:baseline;gap:3px}
+.tg-score-lbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.02em}
+.tg-score-n{font-size:14px;font-weight:800;line-height:1}
+.tg-score-bar{display:none}
+.tg-score-route{display:none}
+.tg-miss{margin-top:4px;font-size:11px;font-weight:600;color:#c0392b;background:#fdf0ee;border-radius:6px;padding:3px 7px}
+.tg-expbtn{border:1px solid var(--line);background:#f6f9f8;color:#156468;font-weight:700;font-size:10.5px;cursor:pointer;padding:3px 9px;border-radius:13px;white-space:nowrap;flex:0 0 auto;display:flex;align-items:center;gap:4px}
+.tg-cv{display:inline-block;transition:transform .15s;font-size:9px}
+.tg-expbtn.open{background:#156468;color:#fff;border-color:#156468}
+.tg-expbtn.open .tg-cv{transform:rotate(180deg)}
 .tg-body{margin-top:8px;border-top:1px solid #eef0ef;padding-top:8px}
 .tg-sec{padding:7px 0;border-top:1px solid #f3f6f5}
 .tg-sec:first-child{border-top:none}
@@ -4484,6 +4486,7 @@ function airxPrompt(text){
 '  - sites: list implant tooth numbers if stated (1-16 upper, 17-32 lower). OR give implantCount (e.g. 4, 5, 6) if only a number is said.',
 '  - stage: \"final\"|\"try-in\"/\"prototype\"|\"iJig\"|\"bite block\"|\"set-up\"|\"finish\". OMIT if not stated.',
 '  - screwBrand: e.g. \"Vortex 1.6\", \"BioHorizons\", \"DESS\", \"Dan Rosen\", \"Nobel temp\". OMIT if not stated.',
+'  - implantBrand / implantLine: the implant system (e.g. \"BlueSkyBio\", \"BioHorizons\", \"Nobel\"). The mapper fills only the first implant. OMIT if not stated.',
 '  - fpDesign: \"FP1\"|\"FP2\"|\"FP3\" if the prosthetic design type is stated. OMIT otherwise.',
 "",
 "IF engine = \"splint\" (night guards, bite splints, bruxism/TMJ appliances, sports mouthguards, sleep appliances):",
@@ -4878,6 +4881,18 @@ function airxApplyFullArch(c){
       else skipped.push('shade "'+c.shade+'"');
     }
   }
+  // Implant brand: fill ONLY the first (lowest-numbered) implant of each arch, plus line if given.
+  if(c.implantBrand){
+    var bNameFA=airxMatchImplantBrand(c.implantBrand);
+    if(bNameFA){
+      var lNameFA = c.implantLine ? airxMatchImplantLine(bNameFA, c.implantLine) : '';
+      var upS=Object.keys(fa.implants).map(Number).sort(function(a,b){return a-b;});
+      var loS=Object.keys(fa.implantsLower).map(Number).sort(function(a,b){return a-b;});
+      if(upS.length){ var u0=upS[0]; fa.site[u0]=fa.site[u0]||{}; fa.site[u0].brand=bNameFA; if(lNameFA) fa.site[u0].line=lNameFA; }
+      if(loS.length){ var l0=loS[0]; fa.siteLower[l0]=fa.siteLower[l0]||{}; fa.siteLower[l0].brand=bNameFA; if(lNameFA) fa.siteLower[l0].line=lNameFA; }
+      applied.push(bNameFA+(lNameFA?' '+lNameFA:'')+' (first implant)');
+    } else { skipped.push('implant brand "'+c.implantBrand+'"'); }
+  }
   renderSteps(); refreshBar();
   var landed=airxAutoAdvance();
   refreshAll();
@@ -5203,7 +5218,7 @@ function renderInfoPage(){
  };
 }
 /* ===================== RX TRIAGE (read a batch of Rx's -> score, decipher & route) =====================
- * Drop up to 10 incoming Rx's. Each is analyzed in 3 scored sections:
+ * Drop up to 50 incoming Rx's. Each is analyzed in 3 scored sections:
  *   A) Doctor identity  — name, address, phone (in that order); flags missing address/phone.
  *   B) Standard fields  — checked/filled boxes (crown #, upper/lower, return-for-finish, case specs).
  *   C) Handwritten      — deciphered to text, low-confidence spans highlighted.
@@ -5336,12 +5351,12 @@ function renderTriagePage(){
  var esc=function(s){ return String(s==null?'':s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); };
  var html='<div style="padding:14px 16px">'+
    '<div class="launch-title" style="font-size:20px">Rx Triage</div>'+
-   '<div class="launch-sub">Drop up to 10 incoming Rx\u2019s. We score the read, decipher handwriting, and route each to the right department.</div>';
+   '<div class="launch-sub">Drop up to 50 incoming Rx\u2019s. We score the read, decipher handwriting, and route each to the right department.</div>';
 
  // Dropzone
  html+='<div id="tgDrop" class="info-drop" style="margin-top:4px">'+
    '<input id="tgFile" type="file" accept="image/*,application/pdf" multiple style="display:none">'+
-   '<div class="info-drop-ic">\u{1F4C4}</div><div><b>Drop Rx\u2019s here</b> or tap to browse <span style="color:var(--muted)">(up to 10)</span></div>'+
+   '<div class="info-drop-ic">\u{1F4C4}</div><div><b>Drop Rx\u2019s here</b> or tap to browse <span style="color:var(--muted)">(up to 50)</span></div>'+
    '<div style="font-size:12px;color:var(--muted);margin-top:2px">.jpg \u00b7 .png \u00b7 .pdf</div></div>';
  if(triage.files.length){
    html+='<div class="info-files">'+triage.files.map(function(f,i){ return '<div class="info-file"><span>\u{1F4CE} '+esc(f.name)+'</span><button type="button" class="info-fx" data-tgrm="'+i+'">\u00D7</button></div>'; }).join('')+'</div>';
@@ -5377,7 +5392,7 @@ function renderTriagePage(){
  var fi=stage.querySelector('#tgFile'), dz=stage.querySelector('#tgDrop');
  function addFiles(list){
    var arr=[].slice.call(list);
-   arr.forEach(function(f){ if(triage.files.length>=10) return; var fr=new FileReader(); fr.onload=function(){ triage.files.push({name:f.name,type:f.type,dataUrl:fr.result}); renderTriagePage(); }; fr.readAsDataURL(f); });
+   arr.forEach(function(f){ if(triage.files.length>=50) return; var fr=new FileReader(); fr.onload=function(){ triage.files.push({name:f.name,type:f.type,dataUrl:fr.result}); renderTriagePage(); }; fr.readAsDataURL(f); });
  }
  if(dz){ dz.onclick=function(){ fi&&fi.click(); };
    dz.addEventListener('dragover',function(e){ e.preventDefault(); dz.classList.add('drag'); });
@@ -5388,7 +5403,7 @@ function renderTriagePage(){
  var run=stage.querySelector('#tgRun'); if(run) run.onclick=function(){ if(!triage.busy) triageRun(); };
  var demo=stage.querySelector('#tgDemo'); if(demo) demo.onclick=function(){ triage.cases=triageDemoCases().map(triageNormalize); renderTriagePage(); };
  var bk=stage.querySelector('#tgBack'); if(bk) bk.onclick=function(){ renderLauncher(); };
- [].forEach.call(stage.querySelectorAll('[data-tgexp]'),function(b){ b.onclick=function(){ var i=+b.getAttribute('data-tgexp'); var el=document.getElementById('tgbody-'+i); if(el) el.style.display = el.style.display==='none'?'block':'none'; }; });
+ [].forEach.call(stage.querySelectorAll('[data-tgexp]'),function(b){ b.onclick=function(){ var i=+b.getAttribute('data-tgexp'); var el=document.getElementById('tgbody-'+i); if(el){ var show=el.style.display==='none'; el.style.display=show?'block':'none'; b.classList.toggle('open',show); } }; });
 }
 
 function triageScorePill(label, score, esc){
@@ -5404,15 +5419,16 @@ function triageTile(c, E, esc){
  var d=c.doctor||{}, f=c.fields||{}, h=c.handwritten||{};
  var missing=(d.missing&&d.missing.length)?'<div class="tg-miss">\u26A0 Missing: '+d.missing.map(esc).join(', ')+'</div>':'';
  var html='<div class="tg-tile" style="--ec:'+E.color+'">';
- html+='<div class="tg-tile-head"><span class="tg-tile-name">'+esc(c.name)+'</span><span class="tg-tile-eng" style="background:'+E.color+'">'+E.name+'</span></div>';
- // 3 section scores
- html+='<div class="tg-scores">'+
-   triageScorePill('Doctor', d.score, esc)+
-   triageScorePill('Fields', f.score, esc)+
-   triageScorePill('Handwriting', h.score, esc)+'</div>';
+ html+='<div class="tg-tile-head">'+
+   '<span class="tg-tile-name">'+esc(c.name)+'</span>'+
+   '<span class="tg-tile-eng" style="background:'+E.color+'">'+E.name+'</span>'+
+   '<div class="tg-scores">'+
+     triageScorePill('Dr', d.score, esc)+
+     triageScorePill('Fld', f.score, esc)+
+     triageScorePill('HW', h.score, esc)+'</div>'+
+   '<button type="button" class="tg-expbtn" data-tgexp="'+idx+'"><span class="tg-cv">\u25BE</span> Details</button>'+
+ '</div>';
  html+=missing;
- // expandable detail
- html+='<button type="button" class="tg-expbtn" data-tgexp="'+idx+'">View analysis \u203A</button>';
  html+='<div class="tg-body" id="tgbody-'+idx+'" style="display:none">';
  // A) doctor
  html+='<div class="tg-sec"><div class="tg-sec-h">A \u00b7 Doctor identity</div>'+
