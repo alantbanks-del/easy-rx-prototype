@@ -505,7 +505,14 @@ svg{width:100%;height:auto;display:block}
 .tg-cv{display:inline-block;transition:transform .15s;font-size:9px}
 .tg-expbtn.open{background:#156468;color:#fff;border-color:#156468}
 .tg-expbtn.open .tg-cv{transform:rotate(180deg)}
-.tg-body{margin-top:8px;border-top:1px solid #eef0ef;padding-top:8px}
+.api-json-sec{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.api-json-btn{width:100%;display:flex;align-items:center;gap:8px;justify-content:center;background:#f6f9f8;border:1px solid var(--line);border-radius:10px;padding:10px;font-weight:800;font-size:13px;color:var(--teal-d);cursor:pointer}
+.api-json-btn span{font-family:monospace;font-size:15px}
+.api-json-btn.open{background:var(--teal-d);color:#fff;border-color:var(--teal-d)}
+.api-json-body{margin-top:8px}
+.api-json-note{font-size:12px;color:var(--muted);margin-bottom:6px}
+.api-json-pre{background:#0f1f1c;color:#c8e6dd;border-radius:10px;padding:12px 14px;font:12px/1.55 monospace;overflow-x:auto;white-space:pre;margin:0}
+.api-json-copy{margin-top:8px;background:#fff;border:1.5px solid var(--teal);color:var(--teal-d);border-radius:9px;padding:8px 14px;font-weight:800;font-size:13px;cursor:pointer}
 .tg-sec{padding:7px 0;border-top:1px solid #f3f6f5}
 .tg-sec:first-child{border-top:none}
 .tg-sec-h{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
@@ -1962,6 +1969,7 @@ function renderRemovableStage(stage){
  if(nm==='Buy a Splint'){ renderGuardStep(); return; }
  if(nm==='Review'){
    stage.innerHTML=renderReview();
+   wireApiJson();
    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
@@ -2234,7 +2242,7 @@ function renderSharedEndStep(stage, nm){
 /* ===================== SURGICAL GUIDES GUIDED FLOW ===================== */
 function renderGuidesStage(stage){
  var nm=STEPS()[step];
- if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); return; }
+ if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); wireApiJson(); return; }
  if(nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
  if(nm==='Guide Type'){
@@ -2917,7 +2925,7 @@ function renderGdDenture(stage){
 
 function renderFullArchStage(stage){
  var nm=STEPS()[step];
- if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); return; }
+ if(nm==='Review'){ stage.innerHTML=renderReview(); [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; }); wireApiJson(); return; }
  if(nm==='Opposing Arch' || nm==='Finish'){ renderSharedEndStep(stage, nm); return; }
 
  if(nm==='Arch'){
@@ -3611,6 +3619,7 @@ function renderOrthoStage(stage){
  var nm=STEPS()[step];
  if(nm==='Review'){
    stage.innerHTML=renderReview();
+   wireApiJson();
    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
@@ -3806,6 +3815,7 @@ function renderAlignStage(stage){
   var nm=STEPS()[step];
   if(nm==='Review'){
     stage.innerHTML=renderReview();
+    wireApiJson();
     [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
     return;
   }
@@ -3947,6 +3957,7 @@ function renderSplintStage(stage){
  var nm=STEPS()[step];
  if(nm==='Review'){
    stage.innerHTML=renderReview();
+   wireApiJson();
    [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){ b.onclick=function(){ var s=b.getAttribute('data-step'); var idx=STEPS().indexOf(s); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } }; });
    return;
  }
@@ -4901,6 +4912,68 @@ function airxApplyFullArch(c){
 }
 // Maps a parsed splint case onto spl.* + arch, validating against SPL_CATALOG so we never
 // write a product the engine doesn't have. Lands on Review if complete, else the first gap.
+// ===== Rx -> API CODE TRANSLATOR (Surgical Guides) =====
+// Authoritative code grid (from ROE). base = first code(s); add = one-time extra; eachAddl = per ADDITIONAL site.
+var GUIDE_API_MAP={
+  'chrome':      {match:/chrome/i,               base:['GS01'],   add:[],       eachAddl:[]},
+  'combiguide':  {match:/combi/i,                base:['CTCG02'], add:[],       eachAddl:[]},
+  'bonechannel': {match:/bone ?channel/i,        base:['CTCG03'], add:[],       eachAddl:[]},
+  'tooth':       {match:/tooth[- ]?supported/i,  base:['CTSP01'], add:[],       eachAddl:['CTSP02']},
+  'tissue':      {match:/tissue[- ]?supported/i, base:['CTSP01'], add:[],       eachAddl:['CTSP02']},
+  'bone':        {match:/bone[- ]?supported/i,   base:['CTSP01'], add:['SG03'], eachAddl:['CTSP02']},
+  'roeplan':     {match:/roe (to )?plan/i,       base:['CTSP01'], add:[],       eachAddl:['CTSP02']},
+  'ezgoma_one':  {match:/ezgoma.*(one|1) ?side/i,base:['EZ01'],   add:[],       eachAddl:[]},
+  'ezgoma_both': {match:/ezgoma.*(both|2) ?side/i,base:['EZ02'],  add:[],       eachAddl:[]},
+  'roezygo':     {match:/roe zygo|zygo guide/i,  base:['GS01'],   add:[],       eachAddl:[]}
+};
+function gkLabel(k){ return ({chrome:'CHROME GuidedSMILE',combiguide:'CombiGuide',bonechannel:'Bone Channel Guide',tooth:'Tooth Supported Guide',tissue:'Tissue Supported Guide',bone:'Bone Supported Guide',roeplan:'ROE to plan the case',ezgoma_one:'EZGoma Guide One Side',ezgoma_both:'EZGoma Guide Both Sides',roezygo:'ROE Zygo Guide'})[k]||''; }
+function txGuideType(text){
+  var t=String(text||'');
+  var order=['chrome','combiguide','bonechannel','ezgoma_both','ezgoma_one','roezygo','bone','tissue','tooth','roeplan'];
+  for(var i=0;i<order.length;i++){ if(GUIDE_API_MAP[order[i]].match.test(t)) return order[i]; }
+  return '';
+}
+function txCountSites(text){
+  var t=String(text||'');
+  var m=t.match(/sites?[^0-9]*([0-9,\s&and]+)/i);
+  var blob=m?m[1]:t;
+  var nums=(blob.match(/\b([1-9]|[12][0-9]|3[0-2])\b/g)||[]).map(Number).filter(function(n){return n>=1&&n<=32;});
+  nums=nums.filter(function(v,i){return nums.indexOf(v)===i;});
+  return nums.length;
+}
+function txValidate(doctor){
+  doctor=doctor||{};
+  var checks=[['Doctor Name', !!(doctor.name && !/illegible|unreadable|^\(/i.test(doctor.name))],
+              ['Phone', !!(doctor.phone && String(doctor.phone).replace(/\D/g,'').length>=7)],
+              ['Address', !!(doctor.address && String(doctor.address).trim().length>3)]];
+  var have=[], missing=[];
+  checks.forEach(function(c){ (c[1]?have:missing).push(c[0]); });
+  return { pct: Math.round(have.length/3*100), have:have, missing:missing };
+}
+function txBuildCodes(guideKey, siteCount){
+  var g=GUIDE_API_MAP[guideKey]; if(!g) return [];
+  var codes=[];
+  g.base.forEach(function(c){ codes.push(c); });
+  g.add.forEach(function(c){ codes.push(c); });
+  if(g.eachAddl.length && siteCount>1){ for(var i=1;i<siteCount;i++){ g.eachAddl.forEach(function(c){ codes.push(c); }); } }
+  return codes;
+}
+function txTranslate(c){
+  var readText=[ (c.fields&&c.fields.items?c.fields.items.join(' '):''), (c.handwritten&&c.handwritten.text)||'', c.summary||'' ].join('  ');
+  var gk=txGuideType(readText);
+  var sites=txCountSites(readText);
+  var val=txValidate(c.doctor||{});
+  var codes=gk?txBuildCodes(gk,sites):[];
+  return {
+    guideKey:gk, guideLabel: gk?gkLabel(gk):'(guide type not recognized)',
+    siteCount:sites, validation:val, codes:codes,
+    pushReady: (val.pct===100 && codes.length>0),
+    payload:{ doctor:{ name:(c.doctor&&c.doctor.name)||'', phone:(c.doctor&&c.doctor.phone)||'', address:(c.doctor&&c.doctor.address)||'' },
+      validationPct:val.pct, missing:val.missing, guideType:gkLabel(gk), siteCount:sites, apiCodes:codes }
+  };
+}
+window.txTranslate=txTranslate; window.txValidate=txValidate; window.txBuildCodes=txBuildCodes; window.txGuideType=txGuideType; window.txCountSites=txCountSites;
+
 function airxApplySplint(c){
   startCase('splints');
   airxEnterEngine();
@@ -5676,6 +5749,7 @@ function renderStage(){
   showRxReady();
  } else if(STEPS()[step]==='Review'){
   stage.innerHTML=renderReview();
+  wireApiJson();
   [].forEach.call(stage.querySelectorAll('.rev-row'),function(b){
    b.onclick=function(){ var nm=b.getAttribute('data-step'); var idx=STEPS().indexOf(nm); if(idx>=0){ step=idx; maxStep=Math.max(maxStep,idx); _userPickedStep=true; refreshAll(); } };
   });
@@ -6003,10 +6077,10 @@ function renderReview(){
   var gp=gdPricing();
   var pl=gp.lines.map(function(l){ return '<div class="gd-priceline"><span>'+l.label+'</span><span>'+(l.amt<0?'\u2212$'+Math.abs(l.amt).toLocaleString():'$'+l.amt.toLocaleString())+'</span></div>'; }).join('');
   imgBlock='<div class="gd-pricebox"><div class="gd-pricehead">Estimated Total</div>'+pl+'<div class="gd-pricetotal"><span>Total</span><span>$'+gp.total.toLocaleString(undefined,{minimumFractionDigits:gp.total%1?2:0})+'</span></div><div class="gd-pricenote">Estimate from current selections. Final pricing confirmed by ROE.</div></div>';
-  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+imgBlock+'</div>';
+  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+imgBlock+apiJsonBlock()+'</div>';
  }
  if(curEngine==='ortho' || curEngine==='aligners'){
-  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+'</div>';
+  return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+apiJsonBlock()+'</div>';
  }
  if(savedImages.length){
   var thumbs=savedImages.map(function(im){
@@ -6017,7 +6091,48 @@ function renderReview(){
  } else {
   imgBlock='<div class="rev-imgsec"><div class="rev-imgsec-lbl">\u{1F4CE} Saved images / captures</div><div class="rev-img-none">No shade captures saved. (Optional \u2014 paint &amp; save on the Dial step.)</div></div>';
  }
- return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+imgBlock+'</div>';
+ return '<div style="padding:10px 16px"><p class="hint" style="margin:0 0 12px">Review the case. Tap any line to jump back and change it.</p>'+rows+notesBlock+imgBlock+apiJsonBlock()+'</div>';
+}
+
+// ===== API push payload (codes only, no price) =====
+// Builds the fields that would push to the ROE API for the CURRENT case.
+function buildApiPayload(){
+  var pay={ engine:curEngine, arch:(curArch||''), codes:[], notes:'' };
+  if(curEngine==='guides'){
+    // Guide flow -> API code map (from the ROE grid).
+    var flow=(gd.flow||'').toLowerCase();
+    var flowKey = /chrome/.test(flow)?'chrome' : /combi/.test(flow)?'combiguide' : /bonechannel|bone.?channel/.test(flow)?'bonechannel' :
+      /ezgoma/.test(flow)? ((gd.ezSide==='both'||gd.ezBothSides)?'ezgoma_both':'ezgoma_one') : /zygo/.test(flow)?'roezygo' :
+      (function(){ var s=(gd.stdSupport||'').toLowerCase(); return /tissue/.test(s)?'tissue':/bone/.test(s)?'bone':/tooth/.test(s)?'tooth':'tooth'; })();
+    // count implant sites on the chart
+    var sc=0; ['upper','lower'].forEach(function(ar){ sc+=Object.keys((gd.sites&&gd.sites[ar])||{}).length; });
+    if(typeof txBuildCodes==='function'){ pay.codes=txBuildCodes(flowKey, sc||1); }
+    pay.guideType = (typeof gkLabel==='function'?gkLabel(flowKey):flowKey);
+    pay.siteCount = sc;
+  } else {
+    // Other engines: code grid not yet provided — emit the case shape with an empty codes array.
+    pay.codes=[];
+    pay.notes='Code grid for '+curEngine+' not yet mapped \u2014 codes pending.';
+  }
+  // Validation block (Doctor Name / Phone / Address) if we have any recipient info in state.
+  return pay;
+}
+function apiJsonBlock(){
+  var pay=buildApiPayload();
+  var json=JSON.stringify(pay,null,2);
+  return '<div class="api-json-sec">'+
+    '<button type="button" id="apiJsonBtn" class="api-json-btn"><span>{ }</span> JSON File \u2014 API push fields</button>'+
+    '<div id="apiJsonBody" class="api-json-body" style="display:none">'+
+      '<div class="api-json-note">Fields that would push to the ROE API (codes only \u2014 no pricing).</div>'+
+      '<pre class="api-json-pre">'+json.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];})+'</pre>'+
+      '<button type="button" id="apiJsonCopy" class="api-json-copy">Copy JSON</button>'+
+    '</div></div>';
+}
+// wire the toggle/copy after review renders
+function wireApiJson(){
+  var b=document.getElementById('apiJsonBtn'); if(!b) return;
+  b.onclick=function(){ var body=document.getElementById('apiJsonBody'); if(body){ var show=body.style.display==='none'; body.style.display=show?'block':'none'; b.classList.toggle('open',show); } };
+  var cp=document.getElementById('apiJsonCopy'); if(cp) cp.onclick=function(){ try{ var t=document.querySelector('.api-json-pre').textContent; navigator.clipboard.writeText(t); cp.textContent='Copied \u2713'; setTimeout(function(){cp.textContent='Copy JSON';},1500); }catch(e){} };
 }
 
 /* ===== Step 6 — Implant Brand (per implant site, A / B / C) ===== */
