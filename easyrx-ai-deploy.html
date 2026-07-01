@@ -1036,7 +1036,7 @@ var REM_ACRYLIC_STYLES=['Flipper (1 tooth)','Flipper (2 teeth)','Flipper (3 teet
 var rem={
  appliance:'',                 // '' until step 2 picked
  dentureKind:'',               // 'new' | 'immediate'
- dentureType:'Traditional Handcrafted Premium',
+ dentureType:'',
  dentureStage:'',
  extractTeeth:{},              // tooth# -> true (teeth to extract / missing)
  toothState:{},                // tooth# -> 'missing' | 'abutment' | 'extract' (absent = present)
@@ -1059,7 +1059,7 @@ var REM_GINGIVA=[
  {id:'Dark Pink',  hex:'#c1727a'}
 ];
 function remReset(){
- rem={appliance:'',dentureKind:'',dentureType:'Traditional Handcrafted Premium',dentureStage:'',extractTeeth:{},toothState:{},frameMat:'SLM Cobalt Chrome',ret:'',conn:'ROE to Decide',clasp:'',acrylicStyle:'',shadeSys:'VITA Classical (A1\u2013D4)',shadeCode:'',toothClass:'I',gingiva:'',dentureBespoke:false,dupDenture:false,notes:''};
+ rem={appliance:'',dentureKind:'',dentureType:'',dentureStage:'',extractTeeth:{},toothState:{},frameMat:'SLM Cobalt Chrome',ret:'',conn:'ROE to Decide',clasp:'',acrylicStyle:'',shadeSys:'VITA Classical (A1\u2013D4)',shadeCode:'',toothClass:'I',gingiva:'',dentureBespoke:false,dupDenture:false,notes:''};
 }
 // Stages available given current denture type + kind.
 function dentureStagesAvail(){
@@ -4481,7 +4481,7 @@ function airxPrompt(text){
 "IF engine = \"removable\":",
 '{ \"engine\":\"removable\", \"arch\":\"upper|lower|both\", \"caseLabel\":\"short label\", \"appliance\":\"denture\", \"dentureKind\":\"new|immediate\", \"dentureType\":\"Traditional Handcrafted Premium\", \"dentureStage\":\"Set-Up and Finish\", \"teeth\":[19,20], \"ret\":\"Finish\", \"clasp\":\"Esthetic clasps (anterior)\", \"gingiva\":\"Original\", \"shadeSystem\":\"VITA Classical (A1\\u2013D4)\", \"shade\":\"B1\", \"interpretation\":\"short note\" }',
 '  - appliance KEY: \"denture\"(full denture) | \"partial\"(cast metal frame) | \"flexible\"(flexible/thermoplastic) | \"acrylic\"(flipper/all-acrylic) | \"unilateral\"(Nesbit) | \"essix\"(clear retainer) | \"snapon\"(Snap-On Smile).',
-'  - If appliance=\"denture\": dentureKind \"new\" (no teeth present) or \"immediate\" (teeth to be extracted). dentureType one of: \"Traditional Handcrafted Premium\",\"Traditional Handcrafted Value\",\"IMPACT Premium\",\"IMPACT Value\",\"Ivotion Premium\",\"Stabiliteeth Only\" (default \"Traditional Handcrafted Premium\"). For immediate dentures, list extraction teeth in \"teeth\".',
+'  - If appliance=\"denture\": dentureKind \"new\" (no teeth present) or \"immediate\" (teeth to be extracted). dentureType one of: \"Traditional Handcrafted Premium\",\"Traditional Handcrafted Value\",\"IMPACT Premium\",\"IMPACT Value\",\"Ivotion Premium\",\"Stabiliteeth Only\" ONLY when the doctor names it (says IMPACT, Ivotion, traditional, handcrafted, etc.). If they just say \"denture\" with no type, OMIT dentureType entirely \u2014 do NOT default it. For immediate dentures, list extraction teeth in \"teeth\".',
 '  - dentureStage (FULL DENTURES) \u2014 map the doctor\u2019s EXACT words; do NOT add steps they didn\u2019t say. \"finish\"/\"finished\"/\"just finish\" => \"Finish in Ivocap\" (finish only). \"set up and finish\"/\"setup and finish\" => \"Set-Up and Finish\". \"set up\"/\"set-up only\" => \"Set-Up Only\". \"bite block\" => \"Bite Block Only\". \"custom tray\"/\"tray\" => \"Custom Tray\". \"reset\" => \"Reset and Return\"; \"reset and finish\" => \"Reset + Finish\". OMIT if no stage stated.',
 '  - gingiva (denture/flexible/acrylic tissue shade) \u2014 ONE of: \"Light Pink\",\"Original\",\"Dark Pink\". \"pink\"/\"regular pink\"/\"standard pink\" => \"Original\". \"light pink\" => \"Light Pink\". \"dark pink\" => \"Dark Pink\". OMIT if not stated.',
 '  - If appliance is partial/flexible/acrylic/unilateral: put the teeth being replaced (missing) in \"teeth\".',
@@ -4535,7 +4535,7 @@ function airxSubmit(ids){
   if(rep) rep.innerHTML=spin; else if(msg) msg.textContent='Reading the case\u2026';
   fetch(AIRX_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:AIRX_MODEL,max_tokens:2000,messages:[{role:'user',content:airxPrompt(text)}]})})
-  .then(function(r){ if(!r.ok) throw new Error('Backend '+r.status); return r.json(); })
+  .then(function(r){ if(!r.ok){ return r.text().then(function(t){ var reason=r.status===404?'the parser function isn\u2019t deployed on this site':r.status>=500?'the server errored \u2014 likely the CLAUDE_API_KEY isn\u2019t set in Netlify':'HTTP '+r.status; throw new Error('['+r.status+'] '+reason+(t?' \u2014 '+t.slice(0,140):'')); }); } return r.json(); })
   .then(function(data){
     var raw=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
     raw=raw.replace(/```json|```/g,'').trim();
@@ -5814,9 +5814,10 @@ function rxReadyHtml(subtitle){
    '<button type="button" class="rx-draft" id="rxAddMore">\u2795 Add another product to this order</button>'+
    '<button type="button" class="rx-draft" id="rxDraft">'+(rxState.draftSaved?'\u2713 Draft saved':'\u{1F4BE} Save as Draft')+'</button>'+
    '<button type="button" class="rx-attn" id="rxAttn">\u{1F4CB} Cases Needing Attention \u203A</button>'+
+   apiJsonBlock()+
  '</div>';
 }
-function showRxReady(){ var stage=document.getElementById('stage'); stage.innerHTML=rxReadyHtml('Single-arch Rx complete.'); bindRxReady(); }
+function showRxReady(){ var stage=document.getElementById('stage'); stage.innerHTML=rxReadyHtml('Single-arch Rx complete.'); bindRxReady(); wireApiJson(); }
 function bindRxReady(){
  var f=document.getElementById('rxFinish');
  if(f) f.onclick=function(){
@@ -5828,7 +5829,7 @@ function bindRxReady(){
    setTimeout(function(){
      rxState.submitting=false;
      rxState.caseId='LT-'+(new Date().getFullYear())+'-'+Math.floor(100000+Math.random()*900000);
-     var stage=document.getElementById('stage'); stage.innerHTML=rxReadyHtml(document.querySelector('.rx-ready-sub')?document.querySelector('.rx-ready-sub').textContent:'Rx complete.'); bindRxReady();
+     var stage=document.getElementById('stage'); stage.innerHTML=rxReadyHtml(document.querySelector('.rx-ready-sub')?document.querySelector('.rx-ready-sub').textContent:'Rx complete.'); bindRxReady(); wireApiJson();
    }, 900);
  };
  var d=document.getElementById('rxDraft');
