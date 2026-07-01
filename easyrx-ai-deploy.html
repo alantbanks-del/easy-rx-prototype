@@ -521,6 +521,7 @@ svg{width:100%;height:auto;display:block}
 .tg-na{color:#b0392b;font-style:italic;font-size:12.5px}
 .tg-note{font-size:12px;color:var(--muted);margin-top:3px;font-style:italic}
 .tg-hand{font-size:13.5px;line-height:1.55;color:var(--ink);background:#f8fbfa;border-radius:8px;padding:8px 10px;white-space:pre-wrap}
+.tg-json{background:#0f1f1c;color:#c8e6dd;border-radius:8px;padding:10px 12px;font:11.5px/1.5 monospace;overflow-x:auto;white-space:pre;margin:2px 0 0}
 .tg-low{background:#ffe08a;border-radius:3px;padding:0 2px}
 .tg-lowcap{font-size:11px;color:#a06600;margin-top:4px}
 .al-archlbl{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:12px 0 5px}
@@ -5339,6 +5340,7 @@ function triageSystemPrompt(){
   "{\n"+
   '  "engine": "fixed|removable|fullarch|splints|guides|ortho|aligners|unknown",\n'+
   '  "doctor": { "name":"", "address":"", "phone":"", "missing":["address"|"phone"...], "score":0, "notes":"" },\n'+
+  '  "patient": "patient full name if present on the Rx, else empty",\n'+
   '  "fields": { "items":["short fact each: e.g. Crown #8","Upper","Return for finish","Shade A2"], "score":0, "notes":"" },\n'+
   '  "handwritten": { "text":"deciphered handwriting as plain text", "lowConfidence":["verbatim snippet uncertain"], "score":0, "notes":"" }\n'+
   "}\n"+
@@ -5368,7 +5370,7 @@ function triageAnalyzeOne(file, cb){
 // DEMO data so the screen is presentable before the backend is wired.
 function triageDemoCases(){
  return [
-  {name:'rx_01.jpg', engine:'fixed', doctor:{name:'Dr. Jane Smith',address:'123 Main St, Cleveland OH',phone:'(440) 555-0199',missing:[],score:100,notes:'All identity fields legible.'},
+  {name:'rx_01.jpg', engine:'fixed', patient:'Debra Hergenrider', doctor:{name:'Dr. Jane Smith',address:'123 Main St, Cleveland OH',phone:'(440) 555-0199',missing:[],score:100,notes:'All identity fields legible.'},
     fields:{items:['Crown #8, #9','Upper','Layered zirconia','Shade A2','Return for finish'],score:100,notes:'Cleanly checked.'},
     handwritten:{text:'Please keep contacts tight and match the adjacent centrals.',lowConfidence:[],score:100,notes:'Clear print.'}},
   {name:'rx_02.png', engine:'fixed', doctor:{name:'Dr. A. Patel',address:'',phone:'(216) 555-0144',missing:['address'],score:72,notes:'Address blank.'},
@@ -5377,7 +5379,7 @@ function triageDemoCases(){
   {name:'rx_03.pdf', engine:'removable', doctor:{name:'Dr. R. Gomez',address:'87 Lake Rd, Westlake OH',phone:'',missing:['phone'],score:68,notes:'Phone missing.'},
     fields:{items:['Upper complete denture','Set-up & finish','Shade A3'],score:90,notes:'Standard fields clear.'},
     handwritten:{text:'Patient prefers a fuller lip support.',lowConfidence:[],score:95,notes:''}},
-  {name:'rx_04.jpg', engine:'guides', doctor:{name:'Dr. Lee',address:'9 Elm Ave',phone:'(330) 555-0102',missing:[],score:96,notes:''},
+  {name:'rx_04.jpg', engine:'guides', patient:'Michael Chen', doctor:{name:'Dr. Lee',address:'9 Elm Ave',phone:'(330) 555-0102',missing:[],score:96,notes:''},
     fields:{items:['Surgical guide','Sites #4,#5','Tooth-supported'],score:80,notes:'Support type slightly unclear.'},
     handwritten:{text:'Fully guided, NobelActive 4.3, please confirm sleeve kit.',lowConfidence:['NobelActive 4.3'],score:55,notes:'Implant line hard to read.'}},
   {name:'rx_05.png', engine:'splints', doctor:{name:'Dr. Owens',address:'441 Oak Blvd, Akron OH',phone:'(330) 555-0177',missing:[],score:100,notes:''},
@@ -5479,7 +5481,9 @@ function renderTriagePage(){
  [].forEach.call(stage.querySelectorAll('[data-tgexp]'),function(b){ b.onclick=function(){ var i=+b.getAttribute('data-tgexp'); var el=document.getElementById('tgbody-'+i); if(el){ var show=el.style.display==='none'; el.style.display=show?'block':'none'; b.classList.toggle('open',show); } }; });
 }
 
-function triageScorePill(label, score, esc){
+function triageScorePill(label, score, esc, na){
+ if(na){ return '<div class="tg-score"><div class="tg-score-top"><span class="tg-score-lbl">'+label+'</span>'+
+   '<span class="tg-score-n" style="color:var(--muted)">NA</span></div></div>'; }
  var band=triageBand(score); var n=Math.max(1,Math.min(100,parseInt(score,10)||0));
  return '<div class="tg-score"><div class="tg-score-top"><span class="tg-score-lbl">'+label+'</span>'+
    '<span class="tg-score-n" style="color:'+band.color+'">'+n+'</span></div>'+
@@ -5498,7 +5502,7 @@ function triageTile(c, E, esc){
    '<div class="tg-scores">'+
      triageScorePill('Dr', d.score, esc)+
      triageScorePill('Fld', f.score, esc)+
-     triageScorePill('HW', h.score, esc)+'</div>'+
+     triageScorePill('HW', h.score, esc, !(h.text && String(h.text).trim()))+'</div>'+
    '<button type="button" class="tg-expbtn" data-tgexp="'+idx+'"><span class="tg-cv">\u25BE</span> Details</button>'+
  '</div>';
  html+=missing;
@@ -5514,12 +5518,31 @@ function triageTile(c, E, esc){
    ((f.items&&f.items.length)?'<ul class="tg-ul">'+f.items.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>':'<div class="tg-na">none read</div>')+
    (f.notes?'<div class="tg-note">'+esc(f.notes)+'</div>':'')+'</div>';
  // C) handwritten
+ var hasHand = !!(h.text && String(h.text).trim());
  var htext=esc(h.text||'');
  (h.lowConfidence||[]).forEach(function(sn){ if(!sn) return; var e=esc(sn); htext=htext.split(e).join('<mark class="tg-low">'+e+'</mark>'); });
- html+='<div class="tg-sec"><div class="tg-sec-h">C \u00b7 Handwriting deciphered</div>'+
-   '<div class="tg-hand">'+(htext||'<span class="tg-na">none</span>')+'</div>'+
-   ((h.lowConfidence&&h.lowConfidence.length)?'<div class="tg-lowcap">\u26A0 Low-confidence reads highlighted above</div>':'')+
-   (h.notes?'<div class="tg-note">'+esc(h.notes)+'</div>':'')+'</div>';
+ html+='<div class="tg-sec"><div class="tg-sec-h">C \u00b7 Handwriting'+(hasHand?' deciphered':'')+'</div>'+
+   (hasHand
+     ? '<div class="tg-hand">'+htext+'</div>'+
+       ((h.lowConfidence&&h.lowConfidence.length)?'<div class="tg-lowcap">\u26A0 Low-confidence reads highlighted above</div>':'')+
+       (h.notes?'<div class="tg-note">'+esc(h.notes)+'</div>':'')
+     : '<div class="tg-hand" style="color:var(--muted)">NA \u2014 no handwriting on this Rx.</div>')+
+   '</div>';
+ // D) JSON — API push fields (doctor, patient, suggested codes)
+ var tx = (typeof txTranslate==='function' && c.engine==='guides') ? txTranslate(c) : null;
+ var codes = tx ? tx.codes : [];
+ var pushJson={
+   doctor: (c.doctor&&c.doctor.name)||'',
+   patient: c.patient||'',
+   engine: c.engine||'',
+   suggestedCodes: codes
+ };
+ if(tx){ pushJson.guideType=tx.guideLabel; pushJson.sites=tx.siteCount; pushJson.validationPct=tx.validation.pct; if(tx.validation.missing.length) pushJson.missing=tx.validation.missing; }
+ var jstr=JSON.stringify(pushJson,null,2).replace(/[&<>]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[ch];});
+ html+='<div class="tg-sec"><div class="tg-sec-h">D \u00b7 JSON (API push)</div>'+
+   '<pre class="tg-json">'+jstr+'</pre>'+
+   (codes.length?'':'<div class="tg-note" style="color:var(--muted)">Codes suggested for guides today; other engines pending their code grid.</div>')+
+   '</div>';
  html+='</div>'; // body
  html+='</div>'; // tile
  return html;
